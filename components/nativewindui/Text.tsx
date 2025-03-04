@@ -10,7 +10,7 @@ cssInterop(UITextView, { className: 'style' });
 const textVariants = cva('text-foreground', {
   variants: {
     variant: {
-      largeTitle: 'text-4xl',
+      largeTitle: 'text-2xl',
       title1: 'text-2xl',
       title2: 'text-[22px] leading-7',
       title3: 'text-xl',
@@ -23,10 +23,13 @@ const textVariants = cva('text-foreground', {
       caption2: 'text-[11px] leading-4',
     },
     color: {
-      primary: '',
+      primary: 'text-background',
       secondary: 'text-secondary-foreground/90',
       tertiary: 'text-muted-foreground/90',
       quarternary: 'text-muted-foreground/50',
+      destructive: 'text-destructive',
+      warning: 'text-warning',
+      success: 'text-success',
     },
   },
   defaultVariants: {

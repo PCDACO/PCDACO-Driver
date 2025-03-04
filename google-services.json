@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595190135675",
+    "project_id": "pcdaco-61cb6",
+    "storage_bucket": "pcdaco-61cb6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595190135675:android:fc269bd000165335c05bde",
+        "android_client_info": {
+          "package_name": "com.anhden123.PCDACODriver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc9e6x1d7pnD_esSCW_SGYTmZFUjQjzKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
