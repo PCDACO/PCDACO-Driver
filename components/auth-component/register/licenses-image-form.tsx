@@ -55,7 +55,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({ form }) => {
                 image: licenseFront,
                 onClear: () => {
                   setLicenseFront(undefined);
-                  form.resetField('licenseImageFront');
+                  form.setValue('licenseImageFront', undefined);
                 },
               })
             ) : (
@@ -87,7 +87,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({ form }) => {
                 image: licenseBack,
                 onClear: () => {
                   setLicenseBack(undefined);
-                  form.resetField('licenseImageBack');
+                  form.setValue('licenseImageBack', undefined);
                 },
               })
             ) : (

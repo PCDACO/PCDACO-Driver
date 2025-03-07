@@ -48,7 +48,7 @@ const LicensesUserForm: React.FC<LicensesUserFormProps> = ({ form }) => {
 
         <FieldLayout label="Ngày hết hạn">
           <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <View className="flex-row items-baseline gap-2 rounded-lg border border-muted px-2 py-3">
+            <View className="flex-row items-center gap-2 rounded-lg border border-muted px-2 py-3">
               <Icon name="calendar" size={20} color="gray" />
               <Controller
                 control={form.control}

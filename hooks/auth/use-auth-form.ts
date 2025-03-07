@@ -15,6 +15,7 @@ import {
 } from '~/constants/schemas/auth.schema';
 import { useAuth } from '~/hooks/auth/use-auth';
 import { useAuthStore } from '~/store/auth-store';
+import { useApiStore } from '~/store/check-api';
 
 type UseAuthFormProps = {
   type: 'login' | 'register';
@@ -22,6 +23,7 @@ type UseAuthFormProps = {
 
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const { loginMutation, registerMutation } = useAuth();
+  const { removeEndpoint } = useApiStore();
   const { setTokens } = useAuthStore();
   const {
     form: licenseForm,
@@ -64,21 +66,27 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
     switch (step) {
       case 1: {
         const isValidate = await validField(form.trigger(['phone', 'password']));
-        nextStep();
+        if (isValidate) {
+          nextStep();
+        }
         return isValidate;
       }
       case 2: {
         const isValidate = await validField(
           form.trigger(['name', 'email', 'address', 'dateOfBirth'])
         );
-        nextStep();
+        if (isValidate) {
+          nextStep();
+        }
         return isValidate;
       }
       case 3: {
         const isValidate = await validField(
           licenseForm.trigger(['licenseNumber', 'expirationDate'])
         );
-        nextStep();
+        if (isValidate) {
+          nextStep();
+        }
         return isValidate;
       }
       case 4: {
@@ -100,11 +108,16 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
       case 'register':
         registerMutation.mutate(data as RegisterPayload, {
           onSuccess: async (data) => {
+            removeEndpoint('register');
             await setTokens(data.value.accessToken, data.value.refreshToken);
 
+            // state true
             await onSubmitLicense();
 
             ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
+          },
+          onError: (error: any) => {
+            ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
           },
         });
         break;
@@ -117,6 +130,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
     form,
     licenseForm,
     onSubmit,
+    onSubmitLicense,
     isLoading: loginMutation.isPending || (registerMutation.isPending && isLoadingLicense),
     step,
     nextStep,

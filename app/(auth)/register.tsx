@@ -15,11 +15,21 @@ import { Button } from '~/components/nativewindui/Button';
 import { Text as TextUI } from '~/components/nativewindui/Text';
 import StepProgress from '~/components/plugins/progress-step';
 import { useAuthForm } from '~/hooks/auth/use-auth-form';
+import { useApiStore } from '~/store/check-api';
 
 const Register: FunctionComponent = () => {
   const [checked, setChecked] = React.useState(false);
-  const { form, onSubmit, isLoading, step, prevStep, checkConditionOfEachStep, licenseForm } =
-    useAuthForm({ type: 'register' });
+  const { endpoints } = useApiStore();
+  const {
+    form,
+    onSubmit,
+    isLoading,
+    step,
+    prevStep,
+    checkConditionOfEachStep,
+    licenseForm,
+    onSubmitLicense,
+  } = useAuthForm({ type: 'register' });
 
   return (
     <SafeAreaView className="flex-1">
@@ -112,18 +122,17 @@ const Register: FunctionComponent = () => {
                 onPress={async () => {
                   const isValid = await checkConditionOfEachStep(step);
                   if (isValid) {
-                    onSubmit();
+                    if (endpoints.includes('register')) {
+                      onSubmit();
+                    } else {
+                      onSubmitLicense();
+                    }
                   }
                 }}
                 disabled={isLoading}>
                 <TextUI>{isLoading ? 'Đang xử lý...' : 'Hoàn tất đăng ký'}</TextUI>
               </Button>
             </View>
-          )}
-          {step === 5 && (
-            <Button onPress={() => prevStep()}>
-              <TextUI>Quay trở lại</TextUI>
-            </Button>
           )}
         </View>
       </View>
