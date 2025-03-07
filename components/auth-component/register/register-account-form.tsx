@@ -4,15 +4,15 @@ import { Controller } from 'react-hook-form';
 import { Text, View } from 'react-native';
 
 import FieldLayout from '~/components/layout/form/field-layout';
-import Input from '~/components/layout/input-with-icon/input';
+import { Input } from '~/components/layout/input-with-icon/input';
 import { Text as TextUI } from '~/components/nativewindui/Text';
 import { useAuthForm } from '~/hooks/auth/use-auth-form';
 
-interface RegisterFormProps {
+interface RegisterAccountFormProps {
   form: ReturnType<typeof useAuthForm>['form'];
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ form }) => {
+const RegisterAccountForm: React.FC<RegisterAccountFormProps> = ({ form }) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -20,6 +20,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ form }) => {
       <TextUI variant="largeTitle" color="secondary">
         Thông tin tài khoản
       </TextUI>
+
       <View className="mt-4 gap-2">
         <FieldLayout label="Số điện thoại">
           <Controller
@@ -71,4 +72,4 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ form }) => {
   );
 };
 
-export default RegisterForm;
+export default RegisterAccountForm;

@@ -13,13 +13,24 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Tên phải có ít nhất 2 ký tự'),
+  name: z.string().min(3, 'Tên phải có ít nhất 3 ký tự'),
   email: z.string().email('Email không hợp lệ'),
   password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
   address: z.string().min(5, 'Địa chỉ phải có ít nhất 5 ký tự'),
-  dateOfBirth: z.coerce.date().refine((date) => date < new Date(), {
-    message: 'Ngày sinh phải nhỏ hơn ngày hiện tại',
-  }),
+  dateOfBirth: z.coerce.date().refine(
+    (date) => {
+      const today = new Date();
+      const eighteenYearsAgo = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+      );
+      return date < eighteenYearsAgo;
+    },
+    {
+      message: 'Bạn chắc bạn đã đủ 18 tuổi chưa?',
+    }
+  ),
   phone: z
     .string()
     .regex(

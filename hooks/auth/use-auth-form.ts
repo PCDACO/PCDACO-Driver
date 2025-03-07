@@ -1,5 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { ToastAndroid } from 'react-native';
+
+import { useLicenseForm } from '../license/use-license-form';
 
 import { Role } from '~/constants/enums';
 import {
@@ -10,6 +14,7 @@ import {
   registerSchema,
 } from '~/constants/schemas/auth.schema';
 import { useAuth } from '~/hooks/auth/use-auth';
+import { useAuthStore } from '~/store/auth-store';
 
 type UseAuthFormProps = {
   type: 'login' | 'register';
@@ -17,6 +22,14 @@ type UseAuthFormProps = {
 
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const { loginMutation, registerMutation } = useAuth();
+  const { setTokens } = useAuthStore();
+  const {
+    form: licenseForm,
+    onSubmit: onSubmitLicense,
+    isLoading: isLoadingLicense,
+  } = useLicenseForm();
+
+  const [step, setStep] = React.useState(1);
 
   const form = useForm<AuthPayloads>({
     resolver: zodResolver(type === 'login' ? loginSchema : registerSchema),
@@ -34,15 +47,80 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
           },
   });
 
-  const onSubmit = form.handleSubmit((data) => {
-    if (type === 'login') {
-      loginMutation.mutate(data as LoginPayload);
+  const validField = async (isValidPromise: Promise<boolean>) => {
+    const isValid = await isValidPromise;
+    if (isValid) {
+      return true;
     } else {
-      console.log('data', data);
+      ToastAndroid.show('Vui lòng điền đúng thông tin', ToastAndroid.SHORT);
+      return false;
+    }
+  };
 
-      registerMutation.mutate(data as RegisterPayload);
+  const prevStep = () => setStep((prev) => prev - 1);
+  const nextStep = () => setStep((prev) => prev + 1);
+
+  const checkConditionOfEachStep = async (step: number) => {
+    switch (step) {
+      case 1: {
+        const isValidate = await validField(form.trigger(['phone', 'password']));
+        nextStep();
+        return isValidate;
+      }
+      case 2: {
+        const isValidate = await validField(
+          form.trigger(['name', 'email', 'address', 'dateOfBirth'])
+        );
+        nextStep();
+        return isValidate;
+      }
+      case 3: {
+        const isValidate = await validField(
+          licenseForm.trigger(['licenseNumber', 'expirationDate'])
+        );
+        nextStep();
+        return isValidate;
+      }
+      case 4: {
+        const isValidate = await validField(
+          licenseForm.trigger(['licenseImageFront', 'licenseImageBack'])
+        );
+        return isValidate;
+      }
+      default:
+        return false;
+    }
+  };
+
+  const onSubmit = form.handleSubmit(async (data) => {
+    switch (type) {
+      case 'login':
+        loginMutation.mutate(data as LoginPayload);
+        break;
+      case 'register':
+        registerMutation.mutate(data as RegisterPayload, {
+          onSuccess: async (data) => {
+            await setTokens(data.value.accessToken, data.value.refreshToken);
+
+            await onSubmitLicense();
+
+            ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
+          },
+        });
+        break;
+      default:
+        break;
     }
   });
 
-  return { form, onSubmit, isLoading: loginMutation.isPending || registerMutation.isPending };
+  return {
+    form,
+    licenseForm,
+    onSubmit,
+    isLoading: loginMutation.isPending || (registerMutation.isPending && isLoadingLicense),
+    step,
+    nextStep,
+    prevStep,
+    checkConditionOfEachStep,
+  };
 };

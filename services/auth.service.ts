@@ -1,4 +1,5 @@
 import axiosInstance from '~/configs/axios.config';
+import { Role } from '~/constants/enums';
 import { LoginRequest, RegisterRequest, Token } from '~/constants/models/auth.model';
 
 export const AuthService = {

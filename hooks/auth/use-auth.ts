@@ -16,7 +16,7 @@ export const useAuth = () => {
     mutationFn: async (payload: LoginRequest) => await AuthService.login(payload),
     onSuccess: async (data) => {
       await setTokens(data.value.accessToken, data.value.refreshToken);
-      ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
+      ToastAndroid.show(`${data.message}`, ToastAndroid.SHORT);
       router.replace('/(main)');
     },
     onError: (error) => {
@@ -27,11 +27,6 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationKey: [QueryKey.Auth.Register],
     mutationFn: async (payload: RegisterRequest) => await AuthService.register(payload),
-    onSuccess: async (data) => {
-      await setTokens(data.value.accessToken, data.value.refreshToken);
-      ToastAndroid.show(`${data.message}`, ToastAndroid.SHORT);
-      router.replace('/(main)');
-    },
     onError: (error) => {
       ToastAndroid.show(`${error}`, ToastAndroid.BOTTOM);
     },

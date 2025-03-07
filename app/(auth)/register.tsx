@@ -1,45 +1,57 @@
+import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link } from 'expo-router';
 import React, { FunctionComponent } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { Text, ToastAndroid, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Logo from '~/assets/svg/logo.svg';
-import ConfirmOtp from '~/components/auth-component/register/confirm-otp';
-import RegisterForm from '~/components/auth-component/register/register-form';
+import LicensesImageForm from '~/components/auth-component/register/licenses-image-form';
+import LicensesUserForm from '~/components/auth-component/register/licenses-user-form';
+import RegisterAccountForm from '~/components/auth-component/register/register-account-form';
+import RegisterInfoForm from '~/components/auth-component/register/register-info-form';
+import ResultRegister from '~/components/auth-component/register/result-register';
 import { Checkbox } from '~/components/layout/checkbox';
 import { Button } from '~/components/nativewindui/Button';
 import { Text as TextUI } from '~/components/nativewindui/Text';
+import StepProgress from '~/components/plugins/progress-step';
 import { useAuthForm } from '~/hooks/auth/use-auth-form';
 
 const Register: FunctionComponent = () => {
   const [checked, setChecked] = React.useState(false);
-  const { form, onSubmit, isLoading } = useAuthForm({ type: 'register' });
+  const { form, onSubmit, isLoading, step, prevStep, checkConditionOfEachStep, licenseForm } =
+    useAuthForm({ type: 'register' });
 
   return (
     <SafeAreaView className="flex-1">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1">
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-          <View className="flex-1 justify-between gap-8 px-6 py-8">
-            {/* Logo + Tiêu đề */}
-            <View className="w-60 flex-row items-center gap-2">
-              <Logo width={100} height={100} />
-              <View className="gap-2">
-                <Text className="w-52 text-3xl font-semibold text-foreground">
-                  Chào mừng đến với FreeDriver!
-                </Text>
-              </View>
+      <View className="flex-1 justify-between gap-8 px-6 py-8">
+        {/* Logo + Tiêu đề */}
+        <View>
+          <View className="w-60 flex-row items-center gap-2">
+            <Logo width={100} height={100} />
+            <View className="gap-2">
+              <Text className="w-52 text-3xl font-semibold text-foreground">
+                Chào mừng đến với FreeDriver!
+              </Text>
             </View>
+          </View>
 
-            {/* Form đăng ký */}
-            <View className="w-full flex-col items-center gap-4">
-              {/* <RegisterForm form={form} /> */}
-              <ConfirmOtp />
-            </View>
+          <StepProgress currentStep={step} steps={4} />
+          <View className="mt-6 w-full flex-col items-center gap-4">
+            {/* check step */}
+            {step === 1 && <RegisterAccountForm form={form} />}
+            {step === 2 && <RegisterInfoForm form={form} />}
+            {step === 3 && <LicensesUserForm form={licenseForm} />}
+            {step === 4 && <LicensesImageForm form={licenseForm} />}
+            {step === 5 && <ResultRegister />}
+          </View>
+        </View>
 
-            {/* Checkbox & Nút đăng ký */}
-            <View className="flex-col gap-4">
+        {/* Form đăng ký */}
+
+        {/* Checkbox & Nút đăng ký */}
+        <View className="flex-col gap-4 ">
+          {step === 1 && (
+            <>
               <View className="flex-row items-center gap-2">
                 <Checkbox checked={checked} onCheckedChange={setChecked} />
                 <Text className="w-80 text-foreground">
@@ -54,13 +66,67 @@ const Register: FunctionComponent = () => {
                   của FreeDriver
                 </Text>
               </View>
-              <Button onPress={onSubmit} disabled={isLoading}>
+              <Button
+                onPress={() => {
+                  if (!checked) {
+                    ToastAndroid.show(
+                      'Vui lòng đồng ý với chính sách và quy định của FreeDriver',
+                      ToastAndroid.SHORT
+                    );
+                  } else {
+                    checkConditionOfEachStep(step);
+                  }
+                }}
+                disabled={isLoading}>
                 <TextUI>Đăng ký</TextUI>
               </Button>
+            </>
+          )}
+          {step === 2 && (
+            <View className="flex-row items-center gap-4">
+              <Button variant="secondary" onPress={prevStep} size="icon">
+                <Icon name="step-backward" color="black" />
+              </Button>
+              <Button className="w-[260px] flex-1" onPress={() => checkConditionOfEachStep(step)}>
+                <TextUI>Xác nhận</TextUI>
+              </Button>
             </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          )}
+          {step === 3 && (
+            <View className="flex-row items-center gap-4">
+              <Button variant="secondary" onPress={prevStep} size="icon">
+                <Icon name="step-backward" color="black" />
+              </Button>
+              <Button className="w-[260px] flex-1" onPress={() => checkConditionOfEachStep(step)}>
+                <TextUI>Xác nhận</TextUI>
+              </Button>
+            </View>
+          )}
+          {step === 4 && (
+            <View className="flex-row items-center gap-4">
+              <Button variant="secondary" onPress={prevStep} size="icon">
+                <Icon name="step-backward" color="black" />
+              </Button>
+              <Button
+                className="w-[260px] flex-1"
+                onPress={async () => {
+                  const isValid = await checkConditionOfEachStep(step);
+                  if (isValid) {
+                    onSubmit();
+                  }
+                }}
+                disabled={isLoading}>
+                <TextUI>{isLoading ? 'Đang xử lý...' : 'Hoàn tất đăng ký'}</TextUI>
+              </Button>
+            </View>
+          )}
+          {step === 5 && (
+            <Button onPress={() => prevStep()}>
+              <TextUI>Quay trở lại</TextUI>
+            </Button>
+          )}
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

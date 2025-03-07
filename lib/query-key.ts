@@ -6,6 +6,15 @@ export const QueryKey = {
     Refresh: 'Refresh',
   },
 
+  License: {
+    List: 'LicenseList',
+    Detail: 'LicenseDetail',
+    Create: 'LicenseCreate',
+    Update: 'LicenseUpdate',
+    Delete: 'LicenseDelete',
+    PatchImage: 'LicensePatchImage',
+  },
+
   Car: {},
 
   Booking: {},
