@@ -14,6 +14,11 @@ declare global {
     keyword?: string;
   };
 
+  type LastIdRootResquest = {
+    limit: number;
+    lastId: string;
+  };
+
   type ListPaginationRequest = {
     limit: number;
     lastId?: number;

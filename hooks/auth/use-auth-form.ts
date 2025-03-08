@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
 import { useLicenseForm } from '../license/use-license-form';
+import { useUserQuery } from '../user/use-user';
 
 import { Role } from '~/constants/enums';
 import {
@@ -16,6 +17,7 @@ import {
 import { useAuth } from '~/hooks/auth/use-auth';
 import { useAuthStore } from '~/store/auth-store';
 import { useApiStore } from '~/store/check-api';
+import { useStepStore } from '~/store/use-step';
 
 type UseAuthFormProps = {
   type: 'login' | 'register';
@@ -23,15 +25,16 @@ type UseAuthFormProps = {
 
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const { loginMutation, registerMutation } = useAuth();
+  const { currentUserQuery } = useUserQuery();
   const { removeEndpoint } = useApiStore();
-  const { setTokens } = useAuthStore();
+  const { setTokens, removeTokens } = useAuthStore();
   const {
     form: licenseForm,
     onSubmit: onSubmitLicense,
     isLoading: isLoadingLicense,
   } = useLicenseForm();
 
-  const [step, setStep] = React.useState(1);
+  const { nextStep } = useStepStore();
 
   const form = useForm<AuthPayloads>({
     resolver: zodResolver(type === 'login' ? loginSchema : registerSchema),
@@ -45,7 +48,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
             address: '',
             dateOfBirth: new Date(),
             phone: '',
-            roleName: Role.Owner,
+            roleName: Role.Driver,
           },
   });
 
@@ -58,9 +61,6 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
       return false;
     }
   };
-
-  const prevStep = () => setStep((prev) => prev - 1);
-  const nextStep = () => setStep((prev) => prev + 1);
 
   const checkConditionOfEachStep = async (step: number) => {
     switch (step) {
@@ -103,15 +103,33 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const onSubmit = form.handleSubmit(async (data) => {
     switch (type) {
       case 'login':
-        loginMutation.mutate(data as LoginPayload);
+        loginMutation.mutate(data as LoginPayload, {
+          onSuccess: async (data) => {
+            // check if login success, remove login endpoint in store
+
+            await setTokens(data.value.accessToken, data.value.refreshToken);
+
+            const { data: currentUser } = currentUserQuery;
+            if (currentUser?.value.role === Role.Driver) {
+              ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
+              router.push('/(main)');
+            } else {
+              ToastAndroid.show('Tài khoản không hợp lệ', ToastAndroid.SHORT);
+              removeTokens();
+            }
+          },
+          onError: (error: any) => {
+            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+          },
+        });
         break;
       case 'register':
         registerMutation.mutate(data as RegisterPayload, {
           onSuccess: async (data) => {
+            // check if register success, remove register endpoint in store
             removeEndpoint('register');
-            await setTokens(data.value.accessToken, data.value.refreshToken);
 
-            // state true
+            await setTokens(data.value.accessToken, data.value.refreshToken);
             await onSubmitLicense();
 
             ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
@@ -131,10 +149,8 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
     licenseForm,
     onSubmit,
     onSubmitLicense,
-    isLoading: loginMutation.isPending || (registerMutation.isPending && isLoadingLicense),
-    step,
-    nextStep,
-    prevStep,
+    isLoading: loginMutation.isPending || registerMutation.isPending || isLoadingLicense,
+    // currentUserQuery.isLoading,
     checkConditionOfEachStep,
   };
 };

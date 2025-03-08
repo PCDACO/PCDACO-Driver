@@ -90,7 +90,7 @@ const RegisterInfoForm: React.FC<RegisterInfoFormProps> = ({ form }) => {
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
-              value={new Date()}
+              value={form.getValues('dateOfBirth') || new Date()}
               mode="date"
               maximumDate={new Date()}
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}

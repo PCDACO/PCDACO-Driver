@@ -1,5 +1,5 @@
 import Icon from '@expo/vector-icons/Feather';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React, { FunctionComponent } from 'react';
 import { Controller } from 'react-hook-form';
 import { Text, View } from 'react-native';
@@ -11,10 +11,12 @@ import { Input } from '~/components/layout/input-with-icon/input';
 import { Button } from '~/components/nativewindui/Button';
 import { Text as TextUI } from '~/components/nativewindui/Text';
 import { useAuthForm } from '~/hooks/auth/use-auth-form';
+import { useStepStore } from '~/store/use-step';
 
 const Login: FunctionComponent = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { form, onSubmit, isLoading } = useAuthForm({ type: 'login' });
+  const { resetStep } = useStepStore();
 
   return (
     <SafeAreaView className="flex-1">
@@ -42,6 +44,9 @@ const Login: FunctionComponent = () => {
                 />
               )}
             />
+            {form.formState.errors.phone && (
+              <TextUI className="text-destructive">{form.formState.errors.phone.message}</TextUI>
+            )}
           </FieldLayout>
 
           <FieldLayout label="Mật khẩu">
@@ -67,9 +72,7 @@ const Login: FunctionComponent = () => {
               )}
             />
             {form.formState.errors.password && (
-              <TextUI variant="caption1" color="quarternary">
-                {form.formState.errors.password.message}
-              </TextUI>
+              <TextUI className="text-destructive">{form.formState.errors.password.message}</TextUI>
             )}
           </FieldLayout>
 
@@ -79,10 +82,13 @@ const Login: FunctionComponent = () => {
             <Button onPress={onSubmit} disabled={isLoading}>
               <TextUI>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</TextUI>
             </Button>
-            <Button variant="plain">
-              <Link href="/register">
-                <TextUI>Đăng kí tài khoản</TextUI>
-              </Link>
+            <Button
+              variant="plain"
+              onPress={() => {
+                resetStep();
+                router.navigate('/register');
+              }}>
+              <TextUI>Đăng kí tài khoản</TextUI>
             </Button>
           </View>
         </View>

@@ -8,11 +8,13 @@ import { LicenseImagesPayload, LicensePayload } from '~/constants/models/license
 import { LicensePayloadSchema, licenseSchema } from '~/constants/schemas/license.schema';
 import { useApiStore } from '~/store/check-api';
 import { useIdStore } from '~/store/use-id-store';
+import { useStepStore } from '~/store/use-step';
 
 export const useLicenseForm = () => {
   const { createLicenseMutation, patchImagesMutation } = useLicenseMutation();
   const { removeEndpoint, resetEndpoints, hasEndpoint } = useApiStore();
   const { setId, id, resetId } = useIdStore();
+  const { nextStep } = useStepStore();
 
   const form = useForm<LicensePayloadSchema>({
     resolver: zodResolver(licenseSchema),
@@ -53,11 +55,9 @@ export const useLicenseForm = () => {
               onSettled: () => {
                 resetEndpoints();
                 resetId();
+                nextStep();
               },
-              onSuccess: () => {
-                resetId();
-                resetEndpoints();
-              },
+              onSuccess: () => {},
               onError: (error: any) => {
                 ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
               },
@@ -83,6 +83,7 @@ export const useLicenseForm = () => {
           onSettled: () => {
             resetId();
             resetEndpoints();
+            nextStep();
           },
           onError: (error: any) => {
             ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
@@ -95,6 +96,6 @@ export const useLicenseForm = () => {
   return {
     form,
     onSubmit,
-    isLoading: createLicenseMutation.isPending && patchImagesMutation.isPending,
+    isLoading: createLicenseMutation.isPending || patchImagesMutation.isPending,
   };
 };

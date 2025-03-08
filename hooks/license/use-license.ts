@@ -27,7 +27,7 @@ export const useLicenseMutation = () => {
   });
 
   const patchImagesMutation = useMutation({
-    mutationKey: ['license-images'],
+    mutationKey: [QueryKey.License.PatchImage],
     mutationFn: async ({ id, payload }: { id: string; payload: LicenseImagesPayload }) =>
       await LiccenseService.patch.images(id, payload),
 

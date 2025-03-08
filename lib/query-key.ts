@@ -21,5 +21,10 @@ export const QueryKey = {
 
   Bank: {},
 
-  User: {},
+  User: {
+    Current: 'CurrentUser',
+    Detail: 'UserDetail',
+    Update: 'UserUpdate',
+    Avatar: 'UserAvatar',
+  },
 };
