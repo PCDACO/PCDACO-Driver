@@ -15,7 +15,14 @@ export const QueryKey = {
     PatchImage: 'LicensePatchImage',
   },
 
-  Car: {},
+  Car: {
+    List: 'CarList',
+    Detail: 'CarDetail',
+    Create: 'CarCreate',
+    Update: 'CarUpdate',
+    Delete: 'CarDelete',
+    PatchImage: 'CarPatchImage',
+  },
 
   Booking: {},
 

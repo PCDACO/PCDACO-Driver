@@ -29,5 +29,10 @@ export const useAuth = () => {
     },
   });
 
-  return { loginMutation, registerMutation, refreshTokenMutation };
+  const validateTokenMutation = useMutation({
+    mutationKey: [QueryKey.Auth.Validate],
+    mutationFn: async () => await AuthService.validationToken(),
+  });
+
+  return { loginMutation, registerMutation, refreshTokenMutation, validateTokenMutation };
 };

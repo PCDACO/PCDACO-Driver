@@ -7,12 +7,18 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo-driver.png"
     },
     "plugins": [
       "expo-router",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow PCDACO-Driver to use your location."
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -22,8 +28,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "cameraPermission": "Allow PCDACO-Driver to access your camera",
+          "microphonePermission": "Allow PCDACO-Driver to access your microphone",
           "recordAudioAndroid": true
         }
       ],
@@ -39,10 +45,10 @@
       "tsconfigPaths": true
     },
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-driver.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-driver.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -59,7 +65,7 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo-driver.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anhden123.PCDACODriver"

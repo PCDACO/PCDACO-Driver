@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
+import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
 import { useLicenseForm } from '../license/use-license-form';
-import { useUserQuery } from '../user/use-user';
 
 import { Role } from '~/constants/enums';
 import {
@@ -15,6 +15,7 @@ import {
   registerSchema,
 } from '~/constants/schemas/auth.schema';
 import { useAuth } from '~/hooks/auth/use-auth';
+import { UserService } from '~/services/user.service';
 import { useAuthStore } from '~/store/auth-store';
 import { useApiStore } from '~/store/check-api';
 import { useStepStore } from '~/store/use-step';
@@ -25,7 +26,7 @@ type UseAuthFormProps = {
 
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const { loginMutation, registerMutation } = useAuth();
-  const { currentUserQuery } = useUserQuery();
+
   const { removeEndpoint } = useApiStore();
   const { setTokens, removeTokens } = useAuthStore();
   const {
@@ -105,17 +106,28 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
       case 'login':
         loginMutation.mutate(data as LoginPayload, {
           onSuccess: async (data) => {
-            // check if login success, remove login endpoint in store
+            setTokens(data.value.accessToken, data.value.refreshToken);
 
-            await setTokens(data.value.accessToken, data.value.refreshToken);
+            const token = jwtDecode(data.value.accessToken);
 
-            const { data: currentUser } = currentUserQuery;
-            if (currentUser?.value.role === Role.Driver) {
-              ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
-              router.push('/(main)');
-            } else {
-              ToastAndroid.show('Tài khoản không hợp lệ', ToastAndroid.SHORT);
-              removeTokens();
+            if (token.sub && token.sub !== undefined) {
+              await UserService.get
+                .detail(token.sub)
+                .then((response) => {
+                  if (response?.value.role === Role.Driver) {
+                    ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
+
+                    router.push('/(main)');
+                    form.reset();
+                  } else {
+                    ToastAndroid.show('Đây không là tài khoản tài xế', ToastAndroid.SHORT);
+                    removeTokens();
+                  }
+                })
+                .catch(() => {
+                  ToastAndroid.show('Đây không là tài xế', ToastAndroid.SHORT);
+                  removeTokens();
+                });
             }
           },
           onError: (error: any) => {

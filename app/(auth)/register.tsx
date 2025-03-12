@@ -58,7 +58,7 @@ const Register: FunctionComponent = () => {
             {step === 1 && (
               <>
                 <View className="flex-row items-center gap-2">
-                  <Checkbox checked={checked} onCheckedChange={setChecked} />
+                  <Checkbox checked={checked} onCheckedChange={setChecked} disabled={checked} />
                   <Text className="w-80 text-foreground">
                     Tôi đã đọc và đồng ý với{' '}
                     <Link className="text-primary" href="/">

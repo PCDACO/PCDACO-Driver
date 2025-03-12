@@ -14,6 +14,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
+    if (config.url === '/api/auth/login' || config.url === '/api/auth/signup') {
+      return config;
+    }
+
     const accessToken = await storage.getItem('accessToken');
 
     if (accessToken) {

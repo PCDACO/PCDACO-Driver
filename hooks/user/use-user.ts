@@ -13,5 +13,12 @@ export const useUserQuery = () => {
     currentUserQuery,
   };
 };
-export const useUserDetailQuery = () => {};
+export const useUserDetailQuery = (id: string) => {
+  const userDetailQuery = useQuery({
+    queryKey: [QueryKey.User.Detail, id],
+    queryFn: async () => await UserService.get.detail(id),
+  });
+
+  return userDetailQuery;
+};
 export const useUserMutation = () => {};

@@ -6,6 +6,7 @@ export interface UserResponse {
   dateOfBirth: Date;
   phone: string;
   role: string;
+  avatarUrl: string;
 }
 
 export interface UserPayload {
