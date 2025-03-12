@@ -13,27 +13,26 @@ interface SwiperImagesProps {
 const ImageItem = (data: SwiperImageItem) => {
   if (!data.url) {
     return (
-      <View className="h-80 w-full items-center justify-center bg-gray-400">
+      <View className="h-96 w-screen flex-1 items-center justify-center bg-gray-400">
         <Text className="text-center text-muted-foreground">Image not available</Text>
       </View>
     );
   }
 
   return (
-    <View>
-      <Image source={{ uri: data.url }} />
+    <View className="w-screen bg-yellow-400">
+      <Image className="h-96 w-screen" source={{ uri: data.url }} />
     </View>
   );
 };
 
 const SwiperImages: FunctionComponent<SwiperImagesProps> = ({ images }) => {
   const flatlistRef = React.useRef<FlatList<any>>(null);
-  const [viewWidth, setViewWidth] = React.useState<number>(0);
-  const [currentIndex, setCurrentIndex] = React.useState<number>(0);
 
   return (
-    <View>
+    <View className="w-screen">
       <FlatList
+        className="w-screen "
         data={images}
         ref={flatlistRef}
         renderItem={({ item }) => <ImageItem {...item} />}

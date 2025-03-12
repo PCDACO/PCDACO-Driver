@@ -11,7 +11,19 @@ const ScreenLayout: FunctionComponent = () => {
           headerShown: false,
         }}>
         <Stack.Screen
-          name="/(car)/[id]"
+          name="/car/[id]"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="/booking/[id]"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="/search-cars"
           options={{
             headerShown: false,
           }}

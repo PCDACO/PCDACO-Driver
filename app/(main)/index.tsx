@@ -1,4 +1,3 @@
-import { FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { Link, router } from 'expo-router';
 import * as React from 'react';
@@ -11,7 +10,7 @@ import { useCarsListQuery } from '~/hooks/car/use-car';
 
 const HomeScreen = () => {
   const { data: car, isLoading: carloading } = useCarsListQuery({
-    limit: 2,
+    limit: 3,
   });
 
   const carList = car?.value.items || [];

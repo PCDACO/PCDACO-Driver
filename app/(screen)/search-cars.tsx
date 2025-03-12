@@ -2,9 +2,11 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { FunctionComponent } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { CarCard } from '~/components/card/car/card';
+// eslint-disable-next-line import/order
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 
 // import ModalPicker from '~/components/plugins/modal-picker';
@@ -19,23 +21,66 @@ const SearchCarsPage: FunctionComponent = () => {
   const router = useRouter();
   const { searchKeyword } = useSearchStore();
   const [params, setParams] = React.useState<Partial<CarParams>>({});
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+  const [isLoadingMore, setIsLoadingMore] = React.useState(false);
 
-  const { data, isLoading } = useCarsListQuery(params as CarParams);
+  const { data, isLoading, refetch } = useCarsListQuery(params as CarParams);
 
   React.useEffect(() => {
     setParams({
       keyword: searchKeyword,
-      lastId: data?.value.items[data?.value.items.length - 1].id,
+      lastId: data?.value.items[data?.value.items.length - 1]?.id,
     });
   }, [searchKeyword]);
 
+  const handleLoadMore = async () => {
+    if (isLoadingMore) return;
+
+    setIsLoadingMore(true);
+    const lastItem = data?.value.items[data.value.items.length - 1];
+    if (lastItem) {
+      setParams((prev) => ({
+        ...prev,
+        lastId: lastItem.id,
+      }));
+      await refetch();
+    }
+    setIsLoadingMore(false);
+  };
+
+  const renderFooter = () => {
+    if (!isLoadingMore) return null;
+    return (
+      <View className="py-4">
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
+  };
+
+  const headerTranslateY = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, -20],
+    extrapolate: 'clamp',
+  });
+
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0.8],
+    extrapolate: 'clamp',
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-background px-4">
-      <View className="">
+      <Animated.View
+        className=""
+        style={{
+          transform: [{ translateY: headerTranslateY }],
+          opacity: headerOpacity,
+        }}>
         <TouchableOpacity onPress={() => router.back()}>
           <FontAwesome name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
       <View>
         <Text className="mb-3 text-2xl font-bold text-foreground">Khám phá xe</Text>
         <View className="flex-row items-center gap-3">
@@ -78,9 +123,15 @@ const SearchCarsPage: FunctionComponent = () => {
         ) : (
           <FlatList
             data={data?.value.items}
-            renderItem={({ item }) => <CarCard car={item} />}
+            renderItem={({ item, index }) => <CarCard car={item} />}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={() => <View className="h-4" />}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+              useNativeDriver: true,
+            })}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={renderFooter}
           />
         )}
       </View>
