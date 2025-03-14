@@ -4,16 +4,12 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 
+import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
-import { useUserQuery } from '~/hooks/user/use-user';
 
 const ResultRegister: React.FC = () => {
-  const { currentUserQuery } = useUserQuery();
-
-  console.log('currentUserQuery', currentUserQuery.data);
-
   return (
-    <View className="flex-1 items-center justify-center bg-background px-6">
+    <View className="items-center justify-center gap-6 bg-red-300 px-6">
       {/* Hiệu ứng nền gradient */}
       <LinearGradient
         colors={['#60a5fa', '#3b82f6']} // Xanh biển nhạt hơn
@@ -35,7 +31,7 @@ const ResultRegister: React.FC = () => {
 
       {/* Nút quay lại trang chủ */}
       <TouchableOpacity
-        className="overflow-hidden rounded-lg shadow-lg"
+        className="overflow-hidden rounded-full shadow-lg"
         onPress={() => router.navigate('/(main)')}>
         <LinearGradient
           colors={['#93c5fd', '#60a5fa']} // Gradient xanh biển rất nhẹ
@@ -43,6 +39,16 @@ const ResultRegister: React.FC = () => {
           <Text className="text-lg font-medium text-white">Về Trang Chủ</Text>
         </LinearGradient>
       </TouchableOpacity>
+
+      <Button
+        variant="outline"
+        onPress={() =>
+          router.replace({
+            pathname: '/(screen)/license/license-edit',
+          })
+        }>
+        <Text>Đăng ký bằng lái xe</Text>
+      </Button>
     </View>
   );
 };

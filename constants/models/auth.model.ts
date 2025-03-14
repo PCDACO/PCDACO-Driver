@@ -16,7 +16,7 @@ export interface Token {
 }
 
 export type LoginRequest = {
-  phone: string;
+  email: string;
   password: string;
 };
 

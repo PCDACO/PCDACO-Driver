@@ -28,6 +28,12 @@ const ScreenLayout: FunctionComponent = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="/license/license-edit"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </>
   );

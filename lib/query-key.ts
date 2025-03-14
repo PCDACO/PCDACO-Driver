@@ -24,7 +24,13 @@ export const QueryKey = {
     PatchImage: 'CarPatchImage',
   },
 
-  Booking: {},
+  Booking: {
+    List: 'BookingList',
+    Detail: 'BookingDetail',
+    Create: 'BookingCreate',
+    Cancel: 'BookingCancel',
+    Confirm: 'BookingConfirm',
+  },
 
   Bank: {},
 

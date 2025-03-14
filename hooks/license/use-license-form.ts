@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
@@ -6,21 +7,23 @@ import { useLicenseMutation } from './use-license';
 
 import { LicenseImagesPayload, LicensePayload } from '~/constants/models/license.model';
 import { LicensePayloadSchema, licenseSchema } from '~/constants/schemas/license.schema';
-import { useApiStore } from '~/store/check-api';
-import { useIdStore } from '~/store/use-id-store';
-import { useStepStore } from '~/store/use-step';
+import { useApiStore } from '~/store/check-endpoint';
 
-export const useLicenseForm = () => {
-  const { createLicenseMutation, patchImagesMutation } = useLicenseMutation();
-  const { removeEndpoint, resetEndpoints, hasEndpoint } = useApiStore();
-  const { setId, id, resetId } = useIdStore();
-  const { nextStep } = useStepStore();
+interface LicenseFormProps {
+  id?: string;
+}
+
+export const useLicenseForm = ({ id }: LicenseFormProps) => {
+  const [currentId, setCurrentId] = React.useState<string | undefined>();
+  const { createLicenseMutation, updateLicenseMutation, patchImagesMutation } =
+    useLicenseMutation();
+  const { hasEndpoint } = useApiStore();
 
   const form = useForm<LicensePayloadSchema>({
     resolver: zodResolver(licenseSchema),
     defaultValues: {
       licenseNumber: '',
-      expirationDate: new Date(),
+      expirationDate: undefined,
       licenseImageFront: undefined,
       licenseImageBack: undefined,
     },
@@ -32,70 +35,98 @@ export const useLicenseForm = () => {
       licenseNumber: data.licenseNumber,
     };
 
-    const imagesPayload: LicenseImagesPayload = {
+    const imagePayload: LicenseImagesPayload = {
       licenseImageFront: data.licenseImageFront,
       licenseImageBack: data.licenseImageBack,
     };
 
-    if (hasEndpoint('license') && !id && hasEndpoint('image')) {
-      createLicenseMutation.mutate(infoPayload, {
-        onSuccess: (license) => {
-          removeEndpoint('license');
-
-          if (!license?.value?.id) {
-            console.error('Lỗi: Không tìm thấy license ID!');
-            return;
+    if (id) {
+      if (hasEndpoint(['edit-info', 'edit-image'])) {
+        updateLicenseMutation.mutate(
+          { id, payload: infoPayload },
+          {
+            onSuccess: () => {
+              setCurrentId(undefined);
+              ToastAndroid.show('Tạo thành công', ToastAndroid.SHORT);
+            },
+            onError: (error: any) => {
+              ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+            },
           }
-
-          setId(license.value.id);
-
-          patchImagesMutation.mutate(
-            { id: license.value.id, payload: imagesPayload },
-            {
-              onSettled: () => {
-                resetEndpoints();
-                resetId();
-                nextStep();
-              },
-              onSuccess: () => {},
-              onError: (error: any) => {
-                ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
-              },
-            }
-          );
-        },
-        onError: (error: any) => {
-          ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
-        },
-      });
-    } else {
-      if (!id) {
-        console.error('Lỗi: Không tìm thấy license ID!');
-        return;
+        );
+      } else if (hasEndpoint(['edit-image'])) {
+        patchImagesMutation.mutate(
+          { id, payload: imagePayload },
+          {
+            onSuccess: () => {
+              setCurrentId(undefined);
+              ToastAndroid.show('Tạo thành công', ToastAndroid.SHORT);
+            },
+            onError: (error: any) => {
+              ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+            },
+          }
+        );
+      } else if (hasEndpoint(['edit-info'])) {
+        updateLicenseMutation.mutate(
+          { id, payload: infoPayload },
+          {
+            onSuccess: () => {
+              setCurrentId(undefined);
+              ToastAndroid.show('Tạo thành công', ToastAndroid.SHORT);
+            },
+            onError: (error: any) => {
+              ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+            },
+          }
+        );
       }
+    } else {
+      if (currentId) {
+        patchImagesMutation.mutate(
+          { id: currentId, payload: imagePayload },
+          {
+            onSuccess: () => {
+              setCurrentId(undefined);
+              ToastAndroid.show('Tạo thành công', ToastAndroid.SHORT);
+            },
+            onError: (error: any) => {
+              ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+            },
+          }
+        );
+      } else {
+        createLicenseMutation.mutate(infoPayload, {
+          onSuccess: (data) => {
+            setCurrentId(data.value.id);
 
-      patchImagesMutation.mutate(
-        {
-          id,
-          payload: imagesPayload,
-        },
-        {
-          onSettled: () => {
-            resetId();
-            resetEndpoints();
-            nextStep();
+            patchImagesMutation.mutate(
+              { id: data.value.id, payload: imagePayload },
+              {
+                onSuccess: () => {
+                  setCurrentId(undefined);
+                  ToastAndroid.show('Tạo thành công', ToastAndroid.SHORT);
+                },
+                onError: (error: any) => {
+                  ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+                },
+              }
+            );
           },
           onError: (error: any) => {
             ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
           },
-        }
-      );
+        });
+      }
     }
   });
 
   return {
     form,
     onSubmit,
-    isLoading: createLicenseMutation.isPending || patchImagesMutation.isPending,
+    isLoading:
+      createLicenseMutation.isPending ||
+      updateLicenseMutation.isPending ||
+      patchImagesMutation.isPending,
   };
 };

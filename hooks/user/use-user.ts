@@ -7,6 +7,7 @@ export const useUserQuery = () => {
   const currentUserQuery = useQuery({
     queryKey: [QueryKey.User.Current],
     queryFn: async () => await UserService.get.current(),
+    retry: 2,
   });
 
   return {

@@ -61,55 +61,6 @@ const CarMainInfo: FunctionComponent<CarMainInfoProps> = ({ car }) => {
             <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
           )}
         </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
-        <View className="rounded-lg border border-muted p-4">
-          {terms.length > 0 ? (
-            <Text className="text-sm text-muted-foreground">{terms}</Text>
-          ) : (
-            <Text className="text-sm text-muted-foreground">Không có điều khoản</Text>
-          )}
-        </View>
       </FieldLayout>
     </View>
   );

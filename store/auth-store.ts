@@ -11,6 +11,7 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
   removeTokens: () => Promise<void>;
   refetchToken: () => Promise<void>;
   validateToken: () => Promise<void>;
@@ -29,6 +30,10 @@ export const useAuthStore = create<AuthState>()(
         set({ accessToken, refreshToken, isAuthenticated: true });
       },
 
+      setIsAuthenticated: (isAuthenticated) => {
+        set({ isAuthenticated });
+      },
+
       removeTokens: async () => {
         await storage.removeItem('accessToken');
         await storage.removeItem('refreshToken');
@@ -44,7 +49,6 @@ export const useAuthStore = create<AuthState>()(
             set({
               accessToken: response.value.accessToken,
               refreshToken: response.value.refreshToken,
-              isAuthenticated: true,
             });
           })
           .catch(() => {
@@ -56,7 +60,6 @@ export const useAuthStore = create<AuthState>()(
         await AuthService.validationToken()
           .then(() => {
             set({
-              isAuthenticated: true,
               accessToken: get().accessToken,
               refreshToken: get().refreshToken,
             });

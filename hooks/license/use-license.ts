@@ -1,10 +1,23 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { LicenseImagesPayload, LicensePayload } from '~/constants/models/license.model';
 import { QueryKey } from '~/lib/query-key';
 import { LiccenseService } from '~/services/license.service';
 
-export const useLicensesListQuery = () => {};
+export const useLicensesListQuery = () => {
+  const query = useQuery({
+    queryKey: [QueryKey.License.List],
+    queryFn: async () => await LiccenseService.get.license(),
+    staleTime: 1000 * 60 * 2,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchInterval: 1000 * 60 * 2,
+    retry: 1,
+  });
+
+  return query;
+};
 export const useLicenseDetailQuery = () => {};
 export const useLicenseMutation = () => {
   const createLicenseMutation = useMutation({
@@ -30,13 +43,6 @@ export const useLicenseMutation = () => {
     mutationKey: [QueryKey.License.PatchImage],
     mutationFn: async ({ id, payload }: { id: string; payload: LicenseImagesPayload }) =>
       await LiccenseService.patch.images(id, payload),
-
-    onSuccess: () => {
-      console.log('Upload ảnh thành công!');
-    },
-    onError: (error) => {
-      console.error('Upload ảnh thất bại:', error);
-    },
   });
 
   return { createLicenseMutation, updateLicenseMutation, patchImagesMutation };

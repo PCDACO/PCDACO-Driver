@@ -6,7 +6,7 @@ import { AuthService } from '~/services/auth.service';
 import { useAuthStore } from '~/store/auth-store';
 
 export const useAuth = () => {
-  const { setTokens } = useAuthStore();
+  const { setTokens, setIsAuthenticated, removeTokens } = useAuthStore();
 
   const loginMutation = useMutation({
     mutationKey: [QueryKey.Auth.Login],
@@ -23,8 +23,11 @@ export const useAuth = () => {
     mutationFn: async (refrechToken: string) => await AuthService.refreshToken(refrechToken),
     onSuccess: async (data) => {
       await setTokens(data.value.accessToken, data.value.refreshToken);
+      setIsAuthenticated(true);
     },
     onError: (error) => {
+      removeTokens();
+      setIsAuthenticated(false);
       console.error(error);
     },
   });
@@ -32,6 +35,14 @@ export const useAuth = () => {
   const validateTokenMutation = useMutation({
     mutationKey: [QueryKey.Auth.Validate],
     mutationFn: async () => await AuthService.validationToken(),
+    onSuccess: () => {
+      setIsAuthenticated(true);
+    },
+    onError: (error) => {
+      removeTokens();
+      setIsAuthenticated(false);
+      console.error(error);
+    },
   });
 
   return { loginMutation, registerMutation, refreshTokenMutation, validateTokenMutation };

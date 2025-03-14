@@ -39,21 +39,21 @@ const RegisterInfoForm: React.FC<RegisterInfoFormProps> = ({ form }) => {
             <Text className="text-red-600">{form.formState.errors.name.message}</Text>
           )}
         </FieldLayout>
-        <FieldLayout label="Email">
+        <FieldLayout label="Số điện thoại">
           <Controller
             control={form.control}
-            name="email"
+            name="phone"
             render={({ field }) => (
               <Input
                 {...field}
-                placeholder="Nhập email"
+                placeholder="Nhập số điện thoại"
                 onChangeText={field.onChange}
-                leftIcon={<Icon name="mail" size={20} color="gray" />}
+                leftIcon={<Icon name="phone" size={20} color="gray" />}
               />
             )}
           />
-          {form.formState.errors.email && (
-            <Text className="text-red-600">{form.formState.errors.email.message}</Text>
+          {form.formState.errors.phone && (
+            <Text className="text-red-600">{form.formState.errors.phone.message}</Text>
           )}
         </FieldLayout>
         <FieldLayout label="Địa chỉ">

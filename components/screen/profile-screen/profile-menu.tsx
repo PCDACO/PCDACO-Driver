@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
 import ProfileMenuItem from './profile-menu-item';
 
 const ProfileMenu = () => {
+  const router = useRouter();
+
   return (
     <View className="mx-4 mb-6 overflow-hidden rounded-xl bg-white shadow-sm">
       <ProfileMenuItem
@@ -14,9 +17,13 @@ const ProfileMenu = () => {
       />
 
       <ProfileMenuItem
-        icon={<Ionicons size={20} name="calendar-outline" />}
-        text="Yêu cầu đặt xe"
-        onPress={() => console.log('Booking requests pressed')}
+        icon={<Ionicons size={20} name="document-text-outline" />}
+        text="Chỉnh sửa bằng lái xe"
+        onPress={() =>
+          router.push({
+            pathname: '/(screen)/license/license-edit',
+          })
+        }
       />
 
       <ProfileMenuItem

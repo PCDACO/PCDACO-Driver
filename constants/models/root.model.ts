@@ -11,7 +11,7 @@ declare global {
   type RootRequest = {
     index: number;
     size: number;
-    keyword?: string;
+    keyword: string;
   };
 
   type LastIdRootResquest = {
@@ -30,7 +30,7 @@ declare global {
     message: string;
   };
 
-  type Size = 'sm' | 'md' | 'lg' | 'xl';
+  // type Size = 'sm' | 'md' | 'lg' | 'xl';
 
   type Pagination<T> = {
     items: T[];

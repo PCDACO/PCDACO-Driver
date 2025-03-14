@@ -2,14 +2,14 @@ import { create } from 'zustand';
 
 interface ApiStore {
   endpoints: string[];
-  addEndpoint: (key: 'register' | 'license' | 'image') => void;
-  removeEndpoint: (key: 'register' | 'license' | 'image') => void;
+  addEndpoint: (key: string) => void;
+  removeEndpoint: (key: string) => void;
   resetEndpoints: () => void;
-  hasEndpoint: (key: 'register' | 'license' | 'image') => boolean;
+  hasEndpoint: (key: string | string[]) => boolean;
 }
 
 export const useApiStore = create<ApiStore>((set, get) => ({
-  endpoints: ['register', 'license', 'image'],
+  endpoints: [],
 
   addEndpoint: (key) =>
     set((state) => ({
@@ -21,7 +21,12 @@ export const useApiStore = create<ApiStore>((set, get) => ({
       endpoints: state.endpoints.filter((endpoint) => endpoint !== key),
     })),
 
-  resetEndpoints: () => set({ endpoints: ['register', 'license', 'image'] }),
+  resetEndpoints: () => set({ endpoints: [] }),
 
-  hasEndpoint: (key) => get().endpoints.includes(key),
+  hasEndpoint: (key) => {
+    if (Array.isArray(key)) {
+      return key.every((k) => get().endpoints.includes(k));
+    }
+    return get().endpoints.includes(key);
+  },
 }));

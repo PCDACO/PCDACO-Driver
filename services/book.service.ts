@@ -9,7 +9,9 @@ import {
 
 export const BookService = {
   get: {
-    list: async (params: BookParams): Promise<RootResponse<Pagination<BookResponseList>>> => {
+    list: async (
+      params?: Partial<BookParams>
+    ): Promise<RootResponse<Pagination<BookResponseList>>> => {
       try {
         const response = await axiosInstance.get('/api/bookings', { params });
         return response.data;
@@ -31,7 +33,7 @@ export const BookService = {
   post: {
     bookings: async (payload: BookPayload): Promise<RootResponse<any>> => {
       try {
-        const response = await axiosInstance.post('/api/booking', payload);
+        const response = await axiosInstance.post('/api/bookings', payload);
 
         return response.data;
       } catch (error: any) {

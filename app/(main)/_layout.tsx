@@ -24,6 +24,13 @@ const MainLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="booking"
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={24} />,
+            tabBarLabel: 'Đặt xe',
+          }}
+        />
+        <Tabs.Screen
           name="profile"
           options={{
             tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,

@@ -22,23 +22,23 @@ const RegisterAccountForm: React.FC<RegisterAccountFormProps> = ({ form }) => {
       </TextUI>
 
       <View className="mt-4 gap-2">
-        <FieldLayout label="Số điện thoại">
+        <FieldLayout label="Email">
           <Controller
             control={form.control}
-            name="phone"
+            name="email"
             render={({ field }) => (
               <Input
                 {...field}
-                placeholder="Nhập số điện thoại"
-                leftIcon={<Icon name="phone" size={20} color="gray" />}
-                textContentType="telephoneNumber"
-                keyboardType="numeric"
+                placeholder="Nhập email"
+                leftIcon={<Icon name="mail" size={20} color="gray" />}
+                textContentType="emailAddress"
+                keyboardType="email-address"
                 onChangeText={field.onChange}
               />
             )}
           />
-          {form.formState.errors.phone && (
-            <Text className="text-red-600">{form.formState.errors.phone.message}</Text>
+          {form.formState.errors.email && (
+            <Text className="text-red-600">{form.formState.errors.email.message}</Text>
           )}
         </FieldLayout>
         <FieldLayout label="Mật khẩu">

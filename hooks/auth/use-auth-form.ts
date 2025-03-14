@@ -4,8 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 import { useForm } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
-import { useLicenseForm } from '../license/use-license-form';
-
 import { Role } from '~/constants/enums';
 import {
   AuthPayloads,
@@ -17,7 +15,6 @@ import {
 import { useAuth } from '~/hooks/auth/use-auth';
 import { UserService } from '~/services/user.service';
 import { useAuthStore } from '~/store/auth-store';
-import { useApiStore } from '~/store/check-api';
 import { useStepStore } from '~/store/use-step';
 
 type UseAuthFormProps = {
@@ -27,13 +24,7 @@ type UseAuthFormProps = {
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const { loginMutation, registerMutation } = useAuth();
 
-  const { removeEndpoint } = useApiStore();
-  const { setTokens, removeTokens } = useAuthStore();
-  const {
-    form: licenseForm,
-    onSubmit: onSubmitLicense,
-    isLoading: isLoadingLicense,
-  } = useLicenseForm();
+  const { setTokens, removeTokens, setIsAuthenticated } = useAuthStore();
 
   const { nextStep } = useStepStore();
 
@@ -41,7 +32,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
     resolver: zodResolver(type === 'login' ? loginSchema : registerSchema),
     defaultValues:
       type === 'login'
-        ? { phone: '', password: '' }
+        ? { email: '', password: '' }
         : {
             name: '',
             email: '',
@@ -66,7 +57,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
   const checkConditionOfEachStep = async (step: number) => {
     switch (step) {
       case 1: {
-        const isValidate = await validField(form.trigger(['phone', 'password']));
+        const isValidate = await validField(form.trigger(['email', 'password']));
         if (isValidate) {
           nextStep();
         }
@@ -74,26 +65,11 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
       }
       case 2: {
         const isValidate = await validField(
-          form.trigger(['name', 'email', 'address', 'dateOfBirth'])
+          form.trigger(['name', 'address', 'dateOfBirth', 'phone'])
         );
         if (isValidate) {
           nextStep();
         }
-        return isValidate;
-      }
-      case 3: {
-        const isValidate = await validField(
-          licenseForm.trigger(['licenseNumber', 'expirationDate'])
-        );
-        if (isValidate) {
-          nextStep();
-        }
-        return isValidate;
-      }
-      case 4: {
-        const isValidate = await validField(
-          licenseForm.trigger(['licenseImageFront', 'licenseImageBack'])
-        );
         return isValidate;
       }
       default:
@@ -117,16 +93,19 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
                   if (response?.value.role === Role.Driver) {
                     ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
 
+                    setIsAuthenticated(true);
                     router.push('/(main)');
                     form.reset();
                   } else {
                     ToastAndroid.show('Đây không là tài khoản tài xế', ToastAndroid.SHORT);
+                    setIsAuthenticated(false);
                     removeTokens();
                   }
                 })
                 .catch(() => {
                   ToastAndroid.show('Đây không là tài xế', ToastAndroid.SHORT);
                   removeTokens();
+                  setIsAuthenticated(false);
                 });
             }
           },
@@ -139,14 +118,13 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
         registerMutation.mutate(data as RegisterPayload, {
           onSuccess: async (data) => {
             // check if register success, remove register endpoint in store
-            removeEndpoint('register');
 
             await setTokens(data.value.accessToken, data.value.refreshToken);
-            await onSubmitLicense();
-
+            setIsAuthenticated(true);
             ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
           },
           onError: (error: any) => {
+            setIsAuthenticated(false);
             ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
           },
         });
@@ -158,11 +136,8 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
 
   return {
     form,
-    licenseForm,
     onSubmit,
-    onSubmitLicense,
-    isLoading: loginMutation.isPending || registerMutation.isPending || isLoadingLicense,
-    // currentUserQuery.isLoading,
+    isLoading: loginMutation.isPending || registerMutation.isPending,
     checkConditionOfEachStep,
   };
 };

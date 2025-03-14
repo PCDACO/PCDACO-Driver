@@ -29,23 +29,23 @@ const Login: FunctionComponent = () => {
 
         {/* Form */}
         <View className="flex-col gap-4">
-          <FieldLayout label="Số điện thoại">
+          <FieldLayout label="Email">
             <Controller
               control={form.control}
-              name="phone"
+              name="email"
               render={({ field }) => (
                 <Input
                   {...field}
-                  placeholder="Nhập số điện thoại"
-                  leftIcon={<Icon name="phone" size={20} color="gray" />}
-                  textContentType="telephoneNumber"
-                  keyboardType="numeric"
+                  placeholder="Nhập email"
+                  leftIcon={<Icon name="mail" size={20} color="gray" />}
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
                   onChangeText={field.onChange}
                 />
               )}
             />
-            {form.formState.errors.phone && (
-              <TextUI className="text-destructive">{form.formState.errors.phone.message}</TextUI>
+            {form.formState.errors.email && (
+              <TextUI className="text-destructive">{form.formState.errors.email.message}</TextUI>
             )}
           </FieldLayout>
 
