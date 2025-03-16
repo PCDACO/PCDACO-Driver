@@ -6,7 +6,7 @@ import { AuthService } from '~/services/auth.service';
 import { useAuthStore } from '~/store/auth-store';
 
 export const useAuth = () => {
-  const { setTokens, setIsAuthenticated, removeTokens } = useAuthStore();
+  const { setTokens, setIsAuthenticated, removeTokens, refreshToken } = useAuthStore();
 
   const loginMutation = useMutation({
     mutationKey: [QueryKey.Auth.Login],
@@ -38,10 +38,15 @@ export const useAuth = () => {
     onSuccess: () => {
       setIsAuthenticated(true);
     },
-    onError: (error) => {
-      removeTokens();
-      setIsAuthenticated(false);
-      console.error(error);
+    onError: (error: any) => {
+      if (error.response?.status === 401) {
+        if (refreshToken) {
+          refreshTokenMutation.mutate(refreshToken);
+        } else {
+          removeTokens();
+          setIsAuthenticated(false);
+        }
+      }
     },
   });
 

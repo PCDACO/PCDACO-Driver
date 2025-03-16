@@ -8,15 +8,16 @@ export interface LicensePayloadResponse {
 }
 
 export interface LicenseResponse {
-  id: string;
+  userId: string;
   licenseNumber: string;
   expirationDate: Date;
   imageFrontUrl: string;
   imageBackUrl: string;
-  isApproved: null;
+  isApproved: boolean;
   rejectReason: null;
   approvedAt: null;
   createdAt: Date;
+  licenseImageUploadedAt: Date;
 }
 
 export interface LicenseImagesPayload {

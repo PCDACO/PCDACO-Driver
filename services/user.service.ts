@@ -36,6 +36,8 @@ export const UserService = {
   patch: {
     avatar: async (id: string, avatar: File): Promise<RootResponse<any>> => {
       try {
+        console.log(' call avatar', avatar);
+
         const formData = new FormData();
         formData.append('avatar', avatar);
 

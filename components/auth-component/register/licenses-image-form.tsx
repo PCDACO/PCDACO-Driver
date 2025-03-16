@@ -1,6 +1,5 @@
 import { Feather } from '@expo/vector-icons';
 import Icon from '@expo/vector-icons/Feather';
-import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
@@ -11,7 +10,7 @@ import { convertAssertToFile } from '~/lib/convert';
 import { useApiStore } from '~/store/check-endpoint';
 
 interface RenderLicense {
-  image: ImagePicker.ImagePickerAsset | string;
+  image: string;
   onClear: () => void;
   isEdit?: boolean;
   id?: string;
@@ -20,20 +19,12 @@ interface RenderLicense {
 const renderLicense: React.FC<RenderLicense> = ({ image, onClear, isEdit = false, id }) => {
   return (
     <View className="relative h-60">
-      {isEdit ||
-        (!id && (
-          <Icon
-            name="x-circle"
-            size={20}
-            color="red"
-            className="absolute right-2 top-2 z-10"
-            onPress={onClear}
-          />
-        ))}
-      <Image
-        source={{ uri: typeof image === 'string' ? image : image.uri }}
-        className=" h-60 w-full rounded-lg object-cover"
-      />
+      {(isEdit || !id) && (
+        <TouchableOpacity className="absolute right-2 top-2 z-10" onPress={onClear}>
+          <Icon name="x-circle" size={20} color="red" />
+        </TouchableOpacity>
+      )}
+      <Image source={{ uri: image }} className=" h-60 w-full rounded-lg object-cover" />
     </View>
   );
 };
@@ -53,13 +44,18 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({
 }) => {
   const [isEdit, setIsEdit] = React.useState(false);
   const { addEndpoint, removeEndpoint } = useApiStore();
-  const [licenseFront, setLicenseFront] = React.useState<ImagePicker.ImagePickerAsset | undefined>(
-    form.watch('licenseImageFront')
-  );
+  const [licenseFront, setLicenseFront] = React.useState<string | undefined>();
 
-  const [licenseBack, setLicenseBack] = React.useState<ImagePicker.ImagePickerAsset | undefined>(
-    form.watch('licenseImageBack')
-  );
+  const [licenseBack, setLicenseBack] = React.useState<string | undefined>();
+
+  React.useEffect(() => {
+    if (licenseImageFront) {
+      setLicenseFront(licenseImageFront);
+    }
+    if (licenseImageBack) {
+      setLicenseBack(licenseImageBack);
+    }
+  }, [licenseImageFront, licenseImageBack]);
 
   return (
     <View className="gap-2">
@@ -95,7 +91,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({
             <CameraTakePicture
               className="h-32"
               onCapture={(value) => {
-                setLicenseFront(value);
+                setLicenseFront(value.uri);
 
                 form.setValue('licenseImageFront', convertAssertToFile(value));
               }}
@@ -129,7 +125,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({
             <CameraTakePicture
               className="h-32"
               onCapture={(value) => {
-                setLicenseBack(value);
+                setLicenseBack(value.uri);
 
                 form.setValue('licenseImageBack', convertAssertToFile(value));
               }}

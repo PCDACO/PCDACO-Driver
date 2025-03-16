@@ -39,5 +39,6 @@ export const QueryKey = {
     Detail: 'UserDetail',
     Update: 'UserUpdate',
     Avatar: 'UserAvatar',
+    Password: 'UserPassword',
   },
 };

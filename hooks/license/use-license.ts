@@ -8,11 +8,7 @@ export const useLicensesListQuery = () => {
   const query = useQuery({
     queryKey: [QueryKey.License.List],
     queryFn: async () => await LiccenseService.get.license(),
-    staleTime: 1000 * 60 * 2,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-    refetchInterval: 1000 * 60 * 2,
+    staleTime: 0,
     retry: 1,
   });
 
@@ -35,14 +31,14 @@ export const useLicenseMutation = () => {
 
   const updateLicenseMutation = useMutation({
     mutationKey: [QueryKey.License.Update],
-    mutationFn: async ({ id, payload }: { id: string; payload: LicensePayload }) =>
-      await LiccenseService.put.license(id, payload),
+    mutationFn: async ({ payload }: { payload: LicensePayload }) =>
+      await LiccenseService.put.license(payload),
   });
 
   const patchImagesMutation = useMutation({
     mutationKey: [QueryKey.License.PatchImage],
-    mutationFn: async ({ id, payload }: { id: string; payload: LicenseImagesPayload }) =>
-      await LiccenseService.patch.images(id, payload),
+    mutationFn: async ({ payload }: { payload: LicenseImagesPayload }) =>
+      await LiccenseService.patch.images(payload),
   });
 
   return { createLicenseMutation, updateLicenseMutation, patchImagesMutation };

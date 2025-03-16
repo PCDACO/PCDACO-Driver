@@ -6,6 +6,9 @@ import { formatPriceToVND } from '~/lib/format';
 interface ProfileStatsProps {
   bookingsCount: number;
   income: number;
+  totalCar: number;
+  totalRent: number;
+  totalRented: number;
 }
 
 const ProfileStats = ({ bookingsCount, income }: ProfileStatsProps) => {

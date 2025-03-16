@@ -13,7 +13,7 @@ interface AuthState {
   setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   removeTokens: () => Promise<void>;
-  refetchToken: () => Promise<void>;
+
   validateToken: () => Promise<void>;
 }
 
@@ -40,22 +40,6 @@ export const useAuthStore = create<AuthState>()(
         set({ accessToken: null, refreshToken: null, isAuthenticated: false });
       },
 
-      refetchToken: async () => {
-        const oldRefreshToken = get().refreshToken;
-        if (!oldRefreshToken) return;
-
-        await AuthService.refreshToken(oldRefreshToken)
-          .then((response) => {
-            set({
-              accessToken: response.value.accessToken,
-              refreshToken: response.value.refreshToken,
-            });
-          })
-          .catch(() => {
-            get().removeTokens();
-          });
-      },
-
       validateToken: async () => {
         await AuthService.validationToken()
           .then(() => {
@@ -64,12 +48,8 @@ export const useAuthStore = create<AuthState>()(
               refreshToken: get().refreshToken,
             });
           })
-          .catch((error: AxiosError) => {
-            if (error.response?.status === 401) {
-              get().refetchToken();
-            } else {
-              get().removeTokens();
-            }
+          .catch(() => {
+            get().removeTokens();
           });
       },
     }),

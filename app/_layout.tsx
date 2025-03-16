@@ -6,13 +6,12 @@ import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCameraPermissions } from 'expo-camera';
 import * as Location from 'expo-location';
-import { router, Slot, Stack } from 'expo-router';
+import { Slot, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useColorScheme, useInitialAndroidBarSync } from '~/lib/useColorScheme';
-import { useAuthStore } from '~/store/auth-store';
 import { NAV_THEME } from '~/theme';
 
 export { ErrorBoundary } from 'expo-router';
@@ -21,8 +20,6 @@ export default function RootLayout() {
   const queryClient = new QueryClient();
   // const [location, setLocation] = React.useState<Location.LocationObject | null>(null);
   const [requestPermission] = useCameraPermissions();
-
-  const { refetchToken } = useAuthStore();
   const { requestForegroundPermissionsAsync } = Location;
 
   const handlerPermission = React.useCallback(() => {
@@ -34,7 +31,6 @@ export default function RootLayout() {
   React.useEffect(() => {
     requestForegroundPermissionsAsync();
     handlerPermission();
-    refetchToken();
   }, []);
 
   useInitialAndroidBarSync();

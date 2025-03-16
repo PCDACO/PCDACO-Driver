@@ -48,13 +48,11 @@
     "icon": "./assets/logo-driver.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/logo-driver.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anhden123.PCDACODriver",

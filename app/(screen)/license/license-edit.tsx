@@ -16,7 +16,7 @@ const LicenseEdit = () => {
   const { data, isLoading: isLoadingList } = useLicensesListQuery();
 
   const { form, onSubmit, isLoading } = useLicenseForm({
-    id: data?.value?.id,
+    id: data?.value?.userId,
   });
 
   if (isLoadingList) {
@@ -30,7 +30,7 @@ const LicenseEdit = () => {
   return (
     <SafeAreaView>
       <View className="relative h-screen bg-slate-50 dark:bg-slate-800">
-        <Header title={data?.value?.id ? 'Chỉnh sửa bằng lái xe' : 'Thêm bằng lái xe'} />
+        <Header title={data?.value?.userId ? 'Chỉnh sửa bằng lái xe' : 'Thêm bằng lái xe'} />
         <ScrollView className="h-screen ">
           {/* form */}
           <View className="w-full gap-6 p-4">
@@ -38,13 +38,13 @@ const LicenseEdit = () => {
               form={form}
               licenseNumber={data?.value?.licenseNumber}
               expirationDate={data?.value?.expirationDate}
-              id={data?.value?.id}
+              id={data?.value?.userId}
             />
             <LicensesImageForm
               form={form}
               licenseImageFront={data?.value?.imageFrontUrl}
               licenseImageBack={data?.value?.imageBackUrl}
-              id={data?.value?.id}
+              id={data?.value?.userId}
             />
           </View>
         </ScrollView>

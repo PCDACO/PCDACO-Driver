@@ -48,8 +48,14 @@ const Profile: FunctionComponent = () => {
           role={data?.value.role}
           user={data?.value}
         />
-        <ProfileStats bookingsCount={47} income={2000000} />
-        <ProfileMenu />
+        <ProfileStats
+          bookingsCount={data?.value.totalRented || 0}
+          income={data?.value.balance || 0}
+          totalCar={data?.value.totalCar || 0}
+          totalRent={data?.value.totalRent || 0}
+          totalRented={data?.value.totalRented || 0}
+        />
+        <ProfileMenu id={data?.value.id || ''} />
         <LogoutButton />
       </SafeAreaView>
     </ScrollView>

@@ -5,15 +5,24 @@ import { View } from 'react-native';
 
 import ProfileMenuItem from './profile-menu-item';
 
-const ProfileMenu = () => {
+interface ProfileMenuProps {
+  id: string;
+}
+
+const ProfileMenu = ({ id }: ProfileMenuProps) => {
   const router = useRouter();
 
   return (
     <View className="mx-4 mb-6 overflow-hidden rounded-xl bg-white shadow-sm">
       <ProfileMenuItem
-        icon={<Ionicons size={20} name="car-outline" />}
-        text="Xe của tôi"
-        onPress={() => console.log('My cars pressed')}
+        icon={<Ionicons size={20} name="person-outline" />}
+        text="Thông tin cá nhân"
+        onPress={() =>
+          router.push({
+            pathname: '/(screen)/user/[id]',
+            params: { id },
+          })
+        }
       />
 
       <ProfileMenuItem
@@ -36,6 +45,17 @@ const ProfileMenu = () => {
         icon={<Ionicons size={20} name="star-outline" />}
         text="Đánh giá"
         onPress={() => console.log('Reviews pressed')}
+      />
+
+      <ProfileMenuItem
+        icon={<Ionicons size={20} name="lock-closed-outline" />}
+        text="Thay đổi mật khẩu"
+        onPress={() =>
+          router.push({
+            pathname: '/(screen)/user/password/[id]',
+            params: { id },
+          })
+        }
       />
 
       <ProfileMenuItem

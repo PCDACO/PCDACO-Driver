@@ -38,8 +38,6 @@ const LicensesUserForm: React.FC<LicensesUserFormProps> = ({
     }
   }, [licenseNumber, expirationDate]);
 
-  console.log('!isEdit || id === undefined', !isEdit && id !== undefined);
-
   return (
     <View className="gap-2">
       <View className="flex-row items-center gap-2">

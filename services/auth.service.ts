@@ -34,7 +34,7 @@ export const AuthService = {
       const response = await axiosInstance.post('/api/auth/validate-token');
       return response.data;
     } catch (error: any) {
-      throw error.response.data;
+      throw error.response;
     }
   },
 };

@@ -7,6 +7,10 @@ export interface UserResponse {
   phone: string;
   role: string;
   avatarUrl: string;
+  totalCar: number;
+  totalRent: number;
+  totalRented: number;
+  balance: number;
 }
 
 export interface UserPayload {
