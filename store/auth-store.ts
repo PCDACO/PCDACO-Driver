@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AxiosError } from 'axios';
+import { router } from 'expo-router';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -13,7 +13,6 @@ interface AuthState {
   setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   removeTokens: () => Promise<void>;
-
   validateToken: () => Promise<void>;
 }
 
@@ -49,7 +48,8 @@ export const useAuthStore = create<AuthState>()(
             });
           })
           .catch(() => {
-            get().removeTokens();
+            set({ isAuthenticated: false, accessToken: null, refreshToken: null });
+            router.replace('/login');
           });
       },
     }),

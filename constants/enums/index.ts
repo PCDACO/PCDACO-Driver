@@ -10,8 +10,37 @@ export enum FinancialReportStatus {
 }
 
 export enum CarStatus {
-  Available = 'Available',
-  Rented = 'Rented',
-  Inactive = 'Inactive',
+  Inactive,
+  Pending,
+  Available,
+  Rented,
+  Maintain,
+  Rejected,
+}
+
+export enum CarStatusNumber {
+  Available = 0,
+  Pending = 1,
+  Rented = 2,
+  Inactive = 3,
+  Maintain = 4,
+}
+
+export enum BookingStatusEnum {
   Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  ReadyForPickup = 'ReadyForPickup',
+  Ongoing = 'Ongoing',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled',
+  Expired = 'Expired',
+}
+
+export enum CarContractStatusEnum {
+  Pending,
+  OwnerSigned,
+  TechnicianSigned,
+  Completed,
+  Rejected,
 }

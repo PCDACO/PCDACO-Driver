@@ -13,7 +13,6 @@ interface LicenseFormProps {
 }
 
 export const useLicenseForm = ({ id }: LicenseFormProps) => {
-  // const [currentId, setCurrentId] = React.useState<string | undefined>();
   const { createLicenseMutation, updateLicenseMutation, patchImagesMutation } =
     useLicenseMutation();
   const { hasEndpoint, resetEndpoints, removeEndpoint } = useApiStore();

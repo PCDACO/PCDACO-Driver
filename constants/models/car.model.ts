@@ -1,3 +1,5 @@
+import { CarStatus } from '../enums';
+
 export interface CarParams extends Partial<LastIdRootResquest> {
   latitude: number;
   longtitude: number;
@@ -8,6 +10,7 @@ export interface CarParams extends Partial<LastIdRootResquest> {
   fuel: string;
   transmission: string;
   keyword: string;
+  status: CarStatus;
 }
 
 export interface CarResponseList {
@@ -16,11 +19,14 @@ export interface CarResponseList {
   modelName: string;
   ownerId: string;
   ownerName: string;
+  ownerAvatarUrl: string;
   licensePlate: string;
   color: string;
   seat: number;
   description: string;
+  transmissionId: string;
   transmissionType: string;
+  fuelTypeId: string;
   fuelType: string;
   fuelConsumption: number;
   requiresCollateral: boolean;
@@ -35,7 +41,14 @@ export interface CarResponseList {
   amenities: Amenity[];
 }
 
-interface Manufacturer {
+export interface Image {
+  id: string;
+  url: string;
+  type: string;
+  name: string;
+}
+
+export interface Manufacturer {
   id: string;
   name: string;
 }
@@ -54,6 +67,7 @@ export interface CarResponseDetail {
   fuelType: string;
   fuelConsumption: number;
   requiresCollateral: boolean;
+  pickupLocation: Location;
   price: number;
   terms: string;
   status: string;
@@ -65,15 +79,15 @@ export interface CarResponseDetail {
   amenities: Amenity[];
 }
 
-interface Image {
-  id: string;
-  url: string;
-  type: string;
-}
-
 export interface Amenity {
   id: string;
   name: string;
   description: string;
   icon: string;
+}
+
+export interface Location {
+  longitude: number;
+  address: string;
+  latitude: number;
 }

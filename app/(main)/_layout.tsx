@@ -26,6 +26,13 @@ const MainLayout = () => {
         <Tabs.Screen
           name="booking"
           options={{
+            headerShown: true,
+            headerTitle: 'Danh sách đặt xe',
+            headerTitleStyle: {
+              fontSize: 24,
+              fontWeight: 'bold',
+            },
+            headerTitleAlign: 'center',
             tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={24} />,
             tabBarLabel: 'Đặt xe',
           }}

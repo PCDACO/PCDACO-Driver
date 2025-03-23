@@ -12,12 +12,14 @@ interface CameraTakePictureProps {
   onCapture?: (imageUri: ImagePicker.ImagePickerAsset) => void;
   contextInput?: React.ReactNode;
   className?: string;
+  disabled?: boolean;
 }
 
 const CameraTakePicture: React.FC<CameraTakePictureProps> = ({
   contextInput,
   className,
   onCapture,
+  disabled = false,
 }) => {
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -40,6 +42,7 @@ const CameraTakePicture: React.FC<CameraTakePictureProps> = ({
   return (
     <TouchableOpacity
       onPress={takePhoto}
+      disabled={disabled}
       className={cn(
         ' flex-row items-center justify-center gap-2 rounded-md border border-dashed border-muted p-4',
         className

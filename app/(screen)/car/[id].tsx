@@ -1,55 +1,36 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { FunctionComponent, useEffect } from 'react';
-import { Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  runOnJS,
-  useAnimatedScrollHandler,
-  interpolate,
-  Extrapolate,
-} from 'react-native-reanimated';
+import { Text, View, Dimensions, ScrollView, Animated } from 'react-native';
+import { useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import CarBasicInfo from '~/components/screen/car-detail-screen/car-basic-info';
 import CarConfiguration from '~/components/screen/car-detail-screen/car-configuration';
+import CarHeader from '~/components/screen/car-detail-screen/car-header';
 import CarImages from '~/components/screen/car-detail-screen/car-images';
 import CarMainInfo from '~/components/screen/car-detail-screen/car-main-info';
 import OwnerContactInfor from '~/components/screen/car-detail-screen/owner-contact-infor';
+import { SwiperImageItem } from '~/components/ui/swiper-images';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
+import { usePanResponder } from '~/hooks/plugins/use-pan-responder';
+import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const BUTTON_WIDTH = SCREEN_WIDTH - 40;
-const DRAG_THRESHOLD = BUTTON_WIDTH * 0.7;
-// const MIN_SHEET_HEIGHT = SCREEN_HEIGHT * 0.4;
-const MAX_SHEET_HEIGHT = SCREEN_HEIGHT;
-
-type GestureContext = {
-  startX: number;
-  startY: number;
-};
 
 const CarDetail: FunctionComponent = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const translateX = useSharedValue(0);
-  const scrollY = useSharedValue(0);
+  const [isExpanded, setIsExpanded] = React.useState(false);
   const translateY = useSharedValue(SCREEN_HEIGHT * 0.6);
-  const isScrollEnabled = useSharedValue(false);
+
+  // Sheet
+  const { slideAnim, panResponder: sheetPanResponder } = usePanResponder({
+    onExpand: () => setIsExpanded(true),
+    onCollapse: () => setIsExpanded(false),
+  });
 
   const { data, isLoading } = useCarDetailQuery(id as string);
-
-  useEffect(() => {
-    translateY.value = withSpring(SCREEN_HEIGHT * 0.4, {
-      damping: 15,
-      stiffness: 40,
-    });
-  }, []);
 
   const handleComplete = () => {
     router.push({
@@ -60,102 +41,22 @@ const CarDetail: FunctionComponent = () => {
     });
   };
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      if (isScrollEnabled.value) {
-        scrollY.value = event.contentOffset.y;
-      }
-    },
+  // Swipe to complete booking
+  const {
+    panResponder,
+    translateX: buttonTranslateX,
+    scale: buttonScale,
+    isCompleted,
+  } = useSwipeComplete({
+    onComplete: handleComplete,
   });
 
-  const verticalGestureHandler = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    GestureContext
-  >({
-    onStart: (_, ctx) => {
-      ctx.startY = translateY.value;
-    },
-    onActive: (event, ctx) => {
-      // Only handle drag if we're not in full screen or if we're at the top of the scroll
-      if (!isScrollEnabled.value || scrollY.value <= 0) {
-        const newTranslateY = ctx.startY + event.translationY;
-        translateY.value = Math.max(0, Math.min(SCREEN_HEIGHT * 0.6, newTranslateY));
-      }
-    },
-    onEnd: (event) => {
-      const shouldExpand = event.velocityY < -600 || translateY.value < SCREEN_HEIGHT * 0.3;
-
-      const finalPosition = shouldExpand ? 0 : SCREEN_HEIGHT * 0.6;
-      translateY.value = withSpring(finalPosition, {
-        velocity: event.velocityY,
-        damping: 15,
-        stiffness: 50,
-      });
-
-      // Enable scrolling only when fully expanded
-      isScrollEnabled.value = finalPosition === 0;
-    },
-  });
-
-  const horizontalGestureHandler = useAnimatedGestureHandler<
-    PanGestureHandlerGestureEvent,
-    GestureContext
-  >({
-    onStart: (_, ctx) => {
-      ctx.startX = translateX.value;
-    },
-    onActive: (event, ctx) => {
-      const newValue = ctx.startX + event.translationX;
-      translateX.value = Math.max(0, Math.min(newValue, BUTTON_WIDTH - 64));
-    },
-    onEnd: () => {
-      if (translateX.value > DRAG_THRESHOLD) {
-        translateX.value = withSpring(BUTTON_WIDTH - 64);
-        runOnJS(handleComplete)();
-      } else {
-        translateX.value = withSpring(0);
-      }
-    },
-  });
-
-  const slideStyle = useAnimatedStyle(() => {
-    const currentTranslateY = translateY.value - (isScrollEnabled.value ? scrollY.value : 0);
-
-    return {
-      transform: [
-        {
-          translateY: currentTranslateY,
-        },
-      ],
-      height: interpolate(
-        translateY.value,
-        [0, SCREEN_HEIGHT * 0.6],
-        [SCREEN_HEIGHT, SCREEN_HEIGHT * 0.5],
-        Extrapolate.CLAMP
-      ),
-    };
-  });
-
-  const dragStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  const imageContainerStyle = useAnimatedStyle(() => {
-    const progress = interpolate(
-      translateY.value,
-      [0, SCREEN_HEIGHT * 0.6],
-      [0, 1],
-      Extrapolate.CLAMP
-    );
-
-    const scale = interpolate(progress, [0, 1], [1, 1], Extrapolate.CLAMP);
-    const opacity = interpolate(progress, [0, 1], [0.3, 1], Extrapolate.CLAMP);
-
-    return {
-      transform: [{ scale }],
-      opacity,
-    };
-  });
+  useEffect(() => {
+    translateY.value = withSpring(SCREEN_HEIGHT * 0.4, {
+      damping: 15,
+      stiffness: 40,
+    });
+  }, []);
 
   if (isLoading || !data) {
     return (
@@ -166,59 +67,65 @@ const CarDetail: FunctionComponent = () => {
     );
   }
 
+  const carImages: SwiperImageItem[] =
+    data?.value.images
+      .filter((item) => item.type === 'Car')
+      .map((image) => ({
+        id: image.id,
+        url: image.url,
+      })) || [];
+
   return (
-    <View className="relative h-screen">
-      {/* Back Button */}
-      {translateY.value !== MAX_SHEET_HEIGHT && (
-        <View className="absolute left-4 top-4 z-10">
-          <TouchableOpacity onPress={() => router.back()}>
-            <FontAwesome name="arrow-left" size={24} color="white" />
-          </TouchableOpacity>
+    <View className="relative flex-1 bg-slate-100 dark:bg-slate-900">
+      <CarHeader />
+      <CarImages images={carImages} />
+
+      <Animated.View
+        className="absolute bottom-0 left-0 right-0 top-0 z-10 items-center justify-center rounded-t-3xl border border-gray-200 bg-white px-6 shadow-lg dark:border-gray-800 dark:bg-slate-900"
+        style={{
+          paddingTop: 10,
+          transform: [{ translateY: slideAnim }],
+        }}>
+        <View {...sheetPanResponder.panHandlers} className="h-6 w-full items-center justify-center">
+          <View className="h-1 w-20 rounded-full bg-gray-200 dark:bg-gray-800" />
         </View>
-      )}
 
-      {/* Car Images with animation */}
-      <Animated.View style={imageContainerStyle} className="h-[80%]">
-        <CarImages />
-      </Animated.View>
-
-      {/* Car Detail */}
-      <PanGestureHandler onGestureEvent={verticalGestureHandler}>
-        <Animated.View
-          className="absolute left-0 w-screen rounded-t-3xl bg-white dark:bg-black"
-          style={slideStyle}>
-          {/* Handle indicator */}
-          <View className="items-center py-2">
-            <View className="h-1 w-16 rounded-full bg-gray-300" />
-          </View>
-
-          <Animated.ScrollView
-            onScroll={scrollHandler}
-            scrollEventThrottle={16}
-            className="px-6"
-            bounces={false}>
+        <ScrollView
+          className="mb-10 h-screen w-full"
+          scrollEnabled={isExpanded}
+          style={{
+            marginBottom: 100,
+          }}
+          showsVerticalScrollIndicator={false}>
+          <View
+            className=" h-full gap-6 py-2"
+            style={{
+              marginBottom: 20,
+            }}>
             <View className="gap-4 pb-32">
               <CarBasicInfo car={data.value} />
               <CarConfiguration car={data.value} />
               <OwnerContactInfor car={data.value} />
               <CarMainInfo car={data.value} />
             </View>
-          </Animated.ScrollView>
-        </Animated.View>
-      </PanGestureHandler>
+          </View>
+        </ScrollView>
+      </Animated.View>
 
-      {/* Drag to Submit Button */}
-      <View className="absolute bottom-4 left-0 right-0 px-5">
-        <View className="relative h-16 w-full rounded-full bg-gray-600/20 p-2">
-          <PanGestureHandler onGestureEvent={horizontalGestureHandler}>
-            <Animated.View
-              className="bg-primary/70 h-12 w-12 items-center justify-center rounded-full"
-              style={dragStyle}>
-              <FontAwesome name="arrow-right" size={24} color="white" />
-            </Animated.View>
-          </PanGestureHandler>
-          <View className="absolute left-0 right-0 top-0 translate-y-6">
-            <Text className="text-center text-gray-500">Kéo để đặt xe →</Text>
+      <View className="absolute bottom-8 left-0 right-0 z-20 px-6 shadow-sm">
+        <View className="bg-foreground/20 h-12 w-full overflow-hidden rounded-full ">
+          <Animated.View
+            className="absolute left-1 top-1 size-10 items-center justify-center rounded-full bg-blue-500"
+            style={{
+              transform: [{ translateX: buttonTranslateX }, { scale: buttonScale }],
+            }}
+            {...panResponder.panHandlers}>
+            <FontAwesome name="arrow-right" size={20} color="white" />
+          </Animated.View>
+          <View className="h-full w-full items-center justify-center">
+            <Text className="text-base font-bold text-background ">
+              {isCompleted ? 'Đặt xe thành công!' : 'Vuốt để đặt xe'}
+            </Text>
           </View>
         </View>
       </View>

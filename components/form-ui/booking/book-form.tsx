@@ -43,6 +43,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
         <DateTimePickerModal
           isVisible={showStartDatePicker}
           mode="date"
+          minimumDate={new Date()}
           onConfirm={(date) => {
             setShowStartDatePicker(false);
             form.setValue('startTime', date);
@@ -72,6 +73,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
         <DateTimePickerModal
           isVisible={showEndDatePicker}
           mode="date"
+          minimumDate={new Date() || form.getValues('startTime')}
           onConfirm={(date: Date) => {
             setShowEndDatePicker(false);
             form.setValue('endTime', date);

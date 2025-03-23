@@ -1,24 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
-import SwiperImages from '~/components/ui/swiper-images';
+import SwiperImages, { SwiperImageItem } from '~/components/ui/swiper-images';
 
-const images = [
-  {
-    id: '1',
-    url: undefined,
-  },
-  {
-    id: '2',
-    url: undefined,
-  },
-  {
-    id: '3',
-    url: undefined,
-  },
-];
+interface CarImagesProps {
+  images: SwiperImageItem[];
+}
 
-const CarImages: FunctionComponent = () => {
+const CarImages: FunctionComponent<CarImagesProps> = ({ images }) => {
   return (
     <View>
       <SwiperImages images={images} />

@@ -1,5 +1,5 @@
 import axiosInstance from '~/configs/axios.config';
-import { CarParams, CarResponseList } from '~/constants/models/car.model';
+import { CarParams, CarResponseDetail, CarResponseList } from '~/constants/models/car.model';
 
 export const CarService = {
   get: {
@@ -14,7 +14,7 @@ export const CarService = {
       }
     },
 
-    detail: async (id: string): Promise<RootResponse<CarResponseList>> => {
+    detail: async (id: string): Promise<RootResponse<CarResponseDetail>> => {
       try {
         const response = await axiosInstance.get(`/api/car/${id}`);
         return response.data;

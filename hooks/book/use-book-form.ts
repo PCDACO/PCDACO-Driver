@@ -5,6 +5,7 @@ import { ToastAndroid } from 'react-native';
 import { useBookingMutation } from './use-book';
 
 import { BookPayloadSchema, bookSchema } from '~/constants/schemas/book.schema';
+import { translate } from '~/lib/translate';
 
 export const useBookingForm = () => {
   const { createBooking } = useBookingMutation();
@@ -19,15 +20,13 @@ export const useBookingForm = () => {
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    // console.log('data', data);
-
     createBooking.mutate(data, {
       onSuccess: () => {
-        ToastAndroid.show('Đặt xe thành công', ToastAndroid.SHORT);
+        ToastAndroid.show(translate.booking.success.title, ToastAndroid.SHORT);
         form.reset();
       },
-      onError: (error) => {
-        ToastAndroid.show('Đặt xe thất bại', ToastAndroid.SHORT);
+      onError: (error: any) => {
+        ToastAndroid.show(error.message || translate.booking.failed.title, ToastAndroid.SHORT);
         console.log('error', error);
       },
     });

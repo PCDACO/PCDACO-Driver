@@ -3,6 +3,8 @@ import { Platform } from 'react-native';
 const IOS_SYSTEM_COLORS = {
   white: 'rgb(255, 255, 255)',
   black: 'rgb(0, 0, 0)',
+  gray: 'rgb(107 114 128)',
+  green: 'rgb(74 222 128)',
   light: {
     grey6: 'rgb(242, 242, 247)',
     grey5: 'rgb(230, 230, 235)',
@@ -36,6 +38,8 @@ const IOS_SYSTEM_COLORS = {
 const ANDROID_COLORS = {
   white: 'rgb(255, 255, 255)',
   black: 'rgb(0, 0, 0)',
+  gray: 'rgb(107 114 128)',
+  green: 'rgb(74 222 128)',
   light: {
     grey6: 'rgb(249, 249, 255)',
     grey5: 'rgb(215, 217, 228)',

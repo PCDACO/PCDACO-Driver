@@ -90,6 +90,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({
           ) : (
             <CameraTakePicture
               className="h-32"
+              disabled={!isEdit}
               onCapture={(value) => {
                 setLicenseFront(value.uri);
 
@@ -124,6 +125,7 @@ const LicensesImageForm: React.FC<LicensesImageFormProps> = ({
           ) : (
             <CameraTakePicture
               className="h-32"
+              disabled={!isEdit}
               onCapture={(value) => {
                 setLicenseBack(value.uri);
 

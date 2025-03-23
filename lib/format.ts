@@ -33,3 +33,8 @@ export function countDaysBetweenDates(startDate: Date, endDate: Date): number {
   const diffInTime = endDate.getTime() - startDate.getTime();
   return Math.round(diffInTime / oneDay);
 }
+
+export const formatNumber = (value: string | number): string => {
+  const numericValue = value.toString().replace(/\D/g, '');
+  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};

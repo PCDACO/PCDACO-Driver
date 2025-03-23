@@ -30,8 +30,6 @@ declare global {
     message: string;
   };
 
-  // type Size = 'sm' | 'md' | 'lg' | 'xl';
-
   type Pagination<T> = {
     items: T[];
     totalItems: number;
