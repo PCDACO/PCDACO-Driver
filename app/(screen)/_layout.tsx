@@ -23,6 +23,13 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
         <Stack.Screen
+          name="booking/detail/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: 'Thông tin đặt xe',
+          }}
+        />
+        <Stack.Screen
           name="search-cars"
           options={{
             headerShown: false,

@@ -25,14 +25,40 @@ export const QueryKey = {
   },
 
   Booking: {
-    List: 'BookingList',
-    Detail: 'BookingDetail',
-    Create: 'BookingCreate',
-    Cancel: 'BookingCancel',
-    Confirm: 'BookingConfirm',
+    get: {
+      List: 'BookingList',
+      Detail: 'BookingDetail',
+      Contract: 'BookingContract',
+      Payment: 'BookingPayment',
+    },
+    post: {
+      Create: 'BookingCreate',
+      Track: 'BookingTrack',
+      PostInspection: 'BookingPostInspection',
+      Webhook: 'BookingWebhook',
+      Inspection: 'BookingInspection',
+      Payment: 'PaymentBooking',
+    },
+    put: {
+      Complete: 'BookingComplete',
+      Approve: 'BookingApprove',
+      Cancel: 'BookingCancel',
+      Confirm: 'BookingConfirm',
+      Return: 'BookingReturn',
+      StartTrip: 'BookingStartTrip',
+    },
   },
 
-  Bank: {},
+  Bank: {
+    List: 'BankList',
+    Account: {
+      List: 'BankAccountList',
+      Detail: 'BankAccountDetail',
+      Create: 'BankAccountCreate',
+      Update: 'BankAccountUpdate',
+      Delete: 'BankAccountDelete',
+    },
+  },
 
   User: {
     Current: 'CurrentUser',

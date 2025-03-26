@@ -35,6 +35,9 @@ const MainLayout = () => {
             headerTitleAlign: 'center',
             tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={24} />,
             tabBarLabel: 'Đặt xe',
+            headerStyle: {
+              height: 70,
+            },
           }}
         />
         <Tabs.Screen

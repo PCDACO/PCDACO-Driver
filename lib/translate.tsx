@@ -5,6 +5,7 @@ export const translate = {
     },
     failed: {
       title: 'Đặt xe thất bại',
+      message: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
     },
     status: {
       Pending: 'Chờ xác nhận',
@@ -15,6 +16,18 @@ export const translate = {
       Completed: 'Đã hoàn thành',
       Cancelled: 'Đã hủy',
       Expired: 'Đã hết hạn',
+    },
+    toast: {
+      approve: 'Xác nhận đơn đặt xe thành công!',
+      reject: 'Từ chối đơn đặt xe thành công!',
+    },
+  },
+  bank: {
+    toast: {
+      create: 'Thêm tài khoản ngân hàng thành công!',
+      update: 'Cập nhật tài khoản ngân hàng thành công!',
+      error_create: 'Thêm tài khoản ngân hàng thất bại!',
+      error_update: 'Cập nhật tài khoản ngân hàng thất bại!',
     },
   },
 };

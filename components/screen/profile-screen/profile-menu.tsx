@@ -38,7 +38,12 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
       <ProfileMenuItem
         icon={<Ionicons size={20} name="wallet-outline" />}
         text="Thu nhập & hình thức thanh toán"
-        onPress={() => console.log('Income & payment pressed')}
+        onPress={() => {
+          router.push({
+            pathname: '/(second)/wallet',
+            params: { id },
+          });
+        }}
       />
 
       <ProfileMenuItem

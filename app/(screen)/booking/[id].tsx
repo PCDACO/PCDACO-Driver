@@ -25,10 +25,6 @@ const Booking: FunctionComponent = () => {
 
   const handleComplete = () => {
     onSubmit();
-
-    // setTimeout(() => {
-    //   translateX.value = withSpring(0);
-    // }, 300);
   };
 
   const {

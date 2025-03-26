@@ -50,13 +50,13 @@ const BookHeader: FunctionComponent<BookHeaderProps> = ({
             <Description className="text-sm font-semibold text-foreground" title={ownerName} />
           </View>
         </View>
-        <View className="flex-1 flex-row items-center gap-2">
+        {/* <View className="flex-1 flex-row items-center gap-2">
           <Feather name="user" size={24} color={COLORS.gray} />
           <View>
             <Description title="Tài xế" className="text-sm" />
             <Description className="text-sm font-semibold text-foreground" title={driverName} />
           </View>
-        </View>
+        </View> */}
       </View>
     </View>
   );

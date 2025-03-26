@@ -145,7 +145,7 @@ export const BookService = {
       }
     },
 
-    approve: async (id: string, payload: BookApprovePayload) => {
+    approveOrReject: async (id: string, payload: BookApprovePayload) => {
       try {
         const response = await axiosInstance.put(`/api/bookings/${id}/approve`, payload);
 
@@ -154,7 +154,6 @@ export const BookService = {
         throw error.response.data;
       }
     },
-
     return: async (id: string) => {
       try {
         const response = await axiosInstance.put(`/api/bookings/${id}/return`);

@@ -2,6 +2,7 @@ import * as Slot from '@rn-primitives/slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { Platform, Pressable, PressableProps, Text, View, ViewStyle } from 'react-native';
+
 import { TextClassContext } from '~/components/nativewindui/Text';
 import { cn } from '~/lib/cn';
 import { useColorScheme } from '~/lib/useColorScheme';

@@ -1,6 +1,6 @@
 import { FontAwesome6 } from '@expo/vector-icons';
 import React, { FunctionComponent } from 'react';
-import { View, Text, Image, FlatList } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { SvgUri } from 'react-native-svg';
 

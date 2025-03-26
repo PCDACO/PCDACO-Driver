@@ -11,7 +11,7 @@ const CarHeader: FunctionComponent<CarHeaderProps> = () => {
       <Pressable
         onPress={() => router.back()}
         className="size-10 items-center justify-center rounded-full bg-black/20 dark:bg-white/20">
-        <Feather name="arrow-left" size={24} color="black" />
+        <Feather name="arrow-left" size={24} color="white" />
       </Pressable>
     </View>
   );

@@ -33,7 +33,7 @@ const HomeScreen = () => {
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView>
         {carloading || !car ? (
-          <View className="flex-1 items-center justify-center">
+          <View className="h-96 flex-1 items-center justify-center">
             <ActivityIndicator size="large" color="#0000ff" />
             <Text className="mt-2 text-muted-foreground">Đang tải danh sách xe...</Text>
           </View>
@@ -62,9 +62,9 @@ const HomeScreen = () => {
                 />
               )}
               keyExtractor={(item) => item.id}
-              ItemSeparatorComponent={() => <View className="h-4" />}
+              ItemSeparatorComponent={() => <View className="h-1" />}
               ListEmptyComponent={() => (
-                <View className="flex-1 items-center justify-center">
+                <View className="h-96 flex-1 items-center justify-center">
                   <Text className="text-muted-foreground">Không có xe </Text>
                 </View>
               )}

@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { FunctionComponent } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BookCard from '~/components/card/book/book-card';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
+import BookEmpty from '~/components/screen/book-list/book-empty';
 import BookListParams from '~/components/screen/book-list/book-params';
 import { BookParams } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
@@ -74,12 +75,9 @@ const BookingScreen: FunctionComponent = () => {
             data={bookingList}
             renderItem={({ item }) => <BookCard booking={item} />}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
             className="gap-4"
-            ListEmptyComponent={() => (
-              <View className="flex-1 items-center justify-center">
-                <Text>Không có dữ liệu</Text>
-              </View>
-            )}
+            ListEmptyComponent={() => <BookEmpty />}
           />
         )}
       </View>

@@ -37,7 +37,7 @@ const BookBody: FunctionComponent<BookBodyProps> = ({ startTime, endTime, actual
         </View>
       </View>
       <View className="flex-row items-center gap-2">
-        <Feather name="calendar" size={24} color={COLORS.gray} />
+        <Feather name="clock" size={24} color={COLORS.gray} />
         <View>
           <Description title="Thời gian thực trả xe" className="text-sm" />
           <Description

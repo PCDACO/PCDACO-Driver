@@ -40,6 +40,7 @@
     "clsx": "^2.1.0",
     "expo": "~52.0.38",
     "expo-camera": "~16.0.18",
+    "expo-checkbox": "~4.0.1",
     "expo-constants": "~17.0.8",
     "expo-dev-client": "~5.0.14",
     "expo-image": "~2.0.6",
