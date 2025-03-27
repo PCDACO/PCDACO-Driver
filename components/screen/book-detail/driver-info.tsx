@@ -9,10 +9,10 @@ import { formatPhoneNumber } from '~/lib/format';
 import { COLORS } from '~/theme/colors';
 
 interface DriverInfoProps {
-  driver: BookResponseDetail['driver'];
+  owner: BookResponseDetail['owner'];
 }
 
-const DriverInfo: FunctionComponent<DriverInfoProps> = ({ driver }) => {
+const DriverInfo: FunctionComponent<DriverInfoProps> = ({ owner }) => {
   return (
     <CardBasic className="gap-4">
       <View className="flex-row items-center gap-2">
@@ -22,15 +22,15 @@ const DriverInfo: FunctionComponent<DriverInfoProps> = ({ driver }) => {
       <View className="gap-2">
         <View className="flex-row items-center justify-between gap-2">
           <Text className="text-sm text-gray-500">Họ tên:</Text>
-          <Text className="text-sm">{driver.name}</Text>
+          <Text className="text-sm">{owner.name}</Text>
         </View>
         <View className="flex-row items-center justify-between gap-2">
           <Text className="text-sm text-gray-500">Số điện thoại:</Text>
-          <Text className="text-sm">{formatPhoneNumber(driver.phone || '')}</Text>
+          <Text className="text-sm">{formatPhoneNumber(owner.phone || '')}</Text>
         </View>
         <View className="flex-row items-center justify-between gap-2">
           <Text className="text-sm text-gray-500">Email:</Text>
-          <Text className="text-sm">{driver.email}</Text>
+          <Text className="text-sm">{owner.email}</Text>
         </View>
       </View>
     </CardBasic>

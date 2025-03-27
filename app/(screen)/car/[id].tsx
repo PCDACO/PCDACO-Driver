@@ -5,6 +5,8 @@ import { Text, View, Dimensions, ScrollView, Animated } from 'react-native';
 import { useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
+import { Button } from '~/components/nativewindui/Button';
+import { Text as TextUI } from '~/components/nativewindui/Text';
 import CarBasicInfo from '~/components/screen/car-detail-screen/car-basic-info';
 import CarConfiguration from '~/components/screen/car-detail-screen/car-configuration';
 import CarHeader from '~/components/screen/car-detail-screen/car-header';
@@ -14,7 +16,7 @@ import OwnerContactInfor from '~/components/screen/car-detail-screen/owner-conta
 import { SwiperImageItem } from '~/components/ui/swiper-images';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
 import { usePanResponder } from '~/hooks/plugins/use-pan-responder';
-import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
+// import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -42,14 +44,14 @@ const CarDetail: FunctionComponent = () => {
   };
 
   // Swipe to complete booking
-  const {
-    panResponder,
-    translateX: buttonTranslateX,
-    scale: buttonScale,
-    isCompleted,
-  } = useSwipeComplete({
-    onComplete: handleComplete,
-  });
+  // const {
+  //   panResponder,
+  //   translateX: buttonTranslateX,
+  //   scale: buttonScale,
+  //   isCompleted,
+  // } = useSwipeComplete({
+  //   onComplete: handleComplete,
+  // });
 
   useEffect(() => {
     translateY.value = withSpring(SCREEN_HEIGHT * 0.4, {
@@ -113,6 +115,12 @@ const CarDetail: FunctionComponent = () => {
       </Animated.View>
 
       <View className="absolute bottom-8 left-0 right-0 z-20 px-6 shadow-sm">
+        <Button onPress={handleComplete} className="w-full">
+          <TextUI>Đặt xe</TextUI>
+        </Button>
+      </View>
+
+      {/* <View className="absolute bottom-8 left-0 right-0 z-20 px-6 shadow-sm">
         <View className="bg-foreground/20 h-12 w-full overflow-hidden rounded-full ">
           <Animated.View
             className="absolute left-1 top-1 size-10 items-center justify-center rounded-full bg-blue-500"
@@ -128,7 +136,7 @@ const CarDetail: FunctionComponent = () => {
             </Text>
           </View>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

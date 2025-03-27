@@ -47,8 +47,8 @@ const BookingScreen = () => {
             }
           />
           <DriverInfo
-            driver={
-              bookDetail?.driver || {
+            owner={
+              bookDetail?.owner || {
                 email: '',
                 id: '',
                 name: '',

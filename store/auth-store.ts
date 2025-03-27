@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -49,7 +48,6 @@ export const useAuthStore = create<AuthState>()(
           })
           .catch(() => {
             set({ isAuthenticated: false, accessToken: null, refreshToken: null });
-            router.replace('/login');
           });
       },
     }),

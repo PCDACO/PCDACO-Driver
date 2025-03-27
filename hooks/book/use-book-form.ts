@@ -7,6 +7,7 @@ import { ToastAndroid } from 'react-native';
 import { useBookingMutation } from './use-book';
 
 import { BookPayloadSchema, bookSchema } from '~/constants/schemas/book.schema';
+import { mergeDateTime } from '~/lib/format';
 import { QueryKey } from '~/lib/query-key';
 import { translate } from '~/lib/translate';
 
@@ -19,28 +20,40 @@ export const useBookingForm = () => {
     resolver: zodResolver(bookSchema),
     defaultValues: {
       carId: '',
+      startDay: new Date(),
+      endDay: new Date(new Date().setDate(new Date().getDate() + 1)),
       startTime: new Date(),
       endTime: new Date(),
     },
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    createBooking.mutate(data, {
-      onSuccess: () => {
-        ToastAndroid.show(translate.booking.success.title, ToastAndroid.SHORT);
-        queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
-        form.reset();
-        setTimeout(() => {
-          router.navigate({
-            pathname: '/booking',
-          });
-        }, 1000);
+    const mergedStart = mergeDateTime(new Date(data.startDay), new Date(data.startTime));
+    const mergedEnd = mergeDateTime(new Date(data.endDay), new Date(data.endTime));
+
+    createBooking.mutate(
+      {
+        carId: data.carId,
+        startTime: mergedStart,
+        endTime: mergedEnd,
       },
-      onError: (error: any) => {
-        ToastAndroid.show(error.message || translate.booking.failed.title, ToastAndroid.SHORT);
-        console.log('error', error);
-      },
-    });
+      {
+        onSuccess: () => {
+          ToastAndroid.show(translate.booking.success.title, ToastAndroid.SHORT);
+          queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
+          form.reset();
+          setTimeout(() => {
+            router.navigate({
+              pathname: '/booking',
+            });
+          }, 1000);
+        },
+        onError: (error: any) => {
+          ToastAndroid.show(error.message || translate.booking.failed.title, ToastAndroid.SHORT);
+          console.log('error', error);
+        },
+      }
+    );
   });
 
   return { form, onSubmit, isLoading: createBooking.isPending };

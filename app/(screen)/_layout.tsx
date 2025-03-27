@@ -19,7 +19,9 @@ const ScreenLayout: FunctionComponent = () => {
         <Stack.Screen
           name="booking/[id]"
           options={{
-            headerShown: false,
+            headerShown: true,
+            headerTitle: 'Thời gian thuê',
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
