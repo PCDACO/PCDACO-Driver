@@ -4,7 +4,10 @@ import {
   BookCompleteResponse,
   BookParams,
   BookPayload,
+  BookPaymentResponse,
   BookPostInspection,
+  BookPostInspectionPayload,
+  BookPreInspectionPayload,
   BookResponseDetail,
   BookResponseList,
   BookStartTripPayload,
@@ -65,7 +68,7 @@ export const BookService = {
       }
     },
 
-    bookingPayment: async (id: string) => {
+    bookingPayment: async (id: string): Promise<RootResponse<BookPaymentResponse>> => {
       try {
         const response = await axiosInstance.post(`/api/bookings/${id}/payment`);
 
@@ -95,9 +98,20 @@ export const BookService = {
       }
     },
 
-    postInspection: async (bookingId: string): Promise<RootResponse<BookPostInspection>> => {
+    postInspection: async (
+      bookingId: string,
+      payload: BookPostInspectionPayload
+    ): Promise<RootResponse<BookPostInspection>> => {
       try {
-        const response = await axiosInstance.post(`/api/bookings/${bookingId}/post-inspection`);
+        const formData = new FormData();
+        formData.append('fuelGaugeFinalPhotos', payload.fuelGaugeFinalPhotos);
+        formData.append('cleanlinessPhotos', payload.cleanlinessPhotos);
+        formData.append('scratchesPhotos', payload.scratchesPhotos);
+        formData.append('tollFeesPhotos', payload.tollFeesPhotos);
+        const response = await axiosInstance.postForm(
+          `/api/bookings/${bookingId}/post-inspection`,
+          formData
+        );
 
         return response.data;
       } catch (error: any) {
@@ -105,9 +119,21 @@ export const BookService = {
       }
     },
 
-    preInspection: async (bookingId: string): Promise<RootResponse<BookPostInspection>> => {
+    preInspection: async (
+      bookingId: string,
+      payload: BookPreInspectionPayload
+    ): Promise<RootResponse<BookPostInspection>> => {
       try {
-        const response = await axiosInstance.post(`/api/bookings/${bookingId}/pre-inspection`);
+        const formData = new FormData();
+        formData.append('exteriorPhotos', payload.exteriorPhotos);
+        formData.append('fuelGaugePhotos', payload.fuelGaugePhotos);
+        formData.append('carKeyPhotos', payload.carKeyPhotos);
+        formData.append('trunkPhotos', payload.trunkPhotos);
+        formData.append('parkingLocationPhotos', payload.parkingLocationPhotos);
+        const response = await axiosInstance.postForm(
+          `/api/bookings/${bookingId}/pre-inspection`,
+          formData
+        );
 
         return response.data;
       } catch (error: any) {
@@ -135,9 +161,9 @@ export const BookService = {
       }
     },
 
-    startTrip: async (id: string) => {
+    startTrip: async (id: string, payload: BookStartTripPayload) => {
       try {
-        const response = await axiosInstance.put(`/api/bookings/${id}/start-trip`);
+        const response = await axiosInstance.put(`/api/bookings/${id}/start-trip`, payload);
 
         return response.data;
       } catch (error: any) {

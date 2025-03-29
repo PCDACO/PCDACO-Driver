@@ -28,8 +28,14 @@ export const useBookingForm = () => {
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    const mergedStart = mergeDateTime(new Date(data.startDay), new Date(data.startTime));
-    const mergedEnd = mergeDateTime(new Date(data.endDay), new Date(data.endTime));
+    const mergedStart = mergeDateTime(
+      new Date(data.startDay),
+      new Date(data.startTime.setHours(new Date(data.startTime).getHours() + 7))
+    );
+    const mergedEnd = mergeDateTime(
+      new Date(data.endDay),
+      new Date(data.endTime.setHours(new Date(data.endTime).getHours() + 7))
+    );
 
     createBooking.mutate(
       {

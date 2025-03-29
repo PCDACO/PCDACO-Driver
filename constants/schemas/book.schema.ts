@@ -12,38 +12,20 @@ export const bookSchema = z
       { message: 'Ngày bắt đầu phải từ hôm nay trở đi' }
     ),
     endDay: z.coerce.date(),
-    startTime: z.coerce
-      .date()
-      .refine(
-        (date: Date) => {
-          const now = new Date();
-          return date > now;
-        },
-        { message: 'Yêu cầu chọn giờ bắt đầu' }
-      )
-      .refine(
-        (date: Date) => {
-          const hour = date.getHours();
-          return hour >= 7 && hour <= 22;
-        },
-        { message: 'Thời gian bắt đầu phải trong khoảng 07:00 - 22:00' }
-      ),
-    endTime: z.coerce
-      .date()
-      .refine(
-        (date: Date) => {
-          const now = new Date();
-          return date > now;
-        },
-        { message: 'Yêu cầu chọn giờ kết thúc' }
-      )
-      .refine(
-        (date: Date) => {
-          const hour = date.getHours();
-          return hour >= 7 && hour <= 22;
-        },
-        { message: 'Thời gian kết thúc phải trong khoảng 07:00 - 22:00' }
-      ),
+    startTime: z.date({ required_error: 'Yêu cầu chọn giờ bắt đầu' }).refine(
+      (date) => {
+        const hour = date.getHours();
+        return hour >= 7 && hour <= 22;
+      },
+      { message: 'Thời gian bắt đầu phải trong khoảng 07:00 - 22:00' }
+    ),
+    endTime: z.date({ required_error: 'Yêu cầu chọn giờ kết thúc' }).refine(
+      (date) => {
+        const hour = date.getHours();
+        return hour >= 7 && hour <= 22;
+      },
+      { message: 'Thời gian kết thúc phải trong khoảng 07:00 - 22:00' }
+    ),
   })
   .superRefine((data, ctx) => {
     if (data.endDay <= data.startDay) {
@@ -53,14 +35,6 @@ export const bookSchema = z
         code: z.ZodIssueCode.custom,
       });
     }
-
-    // if (data.endTime <= data.startTime) {
-    //   ctx.addIssue({
-    //     path: ['endTime'],
-    //     message: 'Thời gian kết thúc phải sau thời gian bắt đầu',
-    //     code: z.ZodIssueCode.custom,
-    //   });
-    // }
   });
 
 export type BookPayloadSchema = z.infer<typeof bookSchema>;

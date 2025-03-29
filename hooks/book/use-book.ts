@@ -4,6 +4,8 @@ import {
   BookApprovePayload,
   BookParams,
   BookPayload,
+  BookPostInspectionPayload,
+  BookPreInspectionPayload,
   BookStartTripPayload,
   Webhook,
 } from '~/constants/models/book.model';
@@ -44,7 +46,13 @@ export const useBookingMutation = () => {
 
   const postInspectionBooking = useMutation({
     mutationKey: [QueryKey.Booking.post.PostInspection],
-    mutationFn: async (bookingId: string) => await BookService.post.postInspection(bookingId),
+    mutationFn: async ({
+      bookingId,
+      payload,
+    }: {
+      bookingId: string;
+      payload: BookPostInspectionPayload;
+    }) => await BookService.post.postInspection(bookingId, payload),
   });
 
   const webhookBooking = useMutation({
@@ -54,7 +62,13 @@ export const useBookingMutation = () => {
 
   const inspectionBooking = useMutation({
     mutationKey: [QueryKey.Booking.post.Inspection],
-    mutationFn: async (bookingId: string) => await BookService.post.preInspection(bookingId),
+    mutationFn: async ({
+      bookingId,
+      payload,
+    }: {
+      bookingId: string;
+      payload: BookPreInspectionPayload;
+    }) => await BookService.post.preInspection(bookingId, payload),
   });
 
   const paymentBooking = useMutation({
@@ -90,7 +104,8 @@ export const useBookingMutation = () => {
 
   const startTripBooking = useMutation({
     mutationKey: [QueryKey.Booking.put.StartTrip],
-    mutationFn: async (id: string) => await BookService.put.startTrip(id),
+    mutationFn: async ({ id, payload }: { id: string; payload: BookStartTripPayload }) =>
+      await BookService.put.startTrip(id, payload),
   });
 
   return {

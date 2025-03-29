@@ -1,7 +1,8 @@
+import * as Location from 'expo-location';
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, ToastAndroid, TouchableOpacity, View } from 'react-native';
 
 import { Text } from '~/components/nativewindui/Text';
 import Loading from '~/components/plugins/loading';
@@ -15,11 +16,29 @@ import { useBookingDetailQuery } from '~/hooks/book/use-book';
 import { COLORS } from '~/theme/colors';
 
 const BookingScreen = () => {
+  const [location, setLocation] = React.useState<Location.LocationObject | null>(null);
   const { id } = useLocalSearchParams();
   const { data: bookingDetail, isLoading } = useBookingDetailQuery(id as string);
-  const { handleApproveOrRejectBooking } = useApproveOrRejectBooking({ id: id as string });
+  const { handleApproveOrRejectBooking, handleStartTrip } = useApproveOrRejectBooking({
+    id: id as string,
+  });
 
   const bookDetail = bookingDetail?.value;
+
+  React.useEffect(() => {
+    async function getCurrentLocation() {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        ToastAndroid.show('Xin hãy cấp quyền truy cập vị trí', ToastAndroid.SHORT);
+        return;
+      }
+
+      const response = await Location.getCurrentPositionAsync({});
+      setLocation(response);
+    }
+
+    getCurrentLocation();
+  }, []);
 
   if (isLoading || !bookingDetail) {
     return (
@@ -83,8 +102,9 @@ const BookingScreen = () => {
         </View>
       </ScrollView>
       <View className="absolute bottom-0 left-0 right-0 z-20 flex-row gap-2 bg-white p-4">
-        {bookDetail?.booking.status === BookingStatusEnum.Approved && (
-          <>
+        {bookDetail?.booking.status !== BookingStatusEnum.Ongoing &&
+          bookDetail?.booking.status !== BookingStatusEnum.Completed &&
+          bookDetail?.booking.status !== BookingStatusEnum.Cancelled && (
             <TouchableOpacity
               onPress={() => {
                 handleApproveOrRejectBooking(false);
@@ -93,6 +113,10 @@ const BookingScreen = () => {
               <Feather name="x-circle" size={20} color={COLORS.black} />
               <Text className="text-foreground">Hủy bỏ đặt xe</Text>
             </TouchableOpacity>
+          )}
+
+        {bookDetail?.booking.status === BookingStatusEnum.Approved &&
+          !bookDetail.payment.isPaid && (
             <TouchableOpacity
               onPress={() => {
                 handleApproveOrRejectBooking(true);
@@ -101,8 +125,22 @@ const BookingScreen = () => {
               <Feather name="check-circle" size={20} color={COLORS.white} />
               <Text className="text-background">Thanh toán</Text>
             </TouchableOpacity>
-          </>
-        )}
+          )}
+
+        {bookDetail?.booking.status === BookingStatusEnum.ReadyForPickup &&
+          bookDetail.payment.isPaid && (
+            <TouchableOpacity
+              className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-4"
+              onPress={() => {
+                handleStartTrip({
+                  latitude: location?.coords.latitude || 0,
+                  longitude: location?.coords.longitude || 0,
+                });
+              }}>
+              <Feather name="check-circle" size={20} color={COLORS.white} />
+              <Text className="text-background">Bắt đầu chuyến đi</Text>
+            </TouchableOpacity>
+          )}
       </View>
     </View>
   );

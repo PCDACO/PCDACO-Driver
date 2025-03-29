@@ -2,6 +2,7 @@ export const translate = {
   booking: {
     success: {
       title: 'Đặt xe thành công',
+      message: 'Đơn đặt xe đã được đặt thành công, vui lòng chờ xác nhận từ tài xế',
     },
     failed: {
       title: 'Đặt xe thất bại',
@@ -20,6 +21,10 @@ export const translate = {
     toast: {
       approve: 'Xác nhận đơn đặt xe thành công!',
       reject: 'Từ chối đơn đặt xe thành công!',
+      payment: 'Đang chuyển hướng đến trang thanh toán...',
+      cancel: 'Hủy bỏ đơn đặt xe thành công!',
+      startTrip: 'Bắt đầu chuyến đi thành công!',
+      return: 'Trả xe thành công!',
     },
   },
   bank: {
