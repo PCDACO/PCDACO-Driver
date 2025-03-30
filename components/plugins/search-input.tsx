@@ -17,9 +17,7 @@ export const SearchInput = ({ placeholder = 'Search...', className = '' }: Searc
   const searchDebounce = useDebounce(searchKey, 500);
 
   React.useEffect(() => {
-    if (searchDebounce) {
-      setSearchKeyword(searchDebounce);
-    }
+    setSearchKeyword(searchDebounce);
   }, [searchDebounce]);
 
   return (

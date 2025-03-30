@@ -1,5 +1,5 @@
-import * as Location from 'expo-location';
 import { Feather } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 import { ScrollView, ToastAndroid, TouchableOpacity, View } from 'react-native';
@@ -19,9 +19,10 @@ const BookingScreen = () => {
   const [location, setLocation] = React.useState<Location.LocationObject | null>(null);
   const { id } = useLocalSearchParams();
   const { data: bookingDetail, isLoading } = useBookingDetailQuery(id as string);
-  const { handleApproveOrRejectBooking, handleStartTrip } = useApproveOrRejectBooking({
-    id: id as string,
-  });
+  const { handleApproveOrRejectBooking, handleStartTrip, handleComplete } =
+    useApproveOrRejectBooking({
+      id: id as string,
+    });
 
   const bookDetail = bookingDetail?.value;
 
@@ -115,7 +116,8 @@ const BookingScreen = () => {
             </TouchableOpacity>
           )}
 
-        {bookDetail?.booking.status === BookingStatusEnum.Approved &&
+        {(bookDetail?.booking.status === BookingStatusEnum.Approved ||
+          bookDetail?.booking.status === BookingStatusEnum.ReadyForPickup) &&
           !bookDetail.payment.isPaid && (
             <TouchableOpacity
               onPress={() => {
@@ -141,6 +143,14 @@ const BookingScreen = () => {
               <Text className="text-background">Bắt đầu chuyến đi</Text>
             </TouchableOpacity>
           )}
+        {bookDetail?.booking.status === BookingStatusEnum.Ongoing && bookDetail.payment.isPaid && (
+          <TouchableOpacity
+            className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-4"
+            onPress={handleComplete}>
+            <Feather name="check-circle" size={20} color={COLORS.white} />
+            <Text className="text-background">Hoàn thành chuyến đi</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

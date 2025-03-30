@@ -18,7 +18,7 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
 
   const queryClient = useQueryClient();
 
-  const { cancelBooking, paymentBooking, startTripBooking } = useBookingMutation();
+  const { cancelBooking, paymentBooking, startTripBooking, completeBooking } = useBookingMutation();
 
   const handleApproveOrRejectBooking = (status: boolean) => {
     if (status) {
@@ -67,8 +67,18 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
     );
   };
 
+  const handleComplete = () => {
+    completeBooking.mutate(id, {
+      onSuccess: () => {},
+      onError: (error: any) => {
+        ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);
+      },
+    });
+  };
+
   return {
     handleApproveOrRejectBooking,
     handleStartTrip,
+    handleComplete,
   };
 };

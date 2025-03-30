@@ -15,16 +15,16 @@ export const bookSchema = z
     startTime: z.date({ required_error: 'Yêu cầu chọn giờ bắt đầu' }).refine(
       (date) => {
         const hour = date.getHours();
-        return hour >= 7 && hour <= 22;
+        return hour >= 6 && hour <= 22;
       },
-      { message: 'Thời gian bắt đầu phải trong khoảng 07:00 - 22:00' }
+      { message: 'Thời gian bắt đầu phải trong khoảng 06:00 - 22:00' }
     ),
     endTime: z.date({ required_error: 'Yêu cầu chọn giờ kết thúc' }).refine(
       (date) => {
         const hour = date.getHours();
-        return hour >= 7 && hour <= 22;
+        return hour >= 6 && hour <= 22;
       },
-      { message: 'Thời gian kết thúc phải trong khoảng 07:00 - 22:00' }
+      { message: 'Thời gian kết thúc phải trong khoảng 06:00 - 22:00' }
     ),
   })
   .superRefine((data, ctx) => {
