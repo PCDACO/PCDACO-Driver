@@ -1,15 +1,18 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
-import React, { FunctionComponent } from 'react';
-import { View, Text, Animated, ScrollView } from 'react-native';
+import React, { FunctionComponent, useCallback } from 'react';
+import { View, Text, Animated, ScrollView, ToastAndroid } from 'react-native';
 
 import BookForm from '~/components/form-ui/booking/book-form';
+import { Checkbox } from '~/components/layout/checkbox';
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import { useBookingForm } from '~/hooks/book/use-book-form';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
 import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
 
 const Booking: FunctionComponent = () => {
+  const [isAccepted, setIsAccepted] = React.useState(false);
+
   const { id } = useLocalSearchParams();
   const { data: car, isLoading } = useCarDetailQuery(id as string);
   const { form, onSubmit, isLoading: isBookingLoading } = useBookingForm();
@@ -20,9 +23,20 @@ const Booking: FunctionComponent = () => {
     }
   }, [id]);
 
-  const handleComplete = () => {
-    onSubmit();
-  };
+  const handleComplete = useCallback(() => {
+    setIsAccepted((prev) => {
+      if (!prev) {
+        ToastAndroid.show(
+          'Vui lòng đồng ý với điều khoản dịch vụ và chính sách bảo mật',
+          ToastAndroid.SHORT
+        );
+        return prev;
+      }
+
+      onSubmit();
+      return prev;
+    });
+  }, [onSubmit, isAccepted]);
 
   const {
     panResponder,
@@ -46,6 +60,18 @@ const Booking: FunctionComponent = () => {
       <ScrollView className="">
         <View className="min-h-screen rounded-t-3xl bg-white px-6 py-4 dark:bg-slate-800">
           <BookForm form={form} />
+
+          <View className="mt-4 flex-row flex-wrap items-start gap-2">
+            <Checkbox
+              checked={isAccepted}
+              onCheckedChange={(check) => setIsAccepted(check)}
+              style={{ borderRadius: 100 }}
+            />
+            <Text className="flex-1 text-sm text-muted-foreground">
+              Tôi đã đọc và đồng ý với <Text className="text-primary">Điều khoản dịch vụ</Text> và{' '}
+              <Text className="text-primary">Chính sách bảo mật</Text>
+            </Text>
+          </View>
         </View>
       </ScrollView>
 

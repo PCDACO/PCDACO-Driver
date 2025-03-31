@@ -6,6 +6,7 @@ import { ScrollView, ToastAndroid, TouchableOpacity, View } from 'react-native';
 
 import { Text } from '~/components/nativewindui/Text';
 import Loading from '~/components/plugins/loading';
+import BookContact from '~/components/screen/book-detail/book-contact';
 import BookInfo from '~/components/screen/book-detail/book-info';
 import BookPayment from '~/components/screen/book-detail/book-payment';
 import CarInfo from '~/components/screen/book-detail/car-info';
@@ -100,6 +101,8 @@ const BookingScreen = () => {
               }
             }
           />
+
+          <BookContact id={bookDetail?.id || ''} />
         </View>
       </ScrollView>
       <View className="absolute bottom-0 left-0 right-0 z-20 flex-row gap-2 bg-white p-4">

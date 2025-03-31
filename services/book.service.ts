@@ -37,7 +37,7 @@ export const BookService = {
       }
     },
 
-    contracts: async (id: string): Promise<RootResponse<null>> => {
+    contracts: async (id: string) => {
       try {
         const response = await axiosInstance.get(`/api/bookings/${id}/contracts`);
 

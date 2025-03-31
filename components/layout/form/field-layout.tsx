@@ -12,7 +12,7 @@ interface FieldLayoutProps {
 const FieldLayout: React.FC<FieldLayoutProps> = ({ children, label, className }) => {
   return (
     <View className="flex flex-col gap-2">
-      <Text className={cn('text-sm text-muted-foreground', className)}>{label}</Text>
+      <Text className={cn('text-base font-bold text-muted-foreground', className)}>{label}</Text>
       <View>{children}</View>
     </View>
   );

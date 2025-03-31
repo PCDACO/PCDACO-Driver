@@ -5,6 +5,7 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BookCard from '~/components/card/book/book-card';
+import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookEmpty from '~/components/screen/book-list/book-empty';
@@ -17,6 +18,7 @@ import { COLORS } from '~/theme/colors';
 
 const BookingScreen: FunctionComponent = () => {
   const { searchKeyword } = useSearchStore();
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const [params, setParams] = React.useState<Partial<BookParams>>({});
   const { params: bookingParams } = useBookingParamsStore();
   const { data: booking, isLoading } = useBookingListQuery(params);
@@ -36,34 +38,42 @@ const BookingScreen: FunctionComponent = () => {
   const bookingList = booking?.value.items || [];
 
   const sheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = React.useMemo(() => ['1%', '90%'], []);
+  const snapPoints = React.useMemo(() => ['1%', '60%'], []);
 
   const handleSnapPress = React.useCallback((index: number) => {
     sheetRef.current?.snapToIndex(index);
+    setIsSheetOpen(index === snapPoints.length - 1);
   }, []);
 
   const handleSheetChange = React.useCallback((index: number) => {
-    console.log('handleSheetChange', index);
+    setIsSheetOpen(index === snapPoints.length - 1);
   }, []);
 
   const handleClosePress = React.useCallback(() => {
     sheetRef.current?.close();
+    setIsSheetOpen(false);
   }, []);
 
   return (
     <SafeAreaView className="relative h-full flex-1">
-      <View className="mb-3 flex-row items-center gap-2 px-4">
-        <SearchInput className="flex-1" />
+      <View
+        className="absolute bottom-4 right-4 z-10"
+        style={{
+          opacity: isSheetOpen ? 0 : 1, // Ẩn khi mở BottomSheet
+          zIndex: isSheetOpen ? -1 : 10, // Đưa xuống dưới khi mở BottomSheet
+        }}>
         <TouchableOpacity
-          className="items-center justify-center rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-slate-300"
+          className="items-center justify-center rounded-full border border-gray-200 bg-white  dark:border-gray-700 dark:bg-slate-300"
+          onPress={() => handleSnapPress(1)}
           style={{
-            padding: 11,
-          }}
-          onPress={() => {
-            handleSnapPress(1);
+            padding: 16,
           }}>
           <Ionicons name="options-outline" size={20} color={COLORS.black} />
         </TouchableOpacity>
+      </View>
+
+      <View className="mb-3 flex-row items-center gap-2 px-4">
+        <SearchInput className="flex-1" />
       </View>
       <View className="flex-1 px-4">
         {isLoading ? (
@@ -86,6 +96,9 @@ const BookingScreen: FunctionComponent = () => {
         ref={sheetRef}
         snapPoints={snapPoints}
         enableDynamicSizing={false}
+        backdropComponent={
+          isSheetOpen ? (props) => <Backdrop {...props} onPress={handleClosePress} /> : null
+        }
         onChange={handleSheetChange}>
         <BottomSheetView className="relative flex-1 bg-white dark:bg-slate-300">
           <BookListParams close={handleClosePress} />

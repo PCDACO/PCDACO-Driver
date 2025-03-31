@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { CarParams } from '~/constants/models/car.model';
 import { QueryKey } from '~/lib/query-key';
@@ -22,4 +22,20 @@ export const useCarDetailQuery = (id: string) => {
   });
 
   return carQuery;
+};
+
+export const useCarsListInfiniteQuery = (params: Partial<CarParams>) => {
+  const query = useInfiniteQuery({
+    queryKey: [QueryKey.Car.List, params],
+    queryFn: () => CarService.get.list(params),
+    initialPageParam: '',
+    getNextPageParam: (lastPage) => {
+      return lastPage.value.hasNext ? lastPage.value.items.at(-1)?.id : undefined;
+    },
+    retry: 1,
+    staleTime: 1000 * 60 * 1,
+    enabled: !!params,
+  });
+
+  return query;
 };

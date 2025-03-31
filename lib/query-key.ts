@@ -49,6 +49,13 @@ export const QueryKey = {
     },
   },
 
+  Contact: {
+    get: {
+      approval_preview: 'ContactApprovalPreview',
+      preview: 'ContactPreview',
+    },
+  },
+
   Bank: {
     List: 'BankList',
     Account: {
@@ -66,5 +73,17 @@ export const QueryKey = {
     Update: 'UserUpdate',
     Avatar: 'UserAvatar',
     Password: 'UserPassword',
+  },
+
+  Fuel: {
+    List: 'FuelList',
+  },
+
+  Transmission: {
+    List: 'TransmissionList',
+  },
+
+  Manufacturer: {
+    List: 'ManufacturerList',
   },
 };

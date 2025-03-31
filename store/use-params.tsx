@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { BookParams } from '~/constants/models/book.model';
+import { CarParams } from '~/constants/models/car.model';
 
 type ParamsStore<T> = {
   params: T;
@@ -17,3 +18,4 @@ export function createParamsStore<T>(initialParams: T) {
 }
 
 export const useBookingParamsStore = createParamsStore<Partial<BookParams>>({});
+export const useCarParamsStore = createParamsStore<Partial<CarParams>>({});

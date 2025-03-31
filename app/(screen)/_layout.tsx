@@ -43,6 +43,20 @@ const ScreenLayout: FunctionComponent = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="terms/contact"
+          options={{
+            headerShown: true,
+            headerTitle: 'Điều khoản & chính sách',
+          }}
+        />
+        <Stack.Screen
+          name="terms/condition"
+          options={{
+            headerShown: true,
+            headerTitle: 'Điều khoản & Điều kiện',
+          }}
+        />
       </Stack>
     </>
   );

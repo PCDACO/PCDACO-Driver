@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, TouchableOpacityProps, View } from 'reac
 
 import { CarResponseList } from '~/constants/models/car.model';
 import { cn } from '~/lib/cn';
-import { formatNumber } from '~/lib/format';
+import { formatPriceToVND } from '~/lib/format';
 
 interface CarCardProps extends TouchableOpacityProps {
   car: CarResponseList;
@@ -20,7 +20,7 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
     <TouchableOpacity
       {...props}
       onPress={onPress}
-      className={cn('mb-4 gap-2  rounded-xl bg-white p-3 shadow-sm', className)}>
+      className={cn('gap-2  rounded-xl bg-white p-3 shadow-sm', className)}>
       {/* Car Info Header */}
       <View className="flex-row items-start justify-between">
         {ownerAvatarUrl ? (
@@ -32,7 +32,7 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
             />
             <View>
               <Text className="text-xl font-bold">{car.modelName}</Text>
-              <Text>{car.ownerName}</Text>
+              <Text className="text-muted-foreground">{car.ownerName}</Text>
             </View>
           </View>
         ) : (
@@ -40,14 +40,14 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
             <FontAwesome name="user-circle" size={30} color="#000" />
             <View>
               <Text className="text-xl font-bold">{car.modelName}</Text>
-              <Text>{car.ownerName}</Text>
+              <Text className="text-muted-foreground">{car.ownerName}</Text>
             </View>
           </View>
         )}
 
         <View>
           <Text className="text-xl font-bold text-gray-800 dark:text-gray-800">
-            {formatNumber(car.price)}/day
+            {formatPriceToVND(car.price)}/ngày
           </Text>
         </View>
       </View>

@@ -2,7 +2,7 @@ import { BookingStatusEnum } from '../enums';
 
 export interface BookParams extends Partial<LastIdRootResquest> {
   search: string;
-  status: string;
+  status: string[];
   isPaid: boolean;
 }
 

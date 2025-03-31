@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { FunctionComponent, useState } from 'react';
 import { Text, TouchableOpacity, View, FlatList } from 'react-native';
 
@@ -5,6 +6,7 @@ import FieldLayout from '~/components/layout/form/field-layout';
 import { BookingStatusEnum } from '~/constants/enums';
 import { translate } from '~/lib/translate';
 import { useBookingParamsStore } from '~/store/use-params';
+import { COLORS } from '~/theme/colors';
 
 interface BookListParamsProps {
   close: () => void;
@@ -32,17 +34,37 @@ const StatusItem: FunctionComponent<StatusItemProps> = ({ status, isActive, onPr
 };
 
 const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
-  const { params, setParams } = useBookingParamsStore();
+  const { params, setParams, resetParams } = useBookingParamsStore();
   const [isPaid, setIsPaid] = useState<boolean | undefined>(params?.isPaid);
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatusEnum | undefined>(
-    params?.status as BookingStatusEnum | undefined
+
+  // Fix lỗi kiểu dữ liệu bằng cách ép kiểu về BookingStatusEnum[]
+  const [selectedStatus, setSelectedStatus] = useState<BookingStatusEnum[]>(
+    params?.status
+      ? Array.isArray(params.status)
+        ? (params.status as BookingStatusEnum[])
+        : [params.status as BookingStatusEnum]
+      : []
   );
 
-  const statusList = Object.values(BookingStatusEnum);
+  // Ép kiểu Object.values thành BookingStatusEnum[]
+  const statusList = Object.values(BookingStatusEnum) as BookingStatusEnum[];
+
+  const toggleStatus = (status: BookingStatusEnum) => {
+    setSelectedStatus((prev) =>
+      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]
+    );
+  };
 
   const handleConfirm = () => {
     setParams({ isPaid, status: selectedStatus });
     close();
+  };
+
+  const handleClear = () => {
+    resetParams();
+    close();
+    setIsPaid(undefined);
+    setSelectedStatus([]);
   };
 
   return (
@@ -82,8 +104,8 @@ const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
             renderItem={({ item }) => (
               <StatusItem
                 status={item}
-                isActive={selectedStatus === item}
-                onPress={() => setSelectedStatus(item)}
+                isActive={selectedStatus.includes(item)}
+                onPress={() => toggleStatus(item)}
               />
             )}
             horizontal={false}
@@ -95,11 +117,16 @@ const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
       </View>
 
       {/* Confirm Button */}
-      <View className="absolute bottom-4 left-0 right-0 px-4">
+      <View className="absolute bottom-4 left-0 right-0 flex-row gap-2 px-4">
         <TouchableOpacity
-          className="items-center justify-center rounded-full bg-primary p-4"
+          className="flex-1 items-center justify-center rounded-full bg-primary p-3"
           onPress={handleConfirm}>
           <Text className="font-semibold text-white dark:text-black">Xác nhận</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="items-center justify-center rounded-full border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-slate-300"
+          onPress={handleClear}>
+          <MaterialIcons name="cleaning-services" color={COLORS.gray} size={20} />
         </TouchableOpacity>
       </View>
     </>

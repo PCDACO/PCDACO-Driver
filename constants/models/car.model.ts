@@ -5,7 +5,6 @@ export interface CarParams extends Partial<LastIdRootResquest> {
   longtitude: number;
   radius: number;
   model: string;
-  lastId: string;
   amentities: string[];
   fuel: string;
   transmission: string;

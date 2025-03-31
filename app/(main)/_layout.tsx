@@ -21,13 +21,16 @@ const MainLayout = () => {
           options={{
             tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} />,
             tabBarLabel: 'Trang chủ',
+            headerStyle: {
+              height: 30,
+            },
           }}
         />
         <Tabs.Screen
           name="booking"
           options={{
             headerShown: true,
-            headerTitle: 'Danh sách đặt xe',
+            headerTitle: '',
             headerTitleStyle: {
               fontSize: 24,
               fontWeight: 'bold',
@@ -36,7 +39,7 @@ const MainLayout = () => {
             tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={24} />,
             tabBarLabel: 'Đặt xe',
             headerStyle: {
-              height: 70,
+              height: 30,
             },
           }}
         />

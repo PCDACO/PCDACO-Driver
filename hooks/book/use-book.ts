@@ -127,6 +127,8 @@ export const useBookingContractQuery = (id: string) => {
   const bookingContractQuery = useQuery({
     queryKey: [QueryKey.Booking.get.Contract, id],
     queryFn: async () => await BookService.get.contracts(id),
+    enabled: !!id,
+    retry: 1,
   });
 
   return bookingContractQuery;
