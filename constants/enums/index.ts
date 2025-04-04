@@ -18,6 +18,46 @@ export enum CarStatus {
   Rejected = 'Rejected',
 }
 
+export enum CarContractStatus {
+  Pending = 'Pending',
+  OwnerSigned = 'OwnerSigned',
+  TechnicianSigned = 'TechnicianSigned',
+  Completed = 'Completed',
+  Rejected = 'Rejected',
+}
+
+export enum BookingReportType {
+  Conflict = 'Conflict',
+  Accident = 'Accident',
+  FineNotice = 'FineNotice',
+  Damage = 'Damage',
+  Maintenance = 'Maintenance',
+  Other = 'Other',
+}
+
+export enum BookingReportTypeNumber {
+  Conflict = 0,
+  Accident = 1,
+  FineNotice = 2,
+  Damage = 3,
+  Maintenance = 4,
+  Other = 5,
+}
+
+export enum BookingReportStatus {
+  Pending = 'Pending',
+  UnderReview = 'UnderReview',
+  Resolved = 'Resolved',
+  Rejected = 'Rejected',
+}
+
+export enum BookingReportStatusNumber {
+  Pending = 0,
+  UnderReview = 1,
+  Resolved = 2,
+  Rejected = 3,
+}
+
 export enum CarStatusNumber {
   Inactive = 0,
   Pending = 1,
@@ -36,12 +76,5 @@ export enum BookingStatusEnum {
   Completed = 'Completed',
   Cancelled = 'Cancelled',
   Expired = 'Expired',
-}
-
-export enum CarContractStatusEnum {
-  Pending = 'Pending',
-  OwnerSigned = 'OwnerSigned',
-  TechnicianSigned = 'TechnicianSigned',
-  Completed = 'Completed',
-  Rejected = 'Rejected',
+  Done = 'Done',
 }

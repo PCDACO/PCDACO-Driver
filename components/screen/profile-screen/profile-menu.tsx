@@ -67,6 +67,15 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
         icon={<Ionicons size={20} name="shield-outline" />}
         text="Chính sách bảo hành & Tài liệu tham khảo"
         onPress={() => console.log('Warranty policy pressed')}
+      />
+      <ProfileMenuItem
+        icon={<Ionicons size={20} name="file-tray-full-outline" />}
+        text="Báo cáo"
+        onPress={() =>
+          router.push({
+            pathname: '/(screen)/(reports)/reports',
+          })
+        }
         isLast
       />
     </View>

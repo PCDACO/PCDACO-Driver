@@ -86,4 +86,24 @@ export const QueryKey = {
   Manufacturer: {
     List: 'ManufacturerList',
   },
+
+  Report: {
+    List: 'ReportList',
+    Detail: 'ReportDetail',
+    Create: 'ReportCreate',
+    Approve: 'ReportApprove',
+    Compensation: 'ReportCompensation',
+    CompensationProof: 'ReportCompensationProof',
+    Image: 'ReportImage',
+  },
+
+  Transaction: {
+    Withdraw: 'Withdraw',
+    Transaction: 'Transaction',
+    CreateWithdraw: 'CreateWithdraw',
+  },
+
+  Model: {
+    List: 'ModelList',
+  },
 };

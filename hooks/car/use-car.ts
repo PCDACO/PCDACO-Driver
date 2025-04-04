@@ -30,7 +30,11 @@ export const useCarsListInfiniteQuery = (params: Partial<CarParams>) => {
     queryFn: () => CarService.get.list(params),
     initialPageParam: '',
     getNextPageParam: (lastPage) => {
-      return lastPage.value.hasNext ? lastPage.value.items.at(-1)?.id : undefined;
+      if (lastPage.value.hasNext) {
+        const lastItem = lastPage.value.items[lastPage.value.items.length - 1];
+        return lastItem?.id;
+      }
+      return undefined;
     },
     retry: 1,
     staleTime: 1000 * 60 * 1,

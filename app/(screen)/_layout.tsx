@@ -2,20 +2,25 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { FunctionComponent } from 'react';
 
+import AuthProvider from '~/components/permission/auth-provider';
+
 const ScreenLayout: FunctionComponent = () => {
   return (
-    <>
+    <AuthProvider>
       <StatusBar hidden />
       <Stack
         screenOptions={{
           headerShown: false,
         }}>
+        {/* Car */}
         <Stack.Screen
           name="car/[id]"
           options={{
             headerShown: false,
           }}
         />
+
+        {/* Booking */}
         <Stack.Screen
           name="booking/[id]"
           options={{
@@ -25,24 +30,29 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
         <Stack.Screen
-          name="booking/detail/[id]"
+          name="booking/report/[id]"
           options={{
             headerShown: true,
-            headerTitle: 'Thông tin đặt xe',
+            animation: 'fade_from_bottom',
+            headerTitle: 'Báo cáo',
+            headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTitleStyle: {
+              fontSize: 24,
+              fontWeight: 'bold',
+            },
           }}
         />
-        <Stack.Screen
-          name="search-cars"
-          options={{
-            headerShown: false,
-          }}
-        />
+
+        {/* License */}
         <Stack.Screen
           name="license/license-edit"
           options={{
             headerShown: false,
           }}
         />
+
+        {/* Terms */}
         <Stack.Screen
           name="terms/contact"
           options={{
@@ -57,8 +67,16 @@ const ScreenLayout: FunctionComponent = () => {
             headerTitle: 'Điều khoản & Điều kiện',
           }}
         />
+
+        {/* Search */}
+        <Stack.Screen
+          name="search-cars"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
-    </>
+    </AuthProvider>
   );
 };
 

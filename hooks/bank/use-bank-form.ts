@@ -8,6 +8,7 @@ import { useBankMutation } from './use-bank';
 import { BankSchema, BankSchemaPayload } from '~/constants/schemas/bank.schema';
 import { QueryKey } from '~/lib/query-key';
 import { translate } from '~/lib/translate';
+import { router } from 'expo-router';
 
 interface BankFormProps {
   id?: string;
@@ -36,6 +37,10 @@ export const useBankForm = ({ id }: BankFormProps) => {
             queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account] });
             form.reset();
             ToastAndroid.show(translate.bank.toast.update, ToastAndroid.SHORT);
+
+            setTimeout(() => {
+              router.back();
+            }, 1000);
           },
           onError: (error: any) => {
             ToastAndroid.show(
@@ -51,6 +56,9 @@ export const useBankForm = ({ id }: BankFormProps) => {
           queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account] });
           form.reset();
           ToastAndroid.show(translate.bank.toast.create, ToastAndroid.SHORT);
+          setTimeout(() => {
+            router.back();
+          }, 1000);
         },
         onError: (error: any) => {
           ToastAndroid.show(error.message || translate.bank.toast.error_create, ToastAndroid.SHORT);

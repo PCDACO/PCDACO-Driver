@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { BankAccountPayload, BankRequest } from '~/constants/models/bank.model';
+import { BankAccountPayload } from '~/constants/models/bank.model';
 import { QueryKey } from '~/lib/query-key';
 import { BankService } from '~/services/bank.service';
 
@@ -18,7 +18,7 @@ export const useBankQuery = ({ search }: BankQueryProps) => {
   const bankQuery = useQuery({
     queryKey: [QueryKey.Bank.List, search],
     queryFn: async () => await BankService.get.list(search),
-    enabled: !!search,
+    enabled: true,
     staleTime: 1000 * 60 * 5,
     retry: 2,
   });

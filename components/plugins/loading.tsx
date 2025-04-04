@@ -1,12 +1,16 @@
-import React from 'react';
 import { View } from 'react-native';
 
 import { ActivityIndicator } from '../nativewindui/ActivityIndicator';
 
-const Loading = () => {
+interface LoadingProps {
+  size?: 'small' | 'large';
+  color?: string;
+}
+
+const Loading = ({ size = 'large', color = '#0000ff' }: LoadingProps) => {
   return (
-    <View className="h-full items-center justify-center">
-      <ActivityIndicator size="large" color="#0000ff" />
+    <View className="items-center justify-center">
+      <ActivityIndicator size={size} color={color} />
     </View>
   );
 };

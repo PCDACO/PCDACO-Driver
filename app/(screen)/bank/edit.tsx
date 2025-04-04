@@ -17,18 +17,43 @@ import BankCard from '~/components/card/bank/bank-card';
 import BankForm from '~/components/form-ui/bank-form';
 import Loading from '~/components/plugins/loading';
 import BankHeader from '~/components/screen/bank-edit/bank-header';
+import { useBankAccountDetailQuery } from '~/hooks/bank/use-bank';
 import { useBankForm } from '~/hooks/bank/use-bank-form';
 import { formatCardNumber } from '~/lib/format';
 import { COLORS } from '~/theme/colors';
 
 const Edit: FunctionComponent = () => {
   const { id } = useLocalSearchParams();
+
+  const { data: bank, isLoading: isBankLoading } = useBankAccountDetailQuery({
+    id: id as string,
+  });
+
+  const bankDetail = bank?.value;
+
   const { form, onSubmit, isLoading } = useBankForm({ id: id as string });
   const [bankName, setBankName] = React.useState<string>('');
 
   const handleBankName = (name: string) => {
     setBankName(name);
   };
+
+  React.useEffect(() => {
+    if (bankDetail) {
+      form.setValue('bankInfoId', bankDetail.bankInfoId);
+      form.setValue('accountName', bankDetail.accountName);
+      form.setValue('accountNumber', bankDetail.accountNumber);
+      form.setValue('isPrimary', bankDetail.isPrimary);
+    }
+  }, [bankDetail, form]);
+
+  if (isBankLoading) {
+    return (
+      <View className="h-full flex-1 items-center justify-center">
+        <Loading />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1">

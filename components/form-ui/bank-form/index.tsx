@@ -23,16 +23,20 @@ const BankForm: FunctionComponent<BankFormProps> = ({ form, selectName, id }) =>
   const [searchBank, setSearchBank] = React.useState<string>('');
   const searchDebounce = useDebounce(searchBank, 500);
   const [showSuggestions, setShowSuggestions] = React.useState<boolean>(false);
-  const { data, isLoading } = useBankQuery({ search: searchDebounce });
+  const { data, isLoading } = useBankQuery({ search: searchDebounce || undefined });
 
   React.useEffect(() => {
-    if (!searchBank && form.getValues('bankInfoId') && id) {
-      setShowSuggestions(false);
-      setSearchBank(
-        data?.value.find((item) => item.id === form.getValues('bankInfoId'))?.shortName || ''
-      );
+    const bankInfoId = form.getValues('bankInfoId');
+
+    if (data?.value && bankInfoId) {
+      const selectedBank = data.value.find((item) => item.id === bankInfoId);
+
+      if (selectedBank && !searchBank) {
+        setSearchBank(selectedBank.shortName);
+        setShowSuggestions(false);
+      }
     }
-  }, [searchBank, form.getValues('bankInfoId'), id]);
+  }, [data?.value, form.getValues('bankInfoId')]);
 
   return (
     <CardBasic className="gap-4">
