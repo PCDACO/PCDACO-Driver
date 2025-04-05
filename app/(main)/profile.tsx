@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { FunctionComponent } from 'react';
+import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,12 +12,12 @@ import ProfileStats from '~/components/screen/profile-screen/profile-stats';
 import Skeleton from '~/components/ui/skeleton';
 import { useUserQuery } from '~/hooks/user/use-user';
 
-const Profile: FunctionComponent = () => {
+const ProfileScreen = () => {
   const { currentUserQuery } = useUserQuery();
 
-  const { data, isLoading, error } = currentUserQuery;
+  const { data, isLoading } = currentUserQuery;
 
-  if (isLoading || error) {
+  if (isLoading) {
     return (
       <SafeAreaView className="gap-4 px-2">
         <Skeleton height={250} />
@@ -32,34 +32,37 @@ const Profile: FunctionComponent = () => {
   }
 
   return (
-    <ScrollView>
-      <SafeAreaView>
-        <View className=" flex-row justify-between px-4 ">
-          <TouchableOpacity className="p-2" onPress={() => router.back()}>
-            <Feather size={20} name="arrow-left" />
-          </TouchableOpacity>
-          <TouchableOpacity className="p-2">
-            <Feather size={20} name="edit" />
-          </TouchableOpacity>
+    <View className="relative h-full">
+      <TouchableOpacity className="absolute left-4 top-4 z-10 p-2" onPress={() => router.back()}>
+        <Feather size={20} name="arrow-left" />
+      </TouchableOpacity>
+      <ScrollView>
+        <View
+          className="gap-4"
+          style={{
+            paddingTop: 30,
+          }}>
+          <ProfileHeader
+            image={data?.value.avatarUrl}
+            name={data?.value.name}
+            role={data?.value.role}
+            user={data?.value}
+          />
+          <ProfileStats
+            bookingsCount={data?.value.totalRented || 0}
+            income={data?.value.balance || 0}
+            totalCar={data?.value.totalCar || 0}
+            totalRent={data?.value.totalRent || 0}
+            totalRented={data?.value.totalRented || 0}
+          />
+          <ProfileMenu id={data?.value.id || ''} />
         </View>
-        <ProfileHeader
-          image={data?.value.avatarUrl}
-          name={data?.value.name}
-          role={data?.value.role}
-          user={data?.value}
-        />
-        <ProfileStats
-          bookingsCount={data?.value.totalRented || 0}
-          income={data?.value.balance || 0}
-          totalCar={data?.value.totalCar || 0}
-          totalRent={data?.value.totalRent || 0}
-          totalRented={data?.value.totalRented || 0}
-        />
-        <ProfileMenu id={data?.value.id || ''} />
-        <LogoutButton />
-      </SafeAreaView>
-    </ScrollView>
+        <View className="">
+          <LogoutButton />
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
-export default Profile;
+export default ProfileScreen;

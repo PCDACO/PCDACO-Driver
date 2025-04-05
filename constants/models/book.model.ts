@@ -60,6 +60,7 @@ export interface BookPaymentResponse {
   basePrice: number;
   excessDays: number;
   excessFee: number;
+  orderCode: number;
   paymentUrl: string;
   platformFee: number;
   qrCode: string;

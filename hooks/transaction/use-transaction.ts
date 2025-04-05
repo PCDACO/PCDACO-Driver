@@ -17,6 +17,14 @@ export const useTransaction = (parmas: Partial<TransactionParams>) => {
   return transactionQuery;
 };
 
+export const useCheckTransaction = () => {
+  const checkTransactionMutation = useMutation({
+    mutationKey: [QueryKey.Transaction.Check],
+    mutationFn: async (orderCode: number) => await TransactionService.post.check(orderCode),
+  });
+  return checkTransactionMutation;
+};
+
 export const useWithdraw = (parmas: Partial<WithdrawParams>) => {
   const withdrawQuery = useQuery({
     queryKey: [QueryKey.Transaction.Withdraw, parmas],

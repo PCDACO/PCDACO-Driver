@@ -98,6 +98,7 @@ export const QueryKey = {
   },
 
   Transaction: {
+    Check: 'TransactionCheck',
     Withdraw: 'Withdraw',
     Transaction: 'Transaction',
     CreateWithdraw: 'CreateWithdraw',

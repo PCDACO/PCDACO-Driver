@@ -18,6 +18,7 @@ const buttonVariants = cva('flex-row items-center justify-center gap-2', {
       plain: 'ios:active:opacity-70',
       icon: 'ios:active:opacity-70',
       outline: 'ios:border-primary ios:active:bg-primary/5 border border-foreground/40',
+      destructive: 'ios:active:opacity-70 bg-destructive',
     },
     size: {
       none: '',
@@ -56,6 +57,7 @@ const buttonTextVariants = cva('font-medium', {
       tonal: 'ios:text-primary text-foreground',
       plain: 'text-foreground',
       outline: 'text-foreground',
+      destructive: 'text-white',
     },
     size: {
       none: '',

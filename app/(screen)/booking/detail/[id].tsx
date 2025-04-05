@@ -1,8 +1,7 @@
 import { Feather } from '@expo/vector-icons';
-import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
-import { ScrollView, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 
 import { Text } from '~/components/nativewindui/Text';
 import Loading from '~/components/plugins/loading';
@@ -15,10 +14,11 @@ import DriverInfo from '~/components/screen/book-detail/driver-info';
 import { BookingStatusEnum } from '~/constants/enums';
 import { useApproveOrRejectBooking } from '~/hooks/book/use-approve-or-reject-booking';
 import { useBookingDetailQuery } from '~/hooks/book/use-book';
+import { useLocation } from '~/hooks/plugins/use-location';
 import { COLORS } from '~/theme/colors';
 
 const BookingScreen = () => {
-  const [location, setLocation] = React.useState<Location.LocationObject | null>(null);
+  const { location } = useLocation();
   const { id } = useLocalSearchParams();
   const { data: bookingDetail, isLoading } = useBookingDetailQuery(id as string);
   const { handleApproveOrRejectBooking, handleStartTrip, handleComplete } =
@@ -27,21 +27,6 @@ const BookingScreen = () => {
     });
 
   const bookDetail = bookingDetail?.value;
-
-  React.useEffect(() => {
-    async function getCurrentLocation() {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        ToastAndroid.show('Xin hãy cấp quyền truy cập vị trí', ToastAndroid.SHORT);
-        return;
-      }
-
-      const response = await Location.getCurrentPositionAsync({});
-      setLocation(response);
-    }
-
-    getCurrentLocation();
-  }, []);
 
   if (isLoading || !bookingDetail) {
     return (

@@ -13,7 +13,7 @@ interface ProfileStatsProps {
 
 const ProfileStats = ({ bookingsCount, income }: ProfileStatsProps) => {
   return (
-    <View className="border-background/60 mx-4 mb-6 mt-2 flex-row rounded-xl bg-background p-4 shadow-md">
+    <View className="border-background/60 flex-row rounded-xl bg-background p-4 shadow-md">
       <View className="border-background/60 flex-1 items-center justify-center border-r pr-4">
         <Text className="text-xl font-bold text-foreground">{bookingsCount}</Text>
         <Text className="text-foreground/90 text-sm">Tổng số lượt đặt</Text>

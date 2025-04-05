@@ -65,6 +65,7 @@ export interface ReportDetailResponse {
   id: string;
   reporterId: string;
   reporterName: string;
+  reporterRole: string;
   title: string;
   description: string;
   reportType: number;

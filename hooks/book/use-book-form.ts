@@ -56,5 +56,9 @@ export const useBookingForm = () => {
     );
   });
 
-  return { form, onSubmit, isLoading: createBooking.isPending };
+  return {
+    form,
+    onSubmit,
+    isLoading: createBooking.isPending,
+  };
 };

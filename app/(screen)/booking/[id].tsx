@@ -23,7 +23,7 @@ const Booking: FunctionComponent = () => {
     }
   }, [id]);
 
-  const handleComplete = useCallback(() => {
+  const handleComplete = useCallback(async () => {
     setIsAccepted((prev) => {
       if (!prev) {
         ToastAndroid.show(

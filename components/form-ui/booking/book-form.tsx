@@ -39,10 +39,10 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
         />
         <View className="gap-2">
           {form.formState.errors.startDay && (
-            <Text className="text-red-600">{form.formState.errors.startDay.message}</Text>
+            <Text className="text-sm text-red-600">{form.formState.errors.startDay.message}</Text>
           )}
           {form.formState.errors.endDay && (
-            <Text className="text-red-600">{form.formState.errors.endDay.message}</Text>
+            <Text className="text-sm text-red-600">{form.formState.errors.endDay.message}</Text>
           )}
         </View>
       </View>
@@ -77,7 +77,9 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
               onCancel={() => setShowStartDatePicker(false)}
             />
             {form.formState.errors.startTime && (
-              <Text className="text-red-600">{form.formState.errors.startTime.message}</Text>
+              <Text className="text-sm text-red-600">
+                {form.formState.errors.startTime.message}
+              </Text>
             )}
           </FieldLayout>
         </View>
@@ -110,7 +112,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
               onCancel={() => setShowEndDatePicker(false)}
             />
             {form.formState.errors.endTime && (
-              <Text className="text-red-600">{form.formState.errors.endTime.message}</Text>
+              <Text className="text-sm text-red-600">{form.formState.errors.endTime.message}</Text>
             )}
           </FieldLayout>
         </View>

@@ -43,7 +43,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ image, name, role, user }
   return (
     <View className="px-4 ">
       <View className="items-center">
-        <View className="relative mb-4">
+        <View className="relative mb-2">
           {avatar || avatar === '' ? (
             <Avatar
               alt="avatar"
@@ -66,7 +66,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ image, name, role, user }
           </TouchableOpacity>
         </View>
 
-        <View className="items-center gap-2">
+        <View className="items-center gap-0.5">
           {name && <Text className="text-xl font-bold text-gray-900">{name}</Text>}
           {role && (
             <View className="flex-row items-center gap-2">

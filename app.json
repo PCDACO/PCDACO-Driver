@@ -45,6 +45,14 @@
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoiYW5odGh0MTM4IiwiYSI6ImNtOGl3cXY2MjA3ZjEyanNpbTQ0ZWxhdHEifQ.ejQXolOC3H1lMD0DZpk_Bg",
           "RNMapboxMapsVersion": "11.0.0"
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow PCDACO-Driver to access your photos.",
+          "savePhotosPermission": "Allow PCDACO-Driver to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ],
     "experiments": {

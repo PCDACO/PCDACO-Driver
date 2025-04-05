@@ -1,17 +1,20 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Linking, ToastAndroid } from 'react-native';
+import { router } from 'expo-router';
+import { ToastAndroid } from 'react-native';
 
 import { useBookingMutation } from './use-book';
 
 import { BookStartTripPayload } from '~/constants/models/book.model';
 import { QueryKey } from '~/lib/query-key';
 import { translate } from '~/lib/translate';
+import { PaymentResponseStore } from '~/store/use-response';
 
 interface UseApproveOrRejectBooking {
   id: string;
 }
 
 export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => {
+  const { setResponse } = PaymentResponseStore();
   if (!id) {
     throw new Error('Id is required');
   }
@@ -27,8 +30,18 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
           queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.Detail] });
           queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
           ToastAndroid.show(translate.booking.toast.payment, ToastAndroid.SHORT);
+          setResponse(data.value);
 
-          Linking.openURL(data.value.paymentUrl);
+          if (data.value) {
+            router.push({
+              pathname: '/booking/payment',
+              params: {
+                id,
+              },
+            });
+          } else {
+            ToastAndroid.show(translate.booking.failed.message, ToastAndroid.SHORT);
+          }
         },
         onError: (error: any) => {
           ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);

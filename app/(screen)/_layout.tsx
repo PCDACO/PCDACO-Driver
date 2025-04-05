@@ -75,6 +75,16 @@ const ScreenLayout: FunctionComponent = () => {
             headerShown: false,
           }}
         />
+
+        {/* Payment */}
+        <Stack.Screen
+          name="booking/payment"
+          options={{
+            headerShown: true,
+            headerTitle: 'Thanh toán',
+            headerTitleAlign: 'center',
+          }}
+        />
       </Stack>
     </AuthProvider>
   );

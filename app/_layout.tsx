@@ -6,6 +6,7 @@ import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCameraPermissions } from 'expo-camera';
 import * as Location from 'expo-location';
+import * as MediaLibrary from 'expo-media-library';
 import { Slot, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
@@ -31,6 +32,8 @@ export default function RootLayout() {
   React.useEffect(() => {
     requestForegroundPermissionsAsync();
     handlerPermission();
+    // Request media library permissions
+    MediaLibrary.requestPermissionsAsync();
   }, []);
 
   useInitialAndroidBarSync();

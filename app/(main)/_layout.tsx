@@ -48,6 +48,7 @@ const MainLayout = () => {
           options={{
             tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
             tabBarLabel: 'Hồ sơ cá nhân',
+            animation: 'shift',
           }}
         />
       </Tabs>

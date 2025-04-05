@@ -19,7 +19,9 @@ export const TransactionService = {
       }
     },
 
-    transaction: async (params: Partial<TransactionParams>): Promise<TransactionResponse> => {
+    transaction: async (
+      params: Partial<TransactionParams>
+    ): Promise<RootResponse<Pagination<TransactionResponse>>> => {
       try {
         const response = await axiosInstance.get('/api/transactions', { params });
         return response.data;
@@ -30,6 +32,14 @@ export const TransactionService = {
   },
 
   post: {
+    check: async (orderCode: number): Promise<RootResponse<null>> => {
+      try {
+        const response = await axiosInstance.post(`/api/transactions/${orderCode}/check`);
+        return response.data;
+      } catch (error: any) {
+        throw error.response.data;
+      }
+    },
     withdraw: async (payload: WithdrawPayload): Promise<WithdrawPayloadResponse> => {
       try {
         const response = await axiosInstance.post('/api/withdrawals', payload);
