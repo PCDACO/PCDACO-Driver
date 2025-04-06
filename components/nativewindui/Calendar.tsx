@@ -1,13 +1,12 @@
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
-import { useRouter } from 'expo-router';
-
 import { HStack } from './Stack';
-import { COLORS } from '~/theme/colors';
+
 import { formatUTCDate } from '~/lib/format';
-import { Feather } from '@expo/vector-icons';
+import { COLORS } from '~/theme/colors';
 
 const daysOfWeek = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import SwiperImages, { SwiperImageItem } from '~/components/ui/swiper-images';
 

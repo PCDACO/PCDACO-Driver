@@ -6,8 +6,7 @@ import { useBookingContractQuery } from '~/hooks/book/use-book';
 
 const TermContact: FunctionComponent = () => {
   const { id } = useLocalSearchParams();
-  console.log('id', id);
-  const { data, isLoading } = useBookingContractQuery(id as string);
+  const { data } = useBookingContractQuery(id as string);
 
   console.log('data', data);
 

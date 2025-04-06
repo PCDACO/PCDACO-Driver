@@ -4,8 +4,8 @@ import { useRouter } from 'expo-router';
 import React, { FunctionComponent, useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, FlatList, Pressable, Alert, ToastAndroid } from 'react-native';
 import { SvgUri } from 'react-native-svg';
-import WithDrawalForm from '~/components/form-ui/with-drawal-form';
 
+import WithDrawalForm from '~/components/form-ui/with-drawal-form';
 import { Button } from '~/components/nativewindui/Button';
 import Backdrop from '~/components/plugins/back-drop';
 import CardBasic from '~/components/plugins/card-basic';

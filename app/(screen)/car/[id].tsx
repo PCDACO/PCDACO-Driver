@@ -1,4 +1,3 @@
-import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { FunctionComponent, useEffect } from 'react';
 import { Text, View, Dimensions, ScrollView, Animated } from 'react-native';
