@@ -3,6 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { View, Text } from 'react-native';
 
 import { CarResponseDetail } from '~/constants/models/car.model';
+import { formatNumber } from '~/lib/format';
 
 interface CarBasicInfoProps {
   car: CarResponseDetail;
@@ -20,7 +21,7 @@ const CarBasicInfo: FunctionComponent<CarBasicInfoProps> = ({ car }) => {
           <Text className="text-sm text-muted-foreground">{color}</Text>
         </View>
         <View className="items-end justify-end">
-          <Text className="text-xl font-bold">{price} /day</Text>
+          <Text className="text-xl font-bold">{formatNumber(price)} ngày</Text>
           <View className="flex-row items-end justify-end gap-2">
             <FontAwesome name="star" size={16} color="#FACC15" />
             <Text>

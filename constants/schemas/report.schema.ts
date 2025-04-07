@@ -17,4 +17,14 @@ export const ReportSchema = z.object({
     .optional(),
 });
 
+export const ReportProofSchema = z.object({
+  images: z
+    .any()
+    .refine((files) => files !== null, 'Yêu cầu chọn ảnh')
+    .refine((files) => {
+      return ACCEPTED_IMAGE_TYPES.includes(files?.type);
+    }, 'Chỉ nhận ảnh định dạng jpg, jpeg, png, webp'),
+});
+
 export type ReportSchemaType = z.infer<typeof ReportSchema>;
+export type ReportProofSchemaType = z.infer<typeof ReportProofSchema>;

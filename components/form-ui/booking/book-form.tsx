@@ -18,6 +18,24 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
   const [showStartDatePicker, setShowStartDatePicker] = React.useState<boolean>(false);
   const [showEndDatePicker, setShowEndDatePicker] = React.useState<boolean>(false);
 
+  const [startTime, setStartTime] = React.useState<Date>(new Date());
+  const [endTime, setEndTime] = React.useState<Date>(new Date());
+
+  React.useEffect(() => {
+    const mergedStartTime = mergeDateTime(form.getValues('startDay'), form.getValues('startTime'));
+    const mergedEndTime = mergeDateTime(form.getValues('endDay'), form.getValues('endTime'));
+
+    if (mergedStartTime && mergedEndTime) {
+      setStartTime(new Date(mergedStartTime));
+      setEndTime(new Date(mergedEndTime));
+    }
+  }, [
+    form.getValues('startTime'),
+    form.getValues('endTime'),
+    form.getValues('startDay'),
+    form.getValues('endDay'),
+  ]);
+
   return (
     <View className="gap-4">
       <View className="gap-1">
@@ -68,6 +86,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={showStartDatePicker}
+              date={form.getValues('startTime')}
               mode="time"
               minimumDate={new Date()}
               onConfirm={(date) => {
@@ -103,6 +122,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
               </View>
             </TouchableOpacity>
             <DateTimePickerModal
+              date={form.getValues('endTime')}
               isVisible={showEndDatePicker}
               mode="time"
               onConfirm={(date: Date) => {
@@ -122,23 +142,13 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
         <View className="flex-row items-center justify-between">
           <Subtitle className="text-base" title="Thời gian nhận xe" />
           <Text className="text-sm text-muted-foreground">
-            {form.getValues('startDay') &&
-              form.getValues('startTime') &&
-              formatDateToString(
-                mergeDateTime(form.getValues('startDay'), form.getValues('startTime')),
-                DateFormat.DayTime
-              )}
+            {startTime && formatDateToString(startTime, DateFormat.DayTime)}
           </Text>
         </View>
         <View className="flex-row items-center justify-between">
           <Subtitle className="text-base" title="Thời gian trả xe" />
           <Text className="text-sm text-muted-foreground">
-            {form.getValues('endDay') && form.getValues('endTime')
-              ? formatDateToString(
-                  mergeDateTime(form.getValues('endDay'), form.getValues('endTime')),
-                  DateFormat.DayTime
-                )
-              : 'Chưa chọn'}
+            {endTime && formatDateToString(endTime, DateFormat.DayTime)}
           </Text>
         </View>
       </View>

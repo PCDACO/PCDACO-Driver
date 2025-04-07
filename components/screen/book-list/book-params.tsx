@@ -1,9 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Text, TouchableOpacity, View, FlatList } from 'react-native';
 
 import FieldLayout from '~/components/layout/form/field-layout';
-import { BookingStatusEnum } from '~/constants/enums';
+import { BookingStatusEnum, BookingStatusNumber } from '~/constants/enums';
 import { translate } from '~/lib/translate';
 import { useBookingParamsStore } from '~/store/use-params';
 import { COLORS } from '~/theme/colors';
@@ -35,19 +35,20 @@ const StatusItem: FunctionComponent<StatusItemProps> = ({ status, isActive, onPr
 
 const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
   const { params, setParams, resetParams } = useBookingParamsStore();
-  const [isPaid, setIsPaid] = useState<boolean | undefined>(params?.isPaid);
+  const [isPaid, setIsPaid] = React.useState<boolean | undefined>(params?.isPaid);
 
-  // Fix lỗi kiểu dữ liệu bằng cách ép kiểu về BookingStatusEnum[]
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatusEnum[]>(
+  // Convert BookingStatusNumber to BookingStatusEnum for display
+  const [selectedStatus, setSelectedStatus] = React.useState<BookingStatusEnum[]>(
     params?.status
       ? Array.isArray(params.status)
-        ? (params.status as BookingStatusEnum[])
-        : [params.status as BookingStatusEnum]
+        ? params.status.map(
+            (num) => BookingStatusEnum[BookingStatusNumber[num] as keyof typeof BookingStatusEnum]
+          )
+        : [BookingStatusEnum[BookingStatusNumber[params.status] as keyof typeof BookingStatusEnum]]
       : []
   );
 
-  // Ép kiểu Object.values thành BookingStatusEnum[]
-  const statusList = Object.values(BookingStatusEnum) as BookingStatusEnum[];
+  const statusList = Object.values(BookingStatusEnum);
 
   const toggleStatus = (status: BookingStatusEnum) => {
     setSelectedStatus((prev) =>
@@ -56,7 +57,9 @@ const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
   };
 
   const handleConfirm = () => {
-    setParams({ isPaid, status: selectedStatus });
+    // Convert BookingStatusEnum back to BookingStatusNumber for API
+    const statusNumbers = selectedStatus.map((status) => BookingStatusNumber[status]);
+    setParams({ isPaid, status: statusNumbers });
     close();
   };
 

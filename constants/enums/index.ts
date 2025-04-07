@@ -78,3 +78,15 @@ export enum BookingStatusEnum {
   Expired = 'Expired',
   Done = 'Done',
 }
+
+export enum BookingStatusNumber {
+  Pending = 0,
+  Approved = 1,
+  Rejected = 2,
+  ReadyForPickup = 3,
+  Ongoing = 4,
+  Completed = 5,
+  Done = 6,
+  Cancelled = 7,
+  Expired = 8,
+}

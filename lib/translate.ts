@@ -17,6 +17,7 @@ export const translate = {
       Completed: 'Đã hoàn thành',
       Cancelled: 'Đã hủy',
       Expired: 'Đã hết hạn',
+      Done: 'Đã hoàn tất',
     },
     toast: {
       approve: 'Xác nhận đơn đặt xe thành công!',
