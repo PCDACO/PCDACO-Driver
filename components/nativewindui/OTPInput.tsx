@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TextInput } from 'react-native';
+import { StyleProp, TextInput, TextStyle } from 'react-native';
 
 import { HStack } from './Stack';
 
+import { cn } from '~/lib/cn';
 import { COLORS } from '~/theme/colors';
 
 interface OTPInputProps {
@@ -10,6 +11,9 @@ interface OTPInputProps {
   value?: string;
   onOTPChange?: (OTP: string) => void;
   isClear?: boolean;
+  className?: string;
+  style?: StyleProp<TextStyle>;
+  selectionColor?: string;
 }
 
 export const OTPInput = ({
@@ -17,6 +21,9 @@ export const OTPInput = ({
   value = '',
   onOTPChange,
   isClear = false,
+  className,
+  style,
+  selectionColor = COLORS.dark.foreground,
 }: OTPInputProps) => {
   const [otp, setOTP] = useState<string[]>(Array(length).fill(''));
   const [timer, setTimer] = useState(60);
@@ -95,9 +102,12 @@ export const OTPInput = ({
           onKeyPress={(e) => handleKeyPress(e, index)}
           keyboardType="number-pad"
           maxLength={1}
-          selectionColor={COLORS.dark.primary}
-          className="h-14 w-14 rounded-2xl border border-border bg-white pl-5 text-xl font-bold text-primary"
-          style={{ lineHeight: 20 }}
+          selectionColor={selectionColor}
+          className={cn(
+            'h-14 w-12 rounded-lg border border-border bg-white pl-5 text-xl font-bold text-primary',
+            className
+          )}
+          style={style}
         />
       ))}
     </HStack>
