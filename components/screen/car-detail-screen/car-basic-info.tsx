@@ -6,22 +6,22 @@ import { CarResponseDetail } from '~/constants/models/car.model';
 import { formatNumber } from '~/lib/format';
 
 interface CarBasicInfoProps {
-  car: CarResponseDetail;
+  car: CarResponseDetail | undefined;
 }
 
 const CarBasicInfo: FunctionComponent<CarBasicInfoProps> = ({ car }) => {
-  const { manufacturer, modelName, color, price, averageRating, totalRented } = car;
+  const { manufacturer, modelName, color, price, averageRating, totalRented } = car || {};
   return (
     <View>
       <View className="flex-row justify-between">
         <View>
           <Text className="text-xl font-bold">
-            {manufacturer.name} {modelName}
+            {manufacturer?.name} {modelName}
           </Text>
           <Text className="text-sm text-muted-foreground">{color}</Text>
         </View>
         <View className="items-end justify-end">
-          <Text className="text-xl font-bold">{formatNumber(price)} ngày</Text>
+          <Text className="text-xl font-bold">{formatNumber(price || 0)} ngày</Text>
           <View className="flex-row items-end justify-end gap-2">
             <FontAwesome name="star" size={16} color="#FACC15" />
             <Text>

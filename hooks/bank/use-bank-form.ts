@@ -6,7 +6,7 @@ import { ToastAndroid } from 'react-native';
 
 import { useBankMutation } from './use-bank';
 
-import { BankSchema, BankSchemaPayload } from '~/constants/schemas/bank.schema';
+import { BankSchemaPayload, BankSchema } from '~/constants/schemas/bank.schema';
 import { QueryKey } from '~/lib/query-key';
 import { translate } from '~/lib/translate';
 
@@ -34,7 +34,7 @@ export const useBankForm = ({ id }: BankFormProps) => {
         { id, payload: values },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account] });
+            queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account.List] });
             form.reset();
             ToastAndroid.show(translate.bank.toast.update, ToastAndroid.SHORT);
 
@@ -44,7 +44,7 @@ export const useBankForm = ({ id }: BankFormProps) => {
           },
           onError: (error: any) => {
             ToastAndroid.show(
-              error.message || translate.bank.toast.error_update,
+              error.response.data.message || translate.bank.toast.error_update,
               ToastAndroid.SHORT
             );
           },
@@ -53,15 +53,19 @@ export const useBankForm = ({ id }: BankFormProps) => {
     } else {
       createBankAccountMutation.mutate(values, {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account] });
+          queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account.List] });
           form.reset();
           ToastAndroid.show(translate.bank.toast.create, ToastAndroid.SHORT);
+
           setTimeout(() => {
             router.back();
           }, 1000);
         },
         onError: (error: any) => {
-          ToastAndroid.show(error.message || translate.bank.toast.error_create, ToastAndroid.SHORT);
+          ToastAndroid.show(
+            error.response.data.message || translate.bank.toast.error_create,
+            ToastAndroid.SHORT
+          );
         },
       });
     }

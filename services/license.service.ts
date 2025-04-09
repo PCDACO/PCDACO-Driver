@@ -10,32 +10,20 @@ import {
 export const LiccenseService = {
   get: {
     license: async (): Promise<RootResponse<LicenseResponse>> => {
-      try {
-        const response = await axiosInstance.get('/api/licenses/users/current');
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      const response = await axiosInstance.get('/api/licenses/users/current');
+      return response.data;
     },
   },
   post: {
     license: async (payload: LicensePayload): Promise<RootResponse<LicensePayloadResponse>> => {
-      try {
-        const response = await axiosInstance.post('/api/users/license', payload);
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      const response = await axiosInstance.post('/api/users/license', payload);
+      return response.data;
     },
   },
   put: {
     license: async (payload: LicensePayload): Promise<RootResponse<LicensePayloadResponse>> => {
-      try {
-        const response = await axiosInstance.put(`/api/users/license`, payload);
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      const response = await axiosInstance.put(`/api/users/license`, payload);
+      return response.data;
     },
   },
   delete: {},
@@ -48,19 +36,13 @@ export const LiccenseService = {
       formData.append('licenseImageBack', payload.licenseImageBack);
       formData.append('licenseImageFront', payload.licenseImageFront);
 
-      console.log('form data', formData);
+      const response = await axiosInstance.patch(`/api/users/license/images`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-      try {
-        const response = await axiosInstance.patch(`/api/users/license/images`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      return response.data;
     },
   },
 };

@@ -6,16 +6,11 @@ export const ModelsService = {
     list: async (
       params?: Partial<RootRequest>
     ): Promise<RootResponse<Pagination<ModelsResponse>>> => {
-      try {
-        const response = await axiosInstance.get<RootResponse<Pagination<ModelsResponse>>>(
-          `/api/models`,
-          { params }
-        );
-
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      const response = await axiosInstance.get<RootResponse<Pagination<ModelsResponse>>>(
+        `/api/models`,
+        { params }
+      );
+      return response.data;
     },
   },
 };

@@ -7,11 +7,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCameraPermissions } from 'expo-camera';
 import * as Location from 'expo-location';
 import * as MediaLibrary from 'expo-media-library';
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import AuthProvider from '~/components/permission/auth-provider';
 import { useColorScheme, useInitialAndroidBarSync } from '~/lib/useColorScheme';
 import { NAV_THEME } from '~/theme';
 
@@ -49,11 +50,14 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <ActionSheetProvider>
             <NavThemeProvider value={NAV_THEME[colorScheme]}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                }}>
-                <Slot />
+              <Stack screenOptions={SCREEN_OPTIONS}>
+                <AuthProvider>
+                  <Stack.Screen name="index" options={TAB_OPTIONS} />
+                  <Stack.Screen name="(main)" options={TAB_OPTIONS} />
+                  <Stack.Screen name="(auth)" options={TAB_OPTIONS} />
+                  <Stack.Screen name="(screen)" options={TAB_OPTIONS} />
+                  <Stack.Screen name="(second)" options={TAB_OPTIONS} />
+                </AuthProvider>
               </Stack>
             </NavThemeProvider>
           </ActionSheetProvider>
@@ -62,3 +66,14 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
+const SCREEN_OPTIONS = {
+  animation: 'ios_from_right',
+  headerShown: false,
+} as const;
+
+const TAB_OPTIONS = {
+  animation: 'fade_from_bottom',
+  presentation: 'modal',
+  headerShown: false,
+} as const;

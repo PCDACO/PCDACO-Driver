@@ -4,6 +4,10 @@ export const QueryKey = {
     Register: 'Register',
     Validate: 'Validate',
     Refresh: 'Refresh',
+    SendOtp: 'SendOtp',
+    VerifyOtp: 'VerifyOtp',
+    ResetPassword: 'ResetPassword',
+    ForgetPassword: 'ForgetPassword',
   },
 
   License: {

@@ -40,8 +40,7 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
         text="Thu nhập & hình thức thanh toán"
         onPress={() => {
           router.push({
-            pathname: '/(second)/wallet',
-            params: { id },
+            pathname: '/(second)/transaction',
           });
         }}
       />

@@ -76,6 +76,7 @@
       }
     },
     "android": {
+      "networkSecurityConfig": "./network_security_config.xml",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo-driver.png",

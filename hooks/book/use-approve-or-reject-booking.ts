@@ -44,7 +44,10 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
           }
         },
         onError: (error: any) => {
-          ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);
+          ToastAndroid.show(
+            error.response.data.message || translate.booking.failed.message,
+            ToastAndroid.SHORT
+          );
         },
       });
     } else {
@@ -55,7 +58,10 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
           ToastAndroid.show(translate.booking.toast.cancel, ToastAndroid.SHORT);
         },
         onError: (error: any) => {
-          ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);
+          ToastAndroid.show(
+            error.response.data.message || translate.booking.failed.message,
+            ToastAndroid.SHORT
+          );
         },
       });
     }
@@ -74,7 +80,10 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
           ToastAndroid.show(translate.booking.toast.startTrip, ToastAndroid.SHORT);
         },
         onError: (error: any) => {
-          ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);
+          ToastAndroid.show(
+            error.response.data.message || translate.booking.failed.message,
+            ToastAndroid.SHORT
+          );
         },
       }
     );
@@ -84,7 +93,10 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
     completeBooking.mutate(id, {
       onSuccess: () => {},
       onError: (error: any) => {
-        ToastAndroid.show(error.message || translate.booking.failed.message, ToastAndroid.SHORT);
+        ToastAndroid.show(
+          error.response.data.message || translate.booking.failed.message,
+          ToastAndroid.SHORT
+        );
       },
     });
   };

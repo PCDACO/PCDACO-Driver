@@ -10,43 +10,29 @@ import {
 
 export const TransactionService = {
   get: {
-    withdraw: async (params: Partial<WithdrawParams>): Promise<WithdrawResponse> => {
-      try {
-        const response = await axiosInstance.get('/api/withdrawals', { params });
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+    withdraw: async (
+      params: Partial<WithdrawParams>
+    ): Promise<RootResponse<Pagination<WithdrawResponse>>> => {
+      const response = await axiosInstance.get('/api/withdrawals', { params });
+      return response.data;
     },
 
     transaction: async (
       params: Partial<TransactionParams>
     ): Promise<RootResponse<Pagination<TransactionResponse>>> => {
-      try {
-        const response = await axiosInstance.get('/api/transactions', { params });
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.get('/api/transactions', { params });
+      return response.data;
     },
   },
 
   post: {
     check: async (orderCode: number): Promise<RootResponse<null>> => {
-      try {
-        const response = await axiosInstance.post(`/api/transactions/${orderCode}/check`);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.post(`/api/transactions/${orderCode}/check`);
+      return response.data;
     },
     withdraw: async (payload: WithdrawPayload): Promise<WithdrawPayloadResponse> => {
-      try {
-        const response = await axiosInstance.post('/api/withdrawals', payload);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.post('/api/withdrawals', payload);
+      return response.data;
     },
   },
 };

@@ -76,7 +76,9 @@ const Login: FunctionComponent = () => {
             )}
           </FieldLayout>
 
-          <Text className="text-foreground/60 text-right font-semibold">Quên mật khẩu?</Text>
+          <Link href="/forget-password" className="self-end" onPress={() => resetStep()}>
+            <Text className="text-foreground/60 font-semibold">Quên mật khẩu?</Text>
+          </Link>
 
           <View className="mt-4 gap-4">
             <Button onPress={onSubmit} disabled={isLoading}>

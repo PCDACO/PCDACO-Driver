@@ -39,8 +39,8 @@ export const usePasswordForm = ({ id }: UsePasswordFormProps) => {
           queryClient.invalidateQueries({ queryKey: [QueryKey.User.Current] });
           ToastAndroid.show('Mật khẩu đã được cập nhật', ToastAndroid.SHORT);
         },
-        onError: (error) => {
-          ToastAndroid.show(error.message, ToastAndroid.SHORT);
+        onError: (error: any) => {
+          ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
         },
       }
     );

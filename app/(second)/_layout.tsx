@@ -41,9 +41,7 @@ export default function SecondLayout() {
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
-          if (route.name === 'Wallet') {
-            iconName = 'wallet';
-          } else if (route.name === 'Transaction') {
+          if (route.name === 'Transaction') {
             iconName = 'swap-horizontal';
           } else if (route.name === 'BankAccount') {
             iconName = 'card';
@@ -54,14 +52,6 @@ export default function SecondLayout() {
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen
-        name="Wallet"
-        component={Wallet}
-        options={{
-          tabBarLabel: 'Ví',
-          title: 'Ví của tôi',
-        }}
-      />
       <Tab.Screen
         name="Transaction"
         component={Transaction}

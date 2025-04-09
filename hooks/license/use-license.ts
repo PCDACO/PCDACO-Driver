@@ -19,14 +19,6 @@ export const useLicenseMutation = () => {
   const createLicenseMutation = useMutation({
     mutationKey: [QueryKey.License.Create],
     mutationFn: async (payload: LicensePayload) => await LiccenseService.post.license(payload),
-
-    onSuccess: (license) => {
-      console.log('License được tạo:', license);
-    },
-
-    onError: (error) => {
-      console.error('Tạo license thất bại:', error);
-    },
   });
 
   const updateLicenseMutation = useMutation({

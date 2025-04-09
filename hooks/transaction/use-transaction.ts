@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 import {
   TransactionParams,
@@ -17,14 +17,6 @@ export const useTransaction = (parmas: Partial<TransactionParams>) => {
   return transactionQuery;
 };
 
-export const useCheckTransaction = () => {
-  const checkTransactionMutation = useMutation({
-    mutationKey: [QueryKey.Transaction.Check],
-    mutationFn: async (orderCode: number) => await TransactionService.post.check(orderCode),
-  });
-  return checkTransactionMutation;
-};
-
 export const useWithdraw = (parmas: Partial<WithdrawParams>) => {
   const withdrawQuery = useQuery({
     queryKey: [QueryKey.Transaction.Withdraw, parmas],
@@ -40,4 +32,44 @@ export const useWithdrawMutation = () => {
     mutationFn: async (payload: WithdrawPayload) => await TransactionService.post.withdraw(payload),
   });
   return { createWithdrawQuery };
+};
+
+export const useInfiniteTransactions = (params: Partial<TransactionParams>) => {
+  return useInfiniteQuery({
+    queryKey: [QueryKey.Transaction.Transaction, 'infinite', params],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await TransactionService.get.transaction({
+        ...params,
+        index: pageParam,
+        size: 10,
+      });
+      return response;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.value?.hasNext) return undefined;
+      return allPages.length + 1;
+    },
+    enabled: !!params,
+  });
+};
+
+export const useInfiniteWithdraw = (params: Partial<WithdrawParams>) => {
+  return useInfiniteQuery({
+    queryKey: [QueryKey.Transaction.Withdraw, 'infinite', params],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await TransactionService.get.withdraw({
+        ...params,
+        index: pageParam,
+        size: 10,
+      });
+      return response;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.value?.hasNext) return undefined;
+      return allPages.length + 1;
+    },
+    enabled: !!params,
+  });
 };

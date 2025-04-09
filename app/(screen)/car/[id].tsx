@@ -42,16 +42,6 @@ const CarDetail: FunctionComponent = () => {
     });
   };
 
-  // Swipe to complete booking
-  // const {
-  //   panResponder,
-  //   translateX: buttonTranslateX,
-  //   scale: buttonScale,
-  //   isCompleted,
-  // } = useSwipeComplete({
-  //   onComplete: handleComplete,
-  // });
-
   useEffect(() => {
     translateY.value = withSpring(SCREEN_HEIGHT * 0.4, {
       damping: 15,
@@ -59,7 +49,7 @@ const CarDetail: FunctionComponent = () => {
     });
   }, []);
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <View className="h-full flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#0000ff" />
@@ -104,10 +94,10 @@ const CarDetail: FunctionComponent = () => {
               marginBottom: 20,
             }}>
             <View className="gap-4 pb-32">
-              <CarBasicInfo car={data.value} />
-              <CarConfiguration car={data.value} />
-              <OwnerContactInfor car={data.value} />
-              <CarMainInfo car={data.value} />
+              <CarBasicInfo car={data!.value} />
+              <CarConfiguration car={data!.value} />
+              <OwnerContactInfor car={data!.value} />
+              <CarMainInfo car={data!.value} />
             </View>
           </View>
         </ScrollView>
@@ -118,24 +108,6 @@ const CarDetail: FunctionComponent = () => {
           <TextUI>Đặt xe</TextUI>
         </Button>
       </View>
-
-      {/* <View className="absolute bottom-8 left-0 right-0 z-20 px-6 shadow-sm">
-        <View className="bg-foreground/20 h-12 w-full overflow-hidden rounded-full ">
-          <Animated.View
-            className="absolute left-1 top-1 size-10 items-center justify-center rounded-full bg-blue-500"
-            style={{
-              transform: [{ translateX: buttonTranslateX }, { scale: buttonScale }],
-            }}
-            {...panResponder.panHandlers}>
-            <FontAwesome name="arrow-right" size={20} color="white" />
-          </Animated.View>
-          <View className="h-full w-full items-center justify-center">
-            <Text className="text-base font-bold text-background ">
-              {isCompleted ? 'Đặt xe thành công!' : 'Vuốt để đặt xe'}
-            </Text>
-          </View>
-        </View>
-      </View> */}
     </View>
   );
 };

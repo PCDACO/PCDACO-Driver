@@ -9,32 +9,20 @@ import {
 export const BankService = {
   get: {
     list: async (search?: string): Promise<RootResponse<BankResponseList[]>> => {
-      try {
-        const response = await axiosInstance.get('/api/bank-info', { params: { search } });
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.get('/api/bank-info', { params: { search } });
+      return response.data;
     },
 
     accounts: async (
       params?: Partial<RootRequest>
     ): Promise<RootResponse<Pagination<BankAccountResponseList>>> => {
-      try {
-        const response = await axiosInstance.get('/api/bank-accounts', { params });
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.get('/api/bank-accounts', { params });
+      return response.data;
     },
 
     detail_account: async (id: string): Promise<RootResponse<BankAccountResponseDetail>> => {
-      try {
-        const response = await axiosInstance.get(`/api/bank-accounts/${id}`);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.get(`/api/bank-accounts/${id}`);
+      return response.data;
     },
   },
 
@@ -42,12 +30,8 @@ export const BankService = {
     account: async (
       payload: BankAccountPayload
     ): Promise<RootResponse<BankAccountResponseDetail>> => {
-      try {
-        const response = await axiosInstance.post('/api/bank-accounts', payload);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.post('/api/bank-accounts', payload);
+      return response.data;
     },
   },
 
@@ -56,23 +40,15 @@ export const BankService = {
       id: string,
       payload: BankAccountPayload
     ): Promise<RootResponse<BankAccountResponseDetail>> => {
-      try {
-        const response = await axiosInstance.put(`/api/bank-accounts/${id}`, payload);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.put(`/api/bank-accounts/${id}`, payload);
+      return response.data;
     },
   },
 
   delete: {
     account: async (id: string): Promise<RootResponse<BankAccountResponseDetail>> => {
-      try {
-        const response = await axiosInstance.delete(`/api/bank-accounts/${id}`);
-        return response.data;
-      } catch (error: any) {
-        throw error.response.data;
-      }
+      const response = await axiosInstance.delete(`/api/bank-accounts/${id}`);
+      return response.data;
     },
   },
 };

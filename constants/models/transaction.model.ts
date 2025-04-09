@@ -10,7 +10,23 @@ export interface WithdrawParams extends RootRequest {
   toDate: string;
 }
 
-export interface TransactionResponse {}
+export interface TransactionResponse {
+  id: string;
+  type: string;
+  amount: number;
+  balanceAfter: number;
+  description: string;
+  createdAt: Date;
+  status: string;
+  details: Details;
+  prooUrl: string;
+}
+
+export interface Details {
+  bookingId: string;
+  bankName: string;
+  bankAccountName: string;
+}
 
 export interface WithdrawPayload {
   bankAccountId: string;

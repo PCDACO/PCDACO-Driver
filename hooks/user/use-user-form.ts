@@ -35,9 +35,9 @@ export const useUserForm = ({ id }: UserFormProps) => {
           setIsSuccess(true);
           router.back();
         },
-        onError: (error) => {
+        onError: (error: any) => {
           setIsSuccess(false);
-          ToastAndroid.show(error.message, ToastAndroid.SHORT);
+          ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
         },
       }
     );

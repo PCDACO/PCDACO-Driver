@@ -3,11 +3,9 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { StatusBar } from 'react-native';
 
-import AuthProvider from '~/components/permission/auth-provider';
-
 const MainLayout = () => {
   return (
-    <AuthProvider>
+    <>
       <StatusBar hidden />
       <Tabs
         screenOptions={{
@@ -52,7 +50,7 @@ const MainLayout = () => {
           }}
         />
       </Tabs>
-    </AuthProvider>
+    </>
   );
 };
 

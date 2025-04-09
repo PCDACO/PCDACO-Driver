@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ToastAndroid } from 'react-native';
 
 import { BankAccountPayload } from '~/constants/models/bank.model';
 import { QueryKey } from '~/lib/query-key';
+import { translate } from '~/lib/translate';
 import { BankService } from '~/services/bank.service';
 
 interface BankQueryProps {
@@ -56,24 +58,12 @@ export const useBankMutation = () => {
   const createBankAccountMutation = useMutation({
     mutationKey: [QueryKey.Bank.Account.Create],
     mutationFn: (payload: BankAccountPayload) => BankService.post.account(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account.List] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const updateBankAccountMutation = useMutation({
     mutationKey: [QueryKey.Bank.Account.Update],
     mutationFn: ({ id, payload }: { id: string; payload: BankAccountPayload }) =>
       BankService.put.account(id, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account.List] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const deleteBankAccountMutation = useMutation({
@@ -81,9 +71,13 @@ export const useBankMutation = () => {
     mutationFn: (id: string) => BankService.delete.account(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKey.Bank.Account.List] });
+      ToastAndroid.show(translate.bank.toast.delete, ToastAndroid.SHORT);
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error: any) => {
+      ToastAndroid.show(
+        error.response.data.message || translate.bank.toast.error_delete,
+        ToastAndroid.SHORT
+      );
     },
   });
 

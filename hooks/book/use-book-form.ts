@@ -38,8 +38,11 @@ export const useBookingForm = () => {
         endTime: mergedEnd,
       },
       {
-        onSuccess: () => {
-          ToastAndroid.show(translate.booking.success.title, ToastAndroid.SHORT);
+        onSuccess: (response) => {
+          ToastAndroid.show(
+            response.message || translate.booking.success.title,
+            ToastAndroid.SHORT
+          );
           queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
           form.reset();
           setTimeout(() => {
@@ -49,7 +52,10 @@ export const useBookingForm = () => {
           }, 1000);
         },
         onError: (error: any) => {
-          ToastAndroid.show(error.message || translate.booking.failed.title, ToastAndroid.SHORT);
+          ToastAndroid.show(
+            error.response.data.message || translate.booking.failed.title,
+            ToastAndroid.SHORT
+          );
           console.log('error', error);
         },
       }

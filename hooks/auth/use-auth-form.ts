@@ -22,7 +22,7 @@ type UseAuthFormProps = {
 };
 
 export const useAuthForm = ({ type }: UseAuthFormProps) => {
-  const { loginMutation, registerMutation } = useAuth();
+  const { loginMutation, registerMutation, sendOtpMutation, verifyOtpMutation } = useAuth();
 
   const { setTokens, removeTokens, setIsAuthenticated } = useAuthStore();
 
@@ -40,7 +40,8 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
             address: '',
             dateOfBirth: new Date(),
             phone: '',
-            roleName: Role.Driver,
+            otp: '',
+            roleName: Role.Owner,
           },
   });
 
@@ -59,16 +60,57 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
       case 1: {
         const isValidate = await validField(form.trigger(['email', 'password']));
         if (isValidate) {
-          nextStep();
+          sendOtpMutation.mutate(
+            { email: form.getValues('email'), isResetPassword: false },
+            {
+              onSuccess: () => {
+                ToastAndroid.show('Xin hãy kiểm tra email để nhận mã OTP', ToastAndroid.SHORT);
+                setTimeout(() => {
+                  nextStep();
+                }, 1000);
+              },
+              onError: (error: any) => {
+                ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+              },
+            }
+          );
         }
         return isValidate;
       }
+
       case 2: {
+        const isValidate = await validField(form.trigger(['otp']));
+        if (isValidate) {
+          verifyOtpMutation.mutate(
+            {
+              email: form.getValues('email'),
+              otp: form.getValues('otp') || '',
+              isResetPassword: false,
+            },
+            {
+              onSuccess: () => {
+                ToastAndroid.show('OTP đã được xác thực', ToastAndroid.SHORT);
+                setTimeout(() => {
+                  nextStep();
+                }, 1000);
+              },
+              onError: (error: any) => {
+                ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
+              },
+            }
+          );
+        } else {
+          ToastAndroid.show(form.formState.errors.otp?.message || '', ToastAndroid.SHORT);
+        }
+        return isValidate;
+      }
+
+      case 3: {
         const isValidate = await validField(
           form.trigger(['name', 'address', 'dateOfBirth', 'phone'])
         );
         if (isValidate) {
-          nextStep();
+          onSubmit();
         }
         return isValidate;
       }
@@ -97,7 +139,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
                     router.push('/(main)');
                     form.reset();
                   } else {
-                    ToastAndroid.show('Đây không là tài khoản tài xế', ToastAndroid.SHORT);
+                    ToastAndroid.show('Đây không là tài khoản chủ xe', ToastAndroid.SHORT);
                     setIsAuthenticated(false);
                     removeTokens();
                   }
@@ -110,15 +152,14 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
             }
           },
           onError: (error: any) => {
-            ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+            ToastAndroid.show(`${error.response.data.message}`, ToastAndroid.SHORT);
           },
         });
         break;
       case 'register':
         registerMutation.mutate(data as RegisterPayload, {
           onSuccess: async (data) => {
-            // check if register success, remove register endpoint in store
-
+            nextStep();
             await setTokens(data.value.accessToken, data.value.refreshToken);
             setIsAuthenticated(true);
             ToastAndroid.show('Đăng ký thành công', ToastAndroid.SHORT);
@@ -139,5 +180,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
     onSubmit,
     isLoading: loginMutation.isPending || registerMutation.isPending,
     checkConditionOfEachStep,
+    isLoadingSendOtp: sendOtpMutation.isPending,
+    isLoadingVerifyOtp: verifyOtpMutation.isPending,
   };
 };

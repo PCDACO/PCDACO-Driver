@@ -56,7 +56,7 @@ export const useReportForm = ({ id }: ReportFormProps) => {
               },
               onError: (error: any) => {
                 ToastAndroid.show(
-                  error.message || translate.report.toast.error_image,
+                  error.response.data.message || translate.report.toast.error_image,
                   ToastAndroid.SHORT
                 );
               },
@@ -72,7 +72,10 @@ export const useReportForm = ({ id }: ReportFormProps) => {
         }
       },
       onError: (error: any) => {
-        ToastAndroid.show(error.message || translate.report.toast.error_create, ToastAndroid.SHORT);
+        ToastAndroid.show(
+          error.response.data.message || translate.report.toast.error_create,
+          ToastAndroid.SHORT
+        );
       },
     });
   });

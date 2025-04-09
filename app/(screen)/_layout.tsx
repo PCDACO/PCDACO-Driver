@@ -2,11 +2,9 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { FunctionComponent } from 'react';
 
-import AuthProvider from '~/components/permission/auth-provider';
-
 const ScreenLayout: FunctionComponent = () => {
   return (
-    <AuthProvider>
+    <>
       <StatusBar hidden />
       <Stack
         screenOptions={{
@@ -69,12 +67,12 @@ const ScreenLayout: FunctionComponent = () => {
         />
 
         {/* Search */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="search-cars"
           options={{
             headerShown: false,
           }}
-        />
+        /> */}
 
         {/* Payment */}
         <Stack.Screen
@@ -86,7 +84,7 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
       </Stack>
-    </AuthProvider>
+    </>
   );
 };
 

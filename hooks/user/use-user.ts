@@ -1,7 +1,9 @@
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ToastAndroid } from 'react-native';
 
 import { UserPasswordPayload, UserPayload } from '~/constants/models/user.model';
 import { QueryKey } from '~/lib/query-key';
+import { translate } from '~/lib/translate';
 import { UserService } from '~/services/user.service';
 
 export const useUserQuery = () => {
@@ -27,7 +29,7 @@ export const useUserDetailQuery = (id: string) => {
 };
 
 export const useUserMutation = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const updateUserMutation = useMutation({
     mutationKey: [QueryKey.User.Update],
@@ -36,8 +38,8 @@ export const useUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKey.User.Current] });
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error: any) => {
+      ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
     },
   });
 
@@ -48,8 +50,8 @@ export const useUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKey.User.Current] });
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error: any) => {
+      ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
     },
   });
 
@@ -59,9 +61,13 @@ export const useUserMutation = () => {
       await UserService.patch.avatar(id, avatar),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [QueryKey.User.Current] });
+      ToastAndroid.show(data.message || translate.user.toast.update_avatar, ToastAndroid.SHORT);
     },
-    onError: (error) => {
-      console.error(error);
+    onError: (error: any) => {
+      ToastAndroid.show(
+        error.response.data.message || translate.user.toast.error_update_avatar,
+        ToastAndroid.SHORT
+      );
     },
   });
 
