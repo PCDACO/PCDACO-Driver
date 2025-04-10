@@ -11,7 +11,7 @@ import ReportBasicInfo from '~/components/screen/report-detail/report-basic-info
 import ReportBookInfo from '~/components/screen/report-detail/report-book-info';
 import ReportCarInfo from '~/components/screen/report-detail/report-car-info';
 import ReportGallery from '~/components/screen/report-detail/report-gallery';
-import { BookingReportStatus, BookingReportStatusNumber, Role } from '~/constants/enums';
+import { BookingReportStatusNumber, Role } from '~/constants/enums';
 import { useReportDetailQuery } from '~/hooks/report/use-report';
 import { useReportProofForm } from '~/hooks/report/use-report-proof-form';
 
@@ -73,7 +73,11 @@ const ReportDetailScreen: FunctionComponent = () => {
   return (
     <View className="relative h-full flex-1 bg-slate-100 dark:bg-slate-900 ">
       <ScrollView>
-        <View className="h-full gap-2 pt-4">
+        <View
+          className="h-full gap-2 pt-4"
+          style={{
+            paddingBottom: 50,
+          }}>
           <View className="gap-2 px-4">
             <ReportBasicInfo
               title={reportDetail?.title || ''}
@@ -83,13 +87,17 @@ const ReportDetailScreen: FunctionComponent = () => {
               status={reportDetail?.status || 0}
             />
             <ReportGallery imageUrls={reportDetail?.imageUrls || []} />
-            {reportDetail?.reporterRole !== Role.Driver && <ReportProofForm form={form} />}
+            <ReportProofForm
+              form={form}
+              role={reportDetail?.reporterRole || ''}
+              imageUrl={reportDetail?.compensationDetail?.imageUrl || ''}
+            />
           </View>
           <TabView tabs={tabs} initialTab={0} contentClassName="bg-gray-50" />
         </View>
       </ScrollView>
       {reportDetail?.reporterRole !== Role.Driver &&
-        reportDetail?.status === BookingReportStatusNumber.UnderReview && (
+        reportDetail?.compensationDetail?.imageUrl === '' && (
           <View className="absolute bottom-0 left-0 right-0 z-20 bg-white p-4 dark:bg-slate-900">
             <Button onPress={onSubmit} disabled={isLoading}>
               {isLoading ? (

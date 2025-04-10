@@ -16,7 +16,7 @@ interface ReportBasicInfoProps {
   title: ReportDetailResponse['title'];
   reportType: ReportDetailResponse['reportType'];
   description: ReportDetailResponse['description'];
-  reportName: ReportDetailResponse['reportedName'];
+  reportName: ReportDetailResponse['reporterName'];
   status: ReportDetailResponse['status'];
 }
 

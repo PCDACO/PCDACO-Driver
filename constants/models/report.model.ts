@@ -112,8 +112,8 @@ export interface CompensationDetail {
   compensationReason: string;
   compensationAmount: number;
   isPaid: boolean;
-  imageUrl: null;
-  paidAt: null;
+  imageUrl: string;
+  paidAt: Date;
 }
 
 export interface InspectionScheduleDetail {

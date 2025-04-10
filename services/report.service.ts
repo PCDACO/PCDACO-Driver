@@ -55,9 +55,13 @@ export const ReportService = {
       reportId: string,
       payload: ReportCompensationProofPayload
     ): Promise<RootResponse<ReportCompensationProofResponse>> => {
-      const response = await axiosInstance.patch(
+      const formData = new FormData();
+
+      formData.append('images', payload.images);
+
+      const response = await axiosInstance.patchForm(
         `/api/reports/${reportId}/compensation-proof`,
-        payload
+        formData
       );
       return response.data;
     },

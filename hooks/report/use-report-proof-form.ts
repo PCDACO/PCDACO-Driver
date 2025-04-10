@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
@@ -30,7 +31,7 @@ export const useReportProofForm = ({ id }: UseReportProofFormProps) => {
     }
     compensationProofMutation.mutate(
       {
-        id,
+        reportId: id,
         payload: {
           images: data.images,
         },
@@ -39,6 +40,7 @@ export const useReportProofForm = ({ id }: UseReportProofFormProps) => {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [QueryKey.Report.Detail] });
           ToastAndroid.show(translate.report.toast.compensation_proof, ToastAndroid.SHORT);
+          router.reload();
           form.reset();
         },
         onError: (error: any) => {
