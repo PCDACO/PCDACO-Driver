@@ -83,6 +83,24 @@ const ScreenLayout: FunctionComponent = () => {
             headerTitleAlign: 'center',
           }}
         />
+
+        <Stack.Screen
+          name="(reports)/reports"
+          options={{
+            headerShown: true,
+            headerTitle: 'Danh sách báo cáo',
+            headerTitleAlign: 'center',
+          }}
+        />
+
+        <Stack.Screen
+          name="(reports)/detail/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: 'Chi tiết báo cáo',
+            headerTitleAlign: 'center',
+          }}
+        />
       </Stack>
     </>
   );
