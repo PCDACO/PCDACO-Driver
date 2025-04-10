@@ -73,3 +73,11 @@ export const useInfiniteWithdraw = (params: Partial<WithdrawParams>) => {
     enabled: !!params,
   });
 };
+
+export const useCheckTransaction = () => {
+  const checkTransactionQuery = useMutation({
+    mutationKey: [QueryKey.Transaction.Check],
+    mutationFn: async (orderCode: number) => await TransactionService.post.check(orderCode),
+  });
+  return checkTransactionQuery;
+};
