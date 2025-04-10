@@ -114,7 +114,9 @@ const Register: FunctionComponent = () => {
                     variant="secondary"
                     onPress={() => checkConditionOfEachStep(step)}
                     disabled={isLoadingVerifyOtp}>
-                    <TextUI>{isLoadingVerifyOtp ? 'Đang xác nhận OTP...' : 'Xác nhận OTP'}</TextUI>
+                    <TextUI className="text-foreground">
+                      {isLoadingVerifyOtp ? 'Đang xác nhận OTP...' : 'Xác nhận OTP'}
+                    </TextUI>
                   </Button>
                 </View>
               </View>

@@ -1,79 +1,92 @@
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { FunctionComponent } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BookCard from '~/components/card/book/book-card';
-import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
-import BookEmpty from '~/components/screen/book-list/book-empty';
 import BookListParams from '~/components/screen/book-list/book-params';
-import { BookParams } from '~/constants/models/book.model';
+import { BookParams, BookResponseList } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
 import { useBookingParamsStore } from '~/store/use-params';
 import { useSearchStore } from '~/store/use-search';
 import { COLORS } from '~/theme/colors';
 
+type InfiniteQueryPage = {
+  value: {
+    items: BookResponseList[];
+    totalItems: number;
+    pageNumber: number;
+    pageSize: number;
+    hasNext: boolean;
+  };
+};
+
 const BookingScreen: FunctionComponent = () => {
   const { searchKeyword } = useSearchStore();
-  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const [params, setParams] = React.useState<Partial<BookParams>>({});
   const { params: bookingParams } = useBookingParamsStore();
-  const { data: booking, isLoading } = useBookingListQuery(params);
+  const {
+    data: booking,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useBookingListQuery(params);
 
   React.useEffect(() => {
     if (searchKeyword || bookingParams) {
       setParams({
         search: searchKeyword || '',
-        limit: bookingParams?.limit || 10,
         status: bookingParams?.status,
         isPaid: bookingParams?.isPaid,
-        lastId: bookingParams?.lastId,
       });
     }
   }, [searchKeyword, bookingParams]);
 
-  const bookingList = booking?.value.items || [];
+  const bookingList = React.useMemo(() => {
+    if (!booking?.pages) return [];
+    return (booking.pages as InfiniteQueryPage[]).flatMap((page, pageIndex) =>
+      page.value.items.map((item) => ({
+        ...item,
+        pageIndex,
+      }))
+    );
+  }, [booking]);
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const sheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = React.useMemo(() => ['1%', '60%'], []);
+  const snapPoints = React.useMemo(() => ['1%', '90%'], []);
 
   const handleSnapPress = React.useCallback((index: number) => {
     sheetRef.current?.snapToIndex(index);
-    setIsSheetOpen(index === snapPoints.length - 1);
-  }, []);
-
-  const handleSheetChange = React.useCallback((index: number) => {
-    setIsSheetOpen(index === snapPoints.length - 1);
   }, []);
 
   const handleClosePress = React.useCallback(() => {
     sheetRef.current?.close();
-    setIsSheetOpen(false);
   }, []);
 
   return (
     <SafeAreaView className="relative h-full flex-1">
-      <View
-        className="absolute bottom-4 right-4 z-10"
-        style={{
-          opacity: isSheetOpen ? 0 : 1, // Ẩn khi mở BottomSheet
-          zIndex: isSheetOpen ? -1 : 10, // Đưa xuống dưới khi mở BottomSheet
-        }}>
+      <View className="mb-3 flex-row items-center gap-2 px-4">
+        <SearchInput className="flex-1" />
         <TouchableOpacity
-          className="items-center justify-center rounded-full border border-gray-200 bg-white  dark:border-gray-700 dark:bg-slate-300"
-          onPress={() => handleSnapPress(1)}
+          className="items-center justify-center rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-slate-300"
           style={{
-            padding: 16,
+            padding: 11,
+          }}
+          onPress={() => {
+            handleSnapPress(1);
           }}>
           <Ionicons name="options-outline" size={20} color={COLORS.black} />
         </TouchableOpacity>
-      </View>
-
-      <View className="mb-3 flex-row items-center gap-2 px-4">
-        <SearchInput className="flex-1" />
       </View>
       <View className="flex-1 px-4">
         {isLoading ? (
@@ -83,23 +96,32 @@ const BookingScreen: FunctionComponent = () => {
         ) : (
           <FlatList
             data={bookingList}
-            renderItem={({ item }) => <BookCard booking={item} />}
-            keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => <BookCard booking={item} />}
+            keyExtractor={(item) => `${item.id}-${item.pageIndex}`}
             className="gap-4"
-            ListEmptyComponent={() => <BookEmpty />}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={1.5}
+            ListFooterComponent={() =>
+              isFetchingNextPage ? (
+                <View className="py-4">
+                  <Loading />
+                </View>
+              ) : null
+            }
+            ListEmptyComponent={() => (
+              <View className="h-96 flex-1 items-center justify-center gap-2">
+                <FontAwesome name="clipboard" size={42} color={COLORS.gray} />
+                <Text className="w-32 text-center text-base font-bold text-gray-400 dark:text-gray-600">
+                  Hiện chưa có yêu cầu đặt xe
+                </Text>
+              </View>
+            )}
           />
         )}
       </View>
 
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        enableDynamicSizing={false}
-        backdropComponent={
-          isSheetOpen ? (props) => <Backdrop {...props} onPress={handleClosePress} /> : null
-        }
-        onChange={handleSheetChange}>
+      <BottomSheet ref={sheetRef} snapPoints={snapPoints} enableDynamicSizing={false}>
         <BottomSheetView className="relative flex-1 bg-white dark:bg-slate-300">
           <BookListParams close={handleClosePress} />
         </BottomSheetView>

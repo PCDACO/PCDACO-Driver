@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import {
   BookApprovePayload,
@@ -13,10 +13,24 @@ import { QueryKey } from '~/lib/query-key';
 import { BookService } from '~/services/book.service';
 
 export const useBookingListQuery = (params?: Partial<BookParams>) => {
-  const bookingQuery = useQuery({
+  const bookingQuery = useInfiniteQuery({
     queryKey: [QueryKey.Booking.get.List, params ?? {}],
-    queryFn: async () => await BookService.get.list(params),
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await BookService.get.list({
+        ...params,
+        index: 1,
+        size: 10 + (pageParam - 1),
+      });
+      return response;
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.value.hasNext) {
+        return lastPage.value.pageNumber + 1;
+      }
+      return undefined;
+    },
     enabled: !!params,
+    initialPageParam: 1,
   });
 
   return bookingQuery;

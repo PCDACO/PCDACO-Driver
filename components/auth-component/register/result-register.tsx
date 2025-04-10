@@ -81,7 +81,7 @@ const ResultRegister: React.FC<ResultRegisterProps> = ({ form }) => {
           size="lg"
           onPress={() => router.push('/(main)')}>
           <Feather name="home" size={18} color="black" />
-          <Text>Về trang chủ</Text>
+          <Text className="text-foreground">Về trang chủ</Text>
         </Button>
       </View>
     </CardBasic>

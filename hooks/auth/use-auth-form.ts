@@ -41,7 +41,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
             dateOfBirth: new Date(),
             phone: '',
             otp: '',
-            roleName: Role.Owner,
+            roleName: Role.Driver,
           },
   });
 
