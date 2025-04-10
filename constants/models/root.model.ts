@@ -37,4 +37,10 @@ declare global {
     pageSize: number;
     hasNext: boolean;
   };
+
+  type AIResponse<T> = {
+    code: string;
+    message: string;
+    data: T[];
+  };
 }

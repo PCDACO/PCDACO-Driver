@@ -25,6 +25,7 @@ export const translate = {
       payment: 'Đang chuyển hướng đến trang thanh toán...',
       cancel: 'Hủy bỏ đơn đặt xe thành công!',
       startTrip: 'Bắt đầu chuyến đi thành công!',
+      complete: 'Hoàn tất chuyến đi thành công!',
       return: 'Trả xe thành công!',
     },
   },

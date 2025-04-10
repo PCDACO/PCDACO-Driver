@@ -91,7 +91,11 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
 
   const handleComplete = () => {
     completeBooking.mutate(id, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.Detail] });
+        queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
+        ToastAndroid.show(translate.booking.toast.complete, ToastAndroid.SHORT);
+      },
       onError: (error: any) => {
         ToastAndroid.show(
           error.response.data.message || translate.booking.failed.message,
