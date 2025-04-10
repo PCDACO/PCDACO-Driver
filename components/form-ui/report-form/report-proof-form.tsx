@@ -5,7 +5,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import FieldLayout from '~/components/layout/form/field-layout';
 import CardBasic from '~/components/plugins/card-basic';
 import ImagePickerButton from '~/components/plugins/image-picker';
-import { BookingReportStatusNumber, Role } from '~/constants/enums';
+import { Role } from '~/constants/enums';
 import { useReportProofForm } from '~/hooks/report/use-report-proof-form';
 import { convertAssertToFile } from '~/lib/convert';
 
@@ -13,9 +13,19 @@ interface ReportProofFormProps {
   form: ReturnType<typeof useReportProofForm>['form'];
   role: string;
   imageUrl: string;
+  compensationReason: string;
+  compensationAmount: number;
+  isPaid: boolean;
 }
 
-const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({ form, role, imageUrl }) => {
+const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({
+  form,
+  role,
+  imageUrl,
+  compensationReason,
+  compensationAmount,
+  isPaid,
+}) => {
   const [image, setImage] = useState<string | null>(imageUrl);
 
   const handleRemoveImage = () => {
@@ -46,6 +56,11 @@ const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({ form, role, 
   return (
     <CardBasic>
       <FieldLayout label="Chứng từ bồi thường">
+        <View className="gap-2">
+          <RenderInfo label="Lý do bồi thường" value={compensationReason} />
+          <RenderInfo label="Số tiền bồi thường" value={compensationAmount.toString()} />
+          <RenderInfo label="Trạng thái" value={isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'} />
+        </View>
         {role !== Role.Driver && imageUrl === '' && (
           <View>
             <View className="relative">

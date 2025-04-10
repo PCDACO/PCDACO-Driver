@@ -91,6 +91,9 @@ const ReportDetailScreen: FunctionComponent = () => {
               form={form}
               role={reportDetail?.reporterRole || ''}
               imageUrl={reportDetail?.compensationDetail?.imageUrl || ''}
+              compensationReason={reportDetail?.compensationDetail?.compensationReason || ''}
+              compensationAmount={reportDetail?.compensationDetail?.compensationAmount || 0}
+              isPaid={reportDetail?.compensationDetail?.isPaid || false}
             />
           </View>
           <TabView tabs={tabs} initialTab={0} contentClassName="bg-gray-50" />
