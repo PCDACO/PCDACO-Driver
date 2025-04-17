@@ -17,8 +17,9 @@ import { COLORS } from '~/theme/colors';
 const ReportsScreen = () => {
   const { searchKeyword } = useSearchStore();
   const { params } = useReportParamsStore();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const { data: reports, isLoading } = useReportQuery({
+  const { data: reports, isLoading, refetch } = useReportQuery({
     params: {
       ...params,
       keyword: searchKeyword,
@@ -46,6 +47,15 @@ const ReportsScreen = () => {
     setIsSheetOpen(false);
   }, []);
 
+  const handleRefresh = async () => {
+    try{
+        setIsRefreshing(true);
+        await refetch();
+    } finally{
+        setIsRefreshing(false);
+    }
+  }
+
   return (
     <SafeAreaView className="relative h-full flex-1">
       <View className="flex-row items-center gap-2 px-4">
@@ -63,6 +73,8 @@ const ReportsScreen = () => {
             data={reportList}
             renderItem={({ item }) => <ReportCard report={item} />}
             keyExtractor={(item) => item.id}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
             contentContainerStyle={{
               paddingHorizontal: 16,
               paddingTop: 16,
