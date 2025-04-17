@@ -76,11 +76,11 @@ const Register: FunctionComponent = () => {
                   />
                   <Text className="w-80 text-foreground">
                     Tôi đã đọc và đồng ý với{' '}
-                    <Link className="text-primary" href="/">
+                    <Link className="text-primary" href="/(screen)/privacy/index">
                       Chính sách & quy định
                     </Link>{' '}
                     và{' '}
-                    <Link className="text-primary" href="/">
+                    <Link className="text-primary" href="/(screen)/privacy/index">
                       Chính sách bảo vệ dữ liệu cá nhân
                     </Link>{' '}
                     của FreeDriver

@@ -1,5 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import React, { FunctionComponent, useCallback } from 'react';
 import { View, Text, Animated, ScrollView, ToastAndroid } from 'react-native';
 
@@ -9,10 +9,12 @@ import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import { useBookingForm } from '~/hooks/book/use-book-form';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
 import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
+import { mergeDateTime } from '~/lib/format';
+import { useContractParamsStore } from '~/store/use-params';
 
 const Booking: FunctionComponent = () => {
   const [isAccepted, setIsAccepted] = React.useState(false);
-
+  const { setParams } = useContractParamsStore();
   const { id } = useLocalSearchParams();
   const { data: car, isLoading } = useCarDetailQuery(id as string);
   const { form, onSubmit, isLoading: isBookingLoading } = useBookingForm();
@@ -22,6 +24,14 @@ const Booking: FunctionComponent = () => {
       form.setValue('carId', id as string);
     }
   }, [id]);
+
+  React.useEffect(() => {
+    setParams({
+      carId: id as string,
+      startTime: mergeDateTime(form.getValues('startDay'), form.getValues('startTime')),
+      endTime: mergeDateTime(form.getValues('endDay'), form.getValues('endTime')),
+    });
+  }, []);
 
   const handleComplete = useCallback(async () => {
     setIsAccepted((prev) => {
@@ -57,7 +67,7 @@ const Booking: FunctionComponent = () => {
 
   return (
     <View className="relative h-screen bg-slate-100 dark:bg-slate-800">
-      <ScrollView className="">
+      <ScrollView>
         <View className="min-h-screen rounded-t-3xl bg-white px-6 py-4 dark:bg-slate-800">
           <BookForm form={form} />
 
@@ -67,9 +77,11 @@ const Booking: FunctionComponent = () => {
               onCheckedChange={(check) => setIsAccepted(check)}
               style={{ borderRadius: 100 }}
             />
-            <Text className="flex-1 text-sm text-muted-foreground">
-              Tôi đã đọc và đồng ý với <Text className="text-primary">Điều khoản dịch vụ</Text> và{' '}
-              <Text className="text-primary">Chính sách bảo mật</Text>
+            <Text className="flex-1 items-baseline text-sm text-muted-foreground">
+              Tôi đã đọc và đồng ý với{' '}
+              <Link href="/(screen)/(contract)/contract">
+                <Text className="text-primary">Hợp đồng</Text>
+              </Link>
             </Text>
           </View>
         </View>

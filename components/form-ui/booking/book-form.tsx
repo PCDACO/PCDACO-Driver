@@ -21,20 +21,29 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
   const [startTime, setStartTime] = React.useState<Date>(new Date());
   const [endTime, setEndTime] = React.useState<Date>(new Date());
 
-  React.useEffect(() => {
-    const mergedStartTime = mergeDateTime(form.getValues('startDay'), form.getValues('startTime'));
-    const mergedEndTime = mergeDateTime(form.getValues('endDay'), form.getValues('endTime'));
+  // Watch all relevant form fields
+  const startDay = form.watch('startDay');
+  const endDay = form.watch('endDay');
+  const startTimeValue = form.watch('startTime');
+  const endTimeValue = form.watch('endTime');
 
-    if (mergedStartTime && mergedEndTime) {
-      setStartTime(new Date(mergedStartTime));
-      setEndTime(new Date(mergedEndTime));
+  React.useEffect(() => {
+    if (startDay && startTimeValue) {
+      const mergedStartTime = mergeDateTime(startDay, startTimeValue);
+      if (mergedStartTime) {
+        setStartTime(new Date(mergedStartTime));
+      }
     }
-  }, [
-    form.getValues('startTime'),
-    form.getValues('endTime'),
-    form.getValues('startDay'),
-    form.getValues('endDay'),
-  ]);
+  }, [startDay, startTimeValue]);
+
+  React.useEffect(() => {
+    if (endDay && endTimeValue) {
+      const mergedEndTime = mergeDateTime(endDay, endTimeValue);
+      if (mergedEndTime) {
+        setEndTime(new Date(mergedEndTime));
+      }
+    }
+  }, [endDay, endTimeValue]);
 
   return (
     <View className="gap-4">

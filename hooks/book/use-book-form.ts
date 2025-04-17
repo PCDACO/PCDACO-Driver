@@ -56,7 +56,6 @@ export const useBookingForm = () => {
             error.response.data.message || translate.booking.failed.title,
             ToastAndroid.SHORT
           );
-          console.log('error', error);
         },
       }
     );

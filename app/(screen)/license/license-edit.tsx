@@ -3,12 +3,13 @@ import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import LicenseFormSkeleton from './license-sekeleton';
+
 import LicensesImageForm from '~/components/auth-component/register/licenses-image-form';
 import LicensesUserForm from '~/components/auth-component/register/licenses-user-form';
 import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
 import Header from '~/components/plugins/header';
-import Loading from '~/components/plugins/loading';
 import { useLicensesListQuery } from '~/hooks/license/use-license';
 import { useLicenseForm } from '~/hooks/license/use-license-form';
 
@@ -21,8 +22,9 @@ const LicenseEdit = () => {
 
   if (isLoadingList) {
     return (
-      <View className="h-screen">
-        <Loading />
+      <View className="h-screen flex-1 items-center justify-center">
+        <Header title="Đang tải bằng lái..." />
+        <LicenseFormSkeleton />
       </View>
     );
   }

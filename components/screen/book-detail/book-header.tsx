@@ -1,4 +1,4 @@
-import { Fontisto, Ionicons } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { FunctionComponent } from 'react';
 import { Pressable } from 'react-native';
@@ -8,10 +8,10 @@ import Subtitle from '~/components/ui/subtitle';
 import { COLORS } from '~/theme/colors';
 
 interface BookHeaderProps {
-  id: string;
+  onPress?: () => void;
 }
 
-const BookHeader: FunctionComponent<BookHeaderProps> = ({ id }) => {
+const BookHeader: FunctionComponent<BookHeaderProps> = ({ onPress }) => {
   const router = useRouter();
 
   return (
@@ -24,13 +24,8 @@ const BookHeader: FunctionComponent<BookHeaderProps> = ({ id }) => {
       <Subtitle title="Thông tin đặt xe" />
       <Pressable
         className="absolute right-4 top-4 h-full w-10 items-center justify-center"
-        onPress={() =>
-          router.push({
-            pathname: '/booking/report/[id]',
-            params: { id },
-          })
-        }>
-        <Fontisto name="flag" size={24} color={COLORS.black} />
+        onPress={onPress}>
+        <Feather name="more-vertical" size={24} color={COLORS.black} />
       </Pressable>
     </CardBasic>
   );

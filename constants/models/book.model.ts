@@ -44,11 +44,13 @@ export interface BookCancelPayload {
 
 export interface BookApprovePayload {
   isApproved: boolean;
+  signature: string;
 }
 
 export interface BookStartTripPayload {
   latitude: number;
   longitude: number;
+  signature: string;
 }
 
 export interface BookCompletePayload {
@@ -120,6 +122,7 @@ export interface Car {
   seat: number;
   transmissionType: string;
   fuelType: string;
+  carImageUrl: string[];
 }
 
 export interface BookCompleteResponse {

@@ -35,7 +35,7 @@ const CarDetail: FunctionComponent = () => {
 
   const handleComplete = () => {
     router.push({
-      pathname: '/booking/[id]',
+      pathname: '/(screen)/booking/page',
       params: {
         id: data?.value.id as string,
       },

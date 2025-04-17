@@ -45,7 +45,9 @@ const Login: FunctionComponent = () => {
               )}
             />
             {form.formState.errors.email && (
-              <TextUI className="text-destructive">{form.formState.errors.email.message}</TextUI>
+              <TextUI className="text-sm text-destructive">
+                {form.formState.errors.email.message}
+              </TextUI>
             )}
           </FieldLayout>
 
@@ -72,7 +74,9 @@ const Login: FunctionComponent = () => {
               )}
             />
             {form.formState.errors.password && (
-              <TextUI className="text-destructive">{form.formState.errors.password.message}</TextUI>
+              <TextUI className="text-sm text-destructive">
+                {form.formState.errors.password.message}
+              </TextUI>
             )}
           </FieldLayout>
 
@@ -100,7 +104,7 @@ const Login: FunctionComponent = () => {
           <View className="w-80">
             <Text className="text-center text-muted">
               Để đảm bảo quyền lợi của bạn, xin vui lòng xem kỹ{' '}
-              <Link className="text-primary" href="/">
+              <Link className="text-primary" href="/(screen)/privacy/index">
                 chính sách của chúng tôi
               </Link>
             </Text>

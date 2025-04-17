@@ -20,10 +20,18 @@ const ScreenLayout: FunctionComponent = () => {
 
         {/* Booking */}
         <Stack.Screen
-          name="booking/[id]"
+          name="booking/page"
           options={{
             headerShown: true,
             headerTitle: 'Thời gian thuê',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name="booking/payment"
+          options={{
+            headerShown: true,
+            headerTitle: 'Thanh toán',
             headerTitleAlign: 'center',
           }}
         />
@@ -39,6 +47,35 @@ const ScreenLayout: FunctionComponent = () => {
               fontSize: 24,
               fontWeight: 'bold',
             },
+          }}
+        />
+        <Stack.Screen
+          name="(signature)/book/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: 'Chữ ký',
+            headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
+            presentation: 'modal',
+          }}
+        />
+
+        {/* Contract */}
+        <Stack.Screen
+          name="(contract)/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: 'Hợp đồng',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name="(contract)/contract"
+          options={{
+            headerShown: true,
+            headerTitle: 'Hợp đồng đặt xe',
+            headerTitleAlign: 'center',
           }}
         />
 
@@ -66,24 +103,7 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
 
-        {/* Search */}
-        {/* <Stack.Screen
-          name="search-cars"
-          options={{
-            headerShown: false,
-          }}
-        /> */}
-
-        {/* Payment */}
-        <Stack.Screen
-          name="booking/payment"
-          options={{
-            headerShown: true,
-            headerTitle: 'Thanh toán',
-            headerTitleAlign: 'center',
-          }}
-        />
-
+        {/* Reports */}
         <Stack.Screen
           name="(reports)/reports"
           options={{
@@ -92,7 +112,6 @@ const ScreenLayout: FunctionComponent = () => {
             headerTitleAlign: 'center',
           }}
         />
-
         <Stack.Screen
           name="(reports)/detail/[id]"
           options={{
@@ -101,6 +120,14 @@ const ScreenLayout: FunctionComponent = () => {
             headerTitleAlign: 'center',
           }}
         />
+
+        {/* Optional - Future Feature */}
+        {/* <Stack.Screen
+          name="search-cars"
+          options={{
+            headerShown: false,
+          }}
+        /> */}
       </Stack>
     </>
   );

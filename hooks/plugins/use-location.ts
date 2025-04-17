@@ -13,7 +13,11 @@ export const useLocation = () => {
         return;
       }
 
-      const response = await Location.getCurrentPositionAsync({});
+      const response = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+        timeInterval: 1000,
+        distanceInterval: 10,
+      });
       setLocation(response);
     }
 

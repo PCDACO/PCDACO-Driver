@@ -20,7 +20,7 @@ const CarInfo: FunctionComponent<CarInfoProps> = ({ car }) => {
         <Ionicons name="car-sport" size={24} color={COLORS.black} />
         <Subtitle title="Thông tin xe" />
       </View>
-      <BookImages />
+      <BookImages car={car} />
       <View className="gap-2 py-2">
         <View className="flex-row items-center justify-between">
           <Text>Tên xe</Text>

@@ -20,7 +20,7 @@ export default function ErrorScreen({ onRetry }: ErrorScreenProps) {
         Đã có lỗi xảy ra trong quá trình xử lý thanh toán. Vui lòng thử lại sau.
       </Text>
 
-      <Button className="w-full" variant="destructive" onPress={onRetry}>
+      <Button className="items-center justify-center" variant="destructive" onPress={onRetry}>
         <TextUI>Thử lại</TextUI>
       </Button>
     </View>

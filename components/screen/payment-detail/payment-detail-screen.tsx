@@ -22,9 +22,20 @@ export default function PaymentDetailScreen({ paymentData, onSubmit }: PaymentDe
   return (
     <SafeAreaView className="relative flex-1 bg-white">
       <ScrollView>
-        <View className="p-4">
+        <View className="gap-8 px-2">
           <Text className=" text-2xl font-bold">Chi tiết thanh toán</Text>
 
+          {paymentData.qrCode && paymentData.qrCode.length > 0 && (
+            <View className="items-center gap-4">
+              <Text className="text-lg font-semibold">Quét mã QR để thanh toán</Text>
+              <View className="items-center justify-center rounded-lg bg-white">
+                <QrCodeWithCorners value={paymentData.qrCode} qrRef={qrRef} />
+              </View>
+              <Text className="text-center text-sm text-gray-500">
+                Quét mã QR bằng ứng dụng ngân hàng để thanh toán
+              </Text>
+            </View>
+          )}
           <CardBasic className="gap-3 rounded-xl bg-gray-50 p-4">
             <View className="gap-0.5">
               <PaymentItem label="Giá cước cơ bản" value={paymentData.basePrice} />
@@ -42,18 +53,6 @@ export default function PaymentDetailScreen({ paymentData, onSubmit }: PaymentDe
             <View className="h-[1px] bg-gray-200" />
             <PaymentItem label="Tổng thanh toán" value={paymentData.totalAmount} isTotal />
           </CardBasic>
-
-          {paymentData.qrCode && paymentData.qrCode.length > 0 && (
-            <View className="items-center">
-              <Text className="text-lg font-semibold">Quét mã QR để thanh toán</Text>
-              <View className="items-center justify-center rounded-lg bg-white">
-                <QrCodeWithCorners value={paymentData.qrCode} qrRef={qrRef} />
-              </View>
-              <Text className="text-center text-sm text-gray-500">
-                Quét mã QR bằng ứng dụng ngân hàng để thanh toán
-              </Text>
-            </View>
-          )}
         </View>
       </ScrollView>
       <View className="absolute bottom-0 left-0 right-0 flex-row gap-2 p-4">

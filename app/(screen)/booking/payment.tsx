@@ -4,6 +4,7 @@ import PaymentDetailScreen from '~/components/screen/payment-detail/payment-deta
 import ErrorScreen from '~/components/screen/payment-detail/status/error-screen';
 import LoadingScreen from '~/components/screen/payment-detail/status/loading-screen';
 import SuccessScreen from '~/components/screen/payment-detail/status/success-screen';
+import useInterval from '~/hooks/plugins/use-interval';
 import { useCheckTransaction } from '~/hooks/transaction/use-transaction';
 import { PaymentResponseStore } from '~/store/use-response';
 
@@ -12,6 +13,14 @@ const PaymentScreen: FunctionComponent = () => {
 
   const { response } = PaymentResponseStore();
   const { mutate: checkTransaction, isPending, isSuccess } = useCheckTransaction();
+
+  // useInterval(() => {
+  //   checkTransaction(response?.orderCode as number, {
+  //     onError: () => {
+  //       setError(true);
+  //     },
+  //   });
+  // }, 10000);
 
   if (isPending) {
     return <LoadingScreen />;

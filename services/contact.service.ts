@@ -4,11 +4,17 @@ import { ContactParams } from '~/constants/models/contact.mode';
 export const ContactService = {
   get: {
     approve_review_contact: async (id: string) => {
-      const response = await axiosInstance.get(`/api/bookings/${id}/approve-review-contact`);
+      const response = await axiosInstance.get(`/api/bookings/${id}/approval-preview-contract`);
       return response.data;
     },
     preview_contact: async (params: ContactParams) => {
-      const response = await axiosInstance.get(`/api/bookings/preview-contact`, { params });
+      const response = await axiosInstance.get(`/api/bookings/preview-contract`, {
+        params: {
+          ...params,
+          startTime: params.startTime.toISOString(),
+          endTime: params.endTime.toISOString(),
+        },
+      });
       return response.data;
     },
   },

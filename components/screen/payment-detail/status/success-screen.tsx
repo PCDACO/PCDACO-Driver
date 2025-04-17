@@ -23,7 +23,7 @@ export default function SuccessScreen({ data }: SuccessScreenProps) {
         Giao dịch của bạn đã được xử lý thành công. Mã giao dịch: {data.orderCode}
       </Text>
 
-      <Button onPress={() => router.push('/booking')} className="w-full">
+      <Button onPress={() => router.push('/booking')} className="items-center justify-center">
         <TextUI>Quay lại danh sách đặt xe</TextUI>
       </Button>
     </View>
