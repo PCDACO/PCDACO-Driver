@@ -8,6 +8,7 @@ import BookCard from '~/components/card/book/book-card';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookListParams from '~/components/screen/book-list/book-params';
+import BookingDetailSkeleton from '~/components/ui/book-skeleton';
 import { BookParams, BookResponseList } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
 import { useBookingParamsStore } from '~/store/use-params';
@@ -72,7 +73,7 @@ const BookingScreen: FunctionComponent = () => {
     } finally{
         setIsRefreshing(false);
     }
-  }
+  };
 
   const sheetRef = React.useRef<BottomSheet>(null);
   const snapPoints = React.useMemo(() => ['1%', '90%'], []);
@@ -102,9 +103,13 @@ const BookingScreen: FunctionComponent = () => {
       </View>
       <View className="flex-1 px-4">
         {isLoading ? (
-          <View className="flex-1 items-center justify-center">
-            <Loading />
-          </View>
+          <FlatList
+            data={[1, 2, 3, 4]}
+            keyExtractor={(item) => item.toString()}
+            renderItem={() => <BookingDetailSkeleton />}
+            contentContainerStyle={{ padding: 16 }}
+            ItemSeparatorComponent={() => <View className="h-2" />}
+        />
         ) : (
           <FlatList
             data={bookingList}
