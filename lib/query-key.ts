@@ -83,6 +83,11 @@ export const QueryKey = {
     List: 'FuelList',
   },
 
+  Feedback: {
+    List: 'FeedbackList',
+    Create: 'FeedbackCreate',
+  },
+
   Transmission: {
     List: 'TransmissionList',
   },

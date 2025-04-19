@@ -11,19 +11,18 @@ interface Props {
 const BookContact: React.FC<Props> = ({ id }) => {
   return (
     <CardBasic>
-      <Text>
-        Hãy xem thêm về{' '}
+      <Text className="text-gray-400">
+        Hãy xem <Text className="font-bold text-foreground">Điều khoản & chính sách</Text> có trong{' '}
         <Text
           onPress={() => {
             router.push({
-              pathname: '/(screen)/terms/contact',
+              pathname: '/(screen)/(contract)/[id]',
               params: { id },
             });
           }}
-          className="text-primary">
-          Điều khoản & chính sách
-        </Text>{' '}
-        tại đây
+          className="text-primary underline">
+          hợp đồng
+        </Text>
       </Text>
     </CardBasic>
   );

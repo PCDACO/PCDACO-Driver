@@ -11,7 +11,7 @@ interface CardBasicProps {
 
 const CardBasic: FunctionComponent<CardBasicProps> = ({ className, children, onPress }) => {
   return (
-    <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity activeOpacity={1} onPress={onPress}>
       <View
         className={cn(
           'rounded-lg bg-white p-4', // base card styles

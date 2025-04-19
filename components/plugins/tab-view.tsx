@@ -20,6 +20,8 @@ interface TabsProps {
   initialTab?: number;
   headerClassName?: string;
   contentClassName?: string;
+  isRefresh?: boolean;
+  onRefresh?: () => void;
 }
 
 const TabView: React.FC<TabsProps> = ({
@@ -27,6 +29,8 @@ const TabView: React.FC<TabsProps> = ({
   initialTab = 0,
   headerClassName = '',
   contentClassName = '',
+  isRefresh = false,
+  onRefresh,
 }) => {
   const { width } = useWindowDimensions();
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -100,6 +104,8 @@ const TabView: React.FC<TabsProps> = ({
           data={tabs}
           renderItem={renderItem}
           horizontal
+          refreshing={isRefresh}
+          onRefresh={onRefresh}
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={(event) => {

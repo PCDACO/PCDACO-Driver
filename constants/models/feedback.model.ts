@@ -6,3 +6,7 @@ export interface FeedbackPayload {
   rating: number;
   comment: string;
 }
+
+export interface FeedbackResponse {
+  id: string;
+}

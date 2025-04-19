@@ -84,4 +84,11 @@ export const translate = {
       error_update_avatar: 'Cập nhật ảnh đại diện thất bại!',
     },
   },
+
+  feedback: {
+    toast: {
+      create: 'Đánh giá thành công!',
+      error_create: 'Đánh giá thất bại!',
+    },
+  },
 };
