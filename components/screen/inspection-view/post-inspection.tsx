@@ -3,6 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { Dimensions, LayoutChangeEvent, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
+
 import { TextWithIconNoBorder } from '~/components/layout/text-with-icon/text-icon-no-border';
 import { PostInspectionPhotos } from '~/constants/models/book.model';
 import { COLORS } from '~/theme/colors';
@@ -12,8 +13,7 @@ interface PostInspectionProps {
 }
 
 const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspectionPhotos }) => {
-  const { fuelGaugeFinalPhotos, cleanlinessPhotos, scratchesPhotos, tollFeesPhotos } =
-    postInspectionPhotos;
+  const { fuelGaugeFinal, cleanliness, scratches, tollFees } = postInspectionPhotos;
 
   const { width: screenWidth } = Dimensions.get('window');
 
@@ -60,25 +60,25 @@ const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspection
       {renderImageField(
         'Ảnh Đồng Hồ Xăng',
         <MaterialCommunityIcons name="gauge" size={20} color={COLORS.black} />,
-        fuelGaugeFinalPhotos
+        fuelGaugeFinal
       )}
 
       {renderImageField(
         'Ảnh Nội Thất',
         <MaterialCommunityIcons name="car-seat" size={20} color={COLORS.black} />,
-        cleanlinessPhotos
+        cleanliness
       )}
 
       {renderImageField(
         'Ảnh Xước Xát',
         <MaterialCommunityIcons name="car-wrench" size={20} color={COLORS.black} />,
-        scratchesPhotos
+        scratches
       )}
 
       {renderImageField(
         'Ảnh Phí Đường',
         <MaterialCommunityIcons name="road-variant" size={20} color={COLORS.black} />,
-        tollFeesPhotos
+        tollFees
       )}
     </View>
   );
