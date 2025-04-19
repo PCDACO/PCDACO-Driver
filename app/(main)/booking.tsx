@@ -8,6 +8,7 @@ import BookCard from '~/components/card/book/book-card';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookListParams from '~/components/screen/book-list/book-params';
+import BookingDetailSkeleton from '~/components/ui/book-skeleton';
 import { BookParams, BookResponseList } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
 import { useBookingParamsStore } from '~/store/use-params';
@@ -28,12 +29,15 @@ const BookingScreen: FunctionComponent = () => {
   const { searchKeyword } = useSearchStore();
   const [params, setParams] = React.useState<Partial<BookParams>>({});
   const { params: bookingParams } = useBookingParamsStore();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
   const {
     data: booking,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch,
   } = useBookingListQuery(params);
 
   React.useEffect(() => {
@@ -59,6 +63,15 @@ const BookingScreen: FunctionComponent = () => {
   const handleLoadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
+    }
+  };
+
+  const handleRefresh = async () => {
+    try{
+        setIsRefreshing(true);
+        await refetch();
+    } finally{
+        setIsRefreshing(false);
     }
   };
 
@@ -90,9 +103,13 @@ const BookingScreen: FunctionComponent = () => {
       </View>
       <View className="flex-1 px-4">
         {isLoading ? (
-          <View className="flex-1 items-center justify-center">
-            <Loading />
-          </View>
+          <FlatList
+            data={[1, 2, 3, 4]}
+            keyExtractor={(item) => item.toString()}
+            renderItem={() => <BookingDetailSkeleton />}
+            contentContainerStyle={{ padding: 16 }}
+            ItemSeparatorComponent={() => <View className="h-2" />}
+        />
         ) : (
           <FlatList
             data={bookingList}
@@ -100,6 +117,8 @@ const BookingScreen: FunctionComponent = () => {
             renderItem={({ item }) => <BookCard booking={item} />}
             keyExtractor={(item) => `${item.id}-${item.pageIndex}`}
             className="gap-4"
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={1.5}
             ListFooterComponent={() =>

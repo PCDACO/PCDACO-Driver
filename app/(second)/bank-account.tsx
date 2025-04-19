@@ -56,8 +56,9 @@ const BankAccount: FunctionComponent = () => {
   const { deleteBankAccountMutation } = useBankMutation();
   const [isWithdraw, setIsWithdraw] = useState(false);
   const { form, onSubmit, isLoading: isLoadingForm, isSuccess, isError } = useWithdrawForm();
+  const [ isRefreshing, setIsRefreshing ] = React.useState(false);
 
-  const { data, isLoading } = useBackAccountListQuery({
+  const { data, isLoading, refetch } = useBackAccountListQuery({
     params: {
       index: 1,
       size: 20,
@@ -141,6 +142,15 @@ const BankAccount: FunctionComponent = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+        setIsRefreshing(true);
+        await refetch();
+    } finally {
+        setIsRefreshing(false);
+    }
+  }
+
   return (
     <View className="h-full p-4">
       <View>
@@ -156,6 +166,8 @@ const BankAccount: FunctionComponent = () => {
           <View>
             <FlatList
               data={bankData}
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
               renderItem={({ item }) => (
                 <BankItem {...item} onPress={() => handleBankPress(item)} />
               )}
