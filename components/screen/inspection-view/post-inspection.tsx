@@ -1,10 +1,11 @@
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { FunctionComponent } from 'react';
-import { Dimensions, LayoutChangeEvent, Text, View } from 'react-native';
+import { LayoutChangeEvent, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 
 import { TextWithIconNoBorder } from '~/components/layout/text-with-icon/text-icon-no-border';
+import CardBasic from '~/components/plugins/card-basic';
 import { PostInspectionPhotos } from '~/constants/models/book.model';
 import { COLORS } from '~/theme/colors';
 
@@ -15,12 +16,10 @@ interface PostInspectionProps {
 const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspectionPhotos }) => {
   const { fuelGaugeFinal, cleanliness, scratches, tollFees } = postInspectionPhotos;
 
-  const { width: screenWidth } = Dimensions.get('window');
-
-  const fieldWidth = React.useRef(screenWidth - 32);
+  const [fieldWidth, setFieldWidth] = React.useState<number>(300);
 
   const handleLayout = (event: LayoutChangeEvent) => {
-    fieldWidth.current = event.nativeEvent.layout.width;
+    setFieldWidth(event.nativeEvent.layout.width);
   };
 
   const renderImageField = (title: string, icon: React.ReactNode, image: string[]) => (
@@ -30,7 +29,7 @@ const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspection
       {image && image.length > 0 ? (
         <Carousel
           loop
-          width={fieldWidth.current}
+          width={fieldWidth}
           height={200}
           autoPlay={false}
           data={image}
@@ -56,7 +55,7 @@ const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspection
   );
 
   return (
-    <View className="gap-8">
+    <CardBasic className="gap-8">
       {renderImageField(
         'Ảnh Đồng Hồ Xăng',
         <MaterialCommunityIcons name="gauge" size={20} color={COLORS.black} />,
@@ -80,7 +79,7 @@ const PostInspection: FunctionComponent<PostInspectionProps> = ({ postInspection
         <MaterialCommunityIcons name="road-variant" size={20} color={COLORS.black} />,
         tollFees
       )}
-    </View>
+    </CardBasic>
   );
 };
 

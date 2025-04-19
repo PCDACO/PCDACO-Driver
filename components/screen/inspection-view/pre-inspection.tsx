@@ -15,12 +15,11 @@ interface PreInspectionProps {
 
 const PreInspection: FunctionComponent<PreInspectionProps> = ({ preInspectionPhotos }) => {
   const { carKey, exteriorCar, fuelGauge, parkingLocation, trunkSpace } = preInspectionPhotos;
-  const { width: screenWidth } = Dimensions.get('window');
 
-  const fieldWidth = React.useRef(screenWidth - 32);
+  const [fieldWidth, setFieldWidth] = React.useState<number>(300);
 
   const handleLayout = (event: LayoutChangeEvent) => {
-    fieldWidth.current = event.nativeEvent.layout.width;
+    setFieldWidth(event.nativeEvent.layout.width);
   };
 
   const renderImageField = (title: string, icon: React.ReactNode, image: string[]) => (
@@ -30,7 +29,7 @@ const PreInspection: FunctionComponent<PreInspectionProps> = ({ preInspectionPho
       {image && image.length > 0 ? (
         <Carousel
           loop
-          width={fieldWidth.current}
+          width={fieldWidth}
           height={200}
           autoPlay={false}
           data={image}
@@ -56,7 +55,7 @@ const PreInspection: FunctionComponent<PreInspectionProps> = ({ preInspectionPho
   );
 
   return (
-    <View className="gap-8">
+    <CardBasic className="gap-8">
       {renderImageField(
         'Ảnh Ngoại Thất',
         <Feather name="camera" size={20} color={COLORS.black} />,
@@ -86,7 +85,7 @@ const PreInspection: FunctionComponent<PreInspectionProps> = ({ preInspectionPho
         <SimpleLineIcons name="location-pin" size={20} color={COLORS.black} />,
         parkingLocation
       )}
-    </View>
+    </CardBasic>
   );
 };
 
