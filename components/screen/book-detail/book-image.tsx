@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Image, View, Text } from 'react-native';
+import { Image, View, Text, LayoutChangeEvent } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
 import { BookResponseDetail } from '~/constants/models/book.model';
@@ -10,6 +10,12 @@ interface BookImagesProps {
 
 const BookImages: FunctionComponent<BookImagesProps> = ({ car }) => {
   const images = car.carImageUrl || [];
+  const [width, setWidth] = React.useState(300);
+
+  const handleOnLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    setWidth(width);
+  };
 
   if (images.length === 0) {
     return (
@@ -20,17 +26,19 @@ const BookImages: FunctionComponent<BookImagesProps> = ({ car }) => {
   }
 
   return (
-    <Carousel
-      loop
-      width={340}
-      height={240}
-      autoPlay
-      data={images}
-      scrollAnimationDuration={1000}
-      renderItem={({ item }) => (
-        <Image source={{ uri: item }} className="h-full w-full rounded-lg" resizeMode="cover" />
-      )}
-    />
+    <View onLayout={handleOnLayout}>
+      <Carousel
+        loop
+        width={width}
+        height={240}
+        autoPlay
+        data={images}
+        scrollAnimationDuration={1000}
+        renderItem={({ item }) => (
+          <Image source={{ uri: item }} className="h-full w-full rounded-lg" resizeMode="cover" />
+        )}
+      />
+    </View>
   );
 };
 
