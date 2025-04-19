@@ -9,6 +9,7 @@ import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import ReportParams from '~/components/screen/report-list/report-params';
+import ReportSkeleton from '~/components/ui/report-skeleton';
 import { useReportQuery } from '~/hooks/report/use-report';
 import { useReportParamsStore } from '~/store/use-params';
 import { useSearchStore } from '~/store/use-search';
@@ -17,8 +18,13 @@ import { COLORS } from '~/theme/colors';
 const ReportsScreen = () => {
   const { searchKeyword } = useSearchStore();
   const { params } = useReportParamsStore();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const { data: reports, isLoading } = useReportQuery({
+  const {
+    data: reports,
+    isLoading,
+    refetch,
+  } = useReportQuery({
     params: {
       ...params,
       keyword: searchKeyword,
@@ -46,23 +52,39 @@ const ReportsScreen = () => {
     setIsSheetOpen(false);
   }, []);
 
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <SafeAreaView className="relative h-full flex-1">
       <View className="flex-row items-center gap-2 px-4">
         <SearchInput className="flex-1" />
       </View>
       <View className="flex-1">
-        {isLoading && (
-          <View className="flex-1 items-center justify-center">
-            <Loading />
-          </View>
-        )}
-
-        {!isLoading && (
+        {isLoading ? (
+          <FlatList
+            data={[1, 2, 3, 4]}
+            keyExtractor={(item) => `skeleton-${item}`}
+            renderItem={() => <ReportSkeleton />}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingTop: 16,
+            }}
+            ItemSeparatorComponent={() => <View className="h-2" />}
+          />
+        ) : (
           <FlatList
             data={reportList}
             renderItem={({ item }) => <ReportCard report={item} />}
             keyExtractor={(item) => item.id}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
             contentContainerStyle={{
               paddingHorizontal: 16,
               paddingTop: 16,
