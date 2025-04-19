@@ -9,12 +9,14 @@ interface SuccessScreenProps {
 
 export default function SuccessScreen({ id }: SuccessScreenProps) {
   const router = useRouter();
-  const handleNewReport = () => {
-    router.replace('/booking/report');
-  };
 
   const handleViewReports = () => {
-    router.push('/booking/reports');
+    router.replace({
+      pathname: '/(screen)/(reports)/detail/[id]',
+      params: {
+        id: id as string,
+      },
+    });
   };
 
   return (
@@ -50,13 +52,7 @@ export default function SuccessScreen({ id }: SuccessScreenProps) {
         <TouchableOpacity
           onPress={handleViewReports}
           className="w-full items-center rounded-lg bg-primary py-4">
-          <Text className="font-medium text-white">Xem danh sách báo cáo</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={handleNewReport}
-          className="w-full items-center rounded-lg border border-gray-200 py-4">
-          <Text className="font-medium text-black">Tạo báo cáo mới</Text>
+          <Text className="font-medium text-white">Xem thông tin báo cáo</Text>
         </TouchableOpacity>
       </View>
     </View>

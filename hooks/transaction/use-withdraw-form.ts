@@ -24,6 +24,7 @@ export const useWithdrawForm = () => {
     createWithdrawQuery.mutate(data, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [QueryKey.Transaction.Withdraw] });
+        queryClient.invalidateQueries({ queryKey: [QueryKey.User.Current] });
         ToastAndroid.show(translate.transaction.toast.withdraw_success, ToastAndroid.SHORT);
         form.reset();
       },

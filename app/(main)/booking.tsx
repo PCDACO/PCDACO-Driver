@@ -5,12 +5,14 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BookCard from '~/components/card/book/book-card';
+import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookListParams from '~/components/screen/book-list/book-params';
 import BookingDetailSkeleton from '~/components/ui/book-skeleton';
 import { BookParams, BookResponseList } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
+import { useBottomSheet } from '~/hooks/plugins/use-bottom-sheet';
 import { useBookingParamsStore } from '~/store/use-params';
 import { useSearchStore } from '~/store/use-search';
 import { COLORS } from '~/theme/colors';
@@ -30,6 +32,8 @@ const BookingScreen: FunctionComponent = () => {
   const [params, setParams] = React.useState<Partial<BookParams>>({});
   const { params: bookingParams } = useBookingParamsStore();
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const { handleClosePress, handleSheetChange, isSheetOpen, sheetRef, handleSnapPress } =
+    useBottomSheet();
 
   const {
     data: booking,
@@ -67,24 +71,15 @@ const BookingScreen: FunctionComponent = () => {
   };
 
   const handleRefresh = async () => {
-    try{
-        setIsRefreshing(true);
-        await refetch();
-    } finally{
-        setIsRefreshing(false);
+    try {
+      setIsRefreshing(true);
+      await refetch();
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
-  const sheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = React.useMemo(() => ['1%', '90%'], []);
-
-  const handleSnapPress = React.useCallback((index: number) => {
-    sheetRef.current?.snapToIndex(index);
-  }, []);
-
-  const handleClosePress = React.useCallback(() => {
-    sheetRef.current?.close();
-  }, []);
+  const snapPoints = React.useMemo(() => ['1%', '60%'], []);
 
   return (
     <SafeAreaView className="relative h-full flex-1">
@@ -109,7 +104,7 @@ const BookingScreen: FunctionComponent = () => {
             renderItem={() => <BookingDetailSkeleton />}
             contentContainerStyle={{ padding: 16 }}
             ItemSeparatorComponent={() => <View className="h-2" />}
-        />
+          />
         ) : (
           <FlatList
             data={bookingList}
@@ -140,7 +135,14 @@ const BookingScreen: FunctionComponent = () => {
         )}
       </View>
 
-      <BottomSheet ref={sheetRef} snapPoints={snapPoints} enableDynamicSizing={false}>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enableDynamicSizing={false}
+        backdropComponent={
+          isSheetOpen ? (props) => <Backdrop {...props} onPress={handleClosePress} /> : null
+        }
+        onChange={handleSheetChange}>
         <BottomSheetView className="relative flex-1 bg-white dark:bg-slate-300">
           <BookListParams close={handleClosePress} />
         </BottomSheetView>

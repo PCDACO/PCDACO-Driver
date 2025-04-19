@@ -13,8 +13,7 @@ const BookImages: FunctionComponent<BookImagesProps> = ({ car }) => {
   const [width, setWidth] = React.useState(300);
 
   const handleOnLayout = (event: LayoutChangeEvent) => {
-    const { width } = event.nativeEvent.layout;
-    setWidth(width);
+    setWidth(event.nativeEvent.layout.width);
   };
 
   if (images.length === 0) {

@@ -20,12 +20,13 @@ import { COLORS } from '~/theme/colors';
 const HomeScreen = () => {
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const [params, setParams] = React.useState<Partial<CarParamsState>>({});
-  const [ isRefreshing, setIsRefreshing ] = React.useState(false);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   const { searchKeyword } = useSearchStore();
   const { params: carParams } = useCarParamsStore();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useCarsListInfiniteQuery(params);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useCarsListInfiniteQuery(params);
 
   const carList = data?.pages.flatMap((page) => page.value.items);
 
@@ -71,12 +72,12 @@ const HomeScreen = () => {
 
   const handleRefresh = async () => {
     try {
-        setIsRefreshing(true);
-        await refetch();
+      setIsRefreshing(true);
+      await refetch();
     } finally {
-        setIsRefreshing(false);
+      setIsRefreshing(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView className="relative flex-1 gap-2 bg-background px-2">
@@ -106,7 +107,7 @@ const HomeScreen = () => {
       <FlatList
         data={carList}
         keyExtractor={(item) => item.id}
-        refreshing ={isRefreshing}
+        refreshing={isRefreshing}
         onRefresh={handleRefresh}
         renderItem={({ item }) => (
           <CarCard

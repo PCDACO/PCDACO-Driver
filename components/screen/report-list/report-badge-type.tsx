@@ -25,7 +25,7 @@ const ReportBadgeType: FunctionComponent<ReportBadgeTypeProps> = ({
   switch (type) {
     case BookingReportTypeNumber.Conflict:
       typeBadgeText = translate.report.type.Conflict;
-      typeBgClass = 'bg-amber-500 dark:bg-amber-900';
+      typeBgClass = 'bg-amber-100 dark:bg-amber-900';
       typeTextClass = 'text-amber-600 dark:text-amber-300';
       break;
     case BookingReportTypeNumber.Accident:

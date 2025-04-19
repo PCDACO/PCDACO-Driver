@@ -51,8 +51,13 @@ export const useReportForm = ({ id }: ReportFormProps) => {
                 form.reset();
 
                 setTimeout(() => {
-                  router.back();
-                }, 1000);
+                  router.push({
+                    pathname: '/(screen)/(reports)/detail/[id]',
+                    params: {
+                      id: response.value.id,
+                    },
+                  });
+                }, 2000);
               },
               onError: (error: any) => {
                 ToastAndroid.show(
@@ -67,8 +72,13 @@ export const useReportForm = ({ id }: ReportFormProps) => {
           form.reset();
 
           setTimeout(() => {
-            router.back();
-          }, 1000);
+            router.push({
+              pathname: '/(screen)/(reports)/detail/[id]',
+              params: {
+                id: response.value.id,
+              },
+            });
+          }, 2000);
         }
       },
       onError: (error: any) => {

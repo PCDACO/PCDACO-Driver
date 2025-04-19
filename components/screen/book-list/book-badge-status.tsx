@@ -63,6 +63,11 @@ const BookBadgeStatus: FunctionComponent<BookBadgeStatusProps> = ({
       bgClass = 'bg-gray-500';
       textClass = 'text-white';
       break;
+    case BookingStatusEnum.Done:
+      badgeText = translate.booking.status[status];
+      bgClass = 'bg-green-500';
+      textClass = 'text-white';
+      break;
     default:
       badgeText = status;
       bgClass = 'bg-gray-500';

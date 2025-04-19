@@ -128,10 +128,10 @@ export interface PreInspectionPhotos {
 }
 
 export interface PostInspectionPhotos {
-  fuelGaugeFinal: string[];
   cleanliness: string[];
   scratches: string[];
   tollFees: string[];
+  fuelGaugeFinal: string[];
 }
 
 export interface Car {

@@ -1,6 +1,8 @@
-import { Stack } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
+import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { FunctionComponent } from 'react';
+import { Pressable } from 'react-native';
 
 const ScreenLayout: FunctionComponent = () => {
   return (
@@ -123,6 +125,8 @@ const ScreenLayout: FunctionComponent = () => {
             headerShown: true,
             headerTitle: 'Danh sách báo cáo',
             headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
           }}
         />
         <Stack.Screen
@@ -131,6 +135,29 @@ const ScreenLayout: FunctionComponent = () => {
             headerShown: true,
             headerTitle: 'Chi tiết báo cáo',
             headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
+            headerLeft: () => (
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: '/(screen)/(reports)/reports',
+                  })
+                }>
+                <Feather name="arrow-left" size={24} color="black" />
+              </Pressable>
+            ),
+
+            headerRight: () => (
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: '/(main)',
+                  })
+                }>
+                <Feather name="home" size={24} color="black" />
+              </Pressable>
+            ),
           }}
         />
 

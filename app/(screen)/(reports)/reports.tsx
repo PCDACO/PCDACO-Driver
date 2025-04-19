@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ReportCard from '~/components/card/report/report-card';
 import Backdrop from '~/components/plugins/back-drop';
-import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import ReportParams from '~/components/screen/report-list/report-params';
 import ReportSkeleton from '~/components/ui/report-skeleton';

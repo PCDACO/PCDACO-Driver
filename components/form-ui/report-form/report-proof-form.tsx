@@ -54,60 +54,60 @@ const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({
   };
 
   return (
-    <CardBasic>
+    <CardBasic className="gap-2">
       <FieldLayout label="Chứng từ bồi thường">
         <View className="gap-2">
           <RenderInfo label="Lý do bồi thường" value={compensationReason} />
           <RenderInfo label="Số tiền bồi thường" value={compensationAmount.toString()} />
           <RenderInfo label="Trạng thái" value={isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'} />
         </View>
-        {role !== Role.Driver && imageUrl === '' && (
-          <View>
-            <View className="relative">
-              {image && (
-                <View className="relative h-60">
-                  <Image
-                    source={{ uri: image }}
-                    className="h-60 w-full rounded-lg object-cover shadow-lg"
-                  />
-                  <TouchableOpacity className="absolute right-2 top-2" onPress={handleRemoveImage}>
-                    <Feather name="x-circle" size={24} color="red" />
-                  </TouchableOpacity>
-                </View>
-              )}
-
-              {!image && (
-                <ImagePickerButton
-                  onChange={(images) => {
-                    if (images.length > 0) {
-                      const file = convertAssertToFile(images[0]);
-                      if (file) {
-                        setImage(images[0].uri);
-                        form.setValue('images', file);
-                      }
-                    }
-                  }}
-                  contextInput={
-                    <View className="items-center gap-2 py-4">
-                      <Feather name="camera" size={24} color="black" />
-                      <View className="items-center">
-                        <Text className="text-lg font-bold">Chọn ảnh</Text>
-                        <Text className="text-sm text-gray-500">Tối thiểu 1 hình ảnh</Text>
-                      </View>
-                    </View>
-                  }
+      </FieldLayout>
+      {role !== Role.Driver && !isPaid && (
+        <View>
+          <View className="relative">
+            {image && (
+              <View className="relative h-60">
+                <Image
+                  source={{ uri: image }}
+                  className="h-60 w-full rounded-lg object-cover shadow-lg"
                 />
-              )}
-            </View>
-            {form.formState.errors.images?.message && (
-              <Text className="text-xs text-destructive">
-                {String(form.formState.errors.images.message)}
-              </Text>
+                <TouchableOpacity className="absolute right-2 top-2" onPress={handleRemoveImage}>
+                  <Feather name="x-circle" size={24} color="red" />
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {!image && (
+              <ImagePickerButton
+                onChange={(images) => {
+                  if (images.length > 0) {
+                    const file = convertAssertToFile(images[0]);
+                    if (file) {
+                      setImage(images[0].uri);
+                      form.setValue('images', file);
+                    }
+                  }
+                }}
+                contextInput={
+                  <View className="items-center gap-2 py-4">
+                    <Feather name="camera" size={24} color="black" />
+                    <View className="items-center">
+                      <Text className="text-lg font-bold">Chọn ảnh</Text>
+                      <Text className="text-sm text-gray-500">Tối thiểu 1 hình ảnh</Text>
+                    </View>
+                  </View>
+                }
+              />
             )}
           </View>
-        )}
-        {renderImage()}
-      </FieldLayout>
+          {form.formState.errors.images?.message && (
+            <Text className="text-xs text-destructive">
+              {String(form.formState.errors.images.message)}
+            </Text>
+          )}
+        </View>
+      )}
+      {renderImage()}
     </CardBasic>
   );
 };

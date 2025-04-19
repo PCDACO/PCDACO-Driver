@@ -121,10 +121,10 @@ const BookingScreen = () => {
                     trunkSpace: [],
                   },
                   postInspectionPhotos: {
-                    fuelGaugeFinalPhotos: [],
-                    cleanlinessPhotos: [],
-                    scratchesPhotos: [],
-                    tollFeesPhotos: [],
+                    fuelGaugeFinal: [],
+                    cleanliness: [],
+                    scratches: [],
+                    tollFees: [],
                   },
                 }
               }

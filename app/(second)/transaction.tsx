@@ -29,12 +29,12 @@ const Transaction: FunctionComponent = () => {
 
   const handleRefresh = async () => {
     try {
-        setIsRefetching(true);
-        await refetch();
+      setIsRefetching(true);
+      await refetch();
     } finally {
-        setIsRefetching(false);
+      setIsRefetching(false);
     }
-  }
+  };
 
   return (
     <View className="flex-1">

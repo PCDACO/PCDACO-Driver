@@ -20,7 +20,7 @@ const ReportScreen: FunctionComponent = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['1%', '45%'], []);
+  const snapPoints = useMemo(() => ['1%', '55%'], []);
 
   const handleSnapPress = useCallback((index: number) => {
     sheetRef.current?.snapToIndex(index);
