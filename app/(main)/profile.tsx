@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import LogoutButton from '~/components/screen/profile-screen/logout-button';
@@ -14,8 +14,18 @@ import { useUserQuery } from '~/hooks/user/use-user';
 
 const ProfileScreen = () => {
   const { currentUserQuery } = useUserQuery();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const { data, isLoading } = currentUserQuery;
+  const { data, isLoading, refetch } = currentUserQuery;
+
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -36,11 +46,12 @@ const ProfileScreen = () => {
       <TouchableOpacity className="absolute left-4 top-4 z-10 p-2" onPress={() => router.back()}>
         <Feather size={20} name="arrow-left" />
       </TouchableOpacity>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}>
         <View
-          className="gap-4"
+          className="gap-2"
           style={{
-            paddingTop: 30,
+            paddingTop: 50,
           }}>
           <ProfileHeader
             image={data?.value.avatarUrl}
@@ -56,8 +67,6 @@ const ProfileScreen = () => {
             totalRented={data?.value.totalRented || 0}
           />
           <ProfileMenu id={data?.value.id || ''} />
-        </View>
-        <View className="">
           <LogoutButton />
         </View>
       </ScrollView>

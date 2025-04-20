@@ -1,17 +1,72 @@
-import React, { FunctionComponent } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import React from 'react';
+import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 
 import CardTransaction from '~/components/card/transaction/card-transaction';
-import Loading from '~/components/plugins/loading';
 import { useInfiniteTransactions } from '~/hooks/transaction/use-transaction';
 
-const Transaction: FunctionComponent = () => {
+interface GroupedTransactions {
+  date: string;
+  transactions: any[];
+}
+
+const formatVietnameseDate = (date: Date): string => {
+  const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+  const months = [
+    'Thg 1',
+    'Thg 2',
+    'Thg 3',
+    'Thg 4',
+    'Thg 5',
+    'Thg 6',
+    'Thg 7',
+    'Thg 8',
+    'Thg 9',
+    'Thg 10',
+    'Thg 11',
+    'Thg 12',
+  ];
+
+  const dayOfWeek = days[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  return `${dayOfWeek}, ${month} ${day}, ${year}`;
+};
+
+const Transaction = () => {
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteTransactions({});
 
-  const [isRefetching, setIsRefetching] = React.useState(false);
-
   const transactions = data?.pages.flatMap((page) => page.value?.items || []) || [];
+
+  // Group transactions by date
+  const groupedTransactions = React.useMemo(() => {
+    const groups: GroupedTransactions[] = [];
+    const dateMap = new Map<string, any[]>();
+
+    transactions.forEach((transaction) => {
+      const date = new Date(transaction.createdAt);
+      const formattedDate = formatVietnameseDate(date);
+      if (!dateMap.has(formattedDate)) {
+        dateMap.set(formattedDate, []);
+      }
+      dateMap.get(formattedDate)?.push(transaction);
+    });
+
+    dateMap.forEach((transactions, date) => {
+      groups.push({ date, transactions });
+    });
+
+    // Sort groups by date (newest first)
+    return groups.sort(
+      (a, b) =>
+        new Date(b.transactions[0].createdAt).getTime() -
+        new Date(a.transactions[0].createdAt).getTime()
+    );
+  }, [transactions]);
 
   const loadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -19,43 +74,49 @@ const Transaction: FunctionComponent = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  const renderItem = ({ item }: { item: GroupedTransactions }) => (
+    <View>
+      <View className="mb-2 mt-4 flex-row items-center justify-between px-2">
+        <Text className="text-sm font-semibold text-gray-500 dark:text-gray-500">{item.date}</Text>
+      </View>
+      {item.transactions.map((transaction) => (
+        <CardTransaction key={transaction.id} data={transaction} />
+      ))}
+    </View>
+  );
+
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Loading size="small" />
+        <ActivityIndicator size="large" />
       </View>
     );
   }
 
-  const handleRefresh = async () => {
-    try {
-      setIsRefetching(true);
-      await refetch();
-    } finally {
-      setIsRefetching(false);
-    }
-  };
-
   return (
     <View className="flex-1">
       <FlatList
-        data={transactions}
-        renderItem={({ item }) => <CardTransaction data={item} />}
-        keyExtractor={(item) => item.id}
+        data={groupedTransactions}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.date}
         onEndReached={loadMore}
-        refreshing={isRefetching}
+        refreshing={isRefreshing}
         onRefresh={handleRefresh}
         onEndReachedThreshold={0.5}
-        ListEmptyComponent={() => (
-          <View className="flex-1 items-center justify-center">
-            <Text>Không có dữ liệu</Text>
-          </View>
-        )}
         ListFooterComponent={() => {
           if (isFetchingNextPage) {
             return (
               <View className="py-4">
-                <Loading size="small" />
+                <ActivityIndicator size="small" />
               </View>
             );
           }

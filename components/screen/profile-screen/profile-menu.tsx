@@ -13,7 +13,7 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
   const router = useRouter();
 
   return (
-    <View className="mx-4 mb-6 overflow-hidden rounded-xl bg-white shadow-sm">
+    <View className="mx-4 overflow-hidden rounded-xl bg-white shadow-sm">
       <ProfileMenuItem
         icon={<Ionicons size={20} name="person-outline" />}
         text="Thông tin cá nhân"
@@ -65,7 +65,7 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
       <ProfileMenuItem
         icon={<Ionicons size={20} name="shield-outline" />}
         text="Chính sách bảo hành & Tài liệu tham khảo"
-        onPress={() => router.push({ pathname: '/(screen)/privacy/index' })}
+        onPress={() => router.push({ pathname: '/(screen)/privacy' })}
       />
       <ProfileMenuItem
         icon={<Ionicons size={20} name="file-tray-full-outline" />}

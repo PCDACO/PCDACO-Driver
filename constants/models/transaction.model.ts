@@ -20,6 +20,7 @@ export interface TransactionResponse {
   status: string;
   details: Details;
   prooUrl: string;
+  isIncome: boolean;
 }
 
 export interface Details {

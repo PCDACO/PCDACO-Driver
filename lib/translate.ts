@@ -76,6 +76,20 @@ export const translate = {
       withdraw_success: 'Rút tiền thành công!',
       withdraw_error: 'Rút tiền thất bại!',
     },
+    type: {
+      BookingPayment: 'Thanh toán đơn đặt xe',
+      PlatformFee: 'Phí hệ thống',
+      OwnerEarning: 'Lợi nhuận chủ xe',
+      Withdrawal: 'Rút tiền',
+      Refund: 'Hoàn tiền',
+      Compensation: 'Bồi thường',
+    },
+    status: {
+      Pending: 'Chờ xử lý',
+      Completed: 'Đã hoàn thành',
+      Failed: 'Thất bại',
+      Cancelled: 'Đã hủy',
+    },
   },
 
   user: {

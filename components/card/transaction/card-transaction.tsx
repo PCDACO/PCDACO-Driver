@@ -1,8 +1,11 @@
 import { FunctionComponent, useState, useCallback } from 'react';
-import { Text, View, Animated, Image, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { Text, View, Image, LayoutAnimation, Platform, UIManager } from 'react-native';
 
 import CardBasic from '~/components/plugins/card-basic';
+import TransactionBadge from '~/components/screen/transaction-list/transaction-badge';
 import { TransactionResponse } from '~/constants/models/transaction.model';
+import { cn } from '~/lib/cn';
+import { translate } from '~/lib/translate';
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === 'android') {
@@ -24,25 +27,30 @@ const CardTransaction: FunctionComponent<CardTransactionProps> = ({ data }) => {
   }, [expanded]);
 
   return (
-    <CardBasic onPress={toggleExpand}>
+    <CardBasic
+      onPress={toggleExpand}
+      className={cn('border-r-4', data.isIncome ? 'border-r-green-600' : 'border-r-red-600')}>
       <View>
-        <View className="flex-row items-center justify-between">
+        <View className="flex-row items-start justify-between">
           <View className="flex-1">
-            <Text className="text-base font-semibold">{data.type}</Text>
-            <Text className="text-sm text-gray-500">{data.description}</Text>
-            <Text className="mt-1 text-xs text-gray-400">
-              {new Date(data.createdAt).toLocaleDateString()}
+            <Text className="text-base font-semibold">
+              {translate.transaction.type[data.type as keyof typeof translate.transaction.type]}
             </Text>
+            {data.description && (
+              <Text className="mt-1 text-xs text-gray-400">{data.description}</Text>
+            )}
+            {data.createdAt && (
+              <Text className="mt-1 text-xs text-gray-400">
+                {new Date(data.createdAt).toLocaleDateString()}
+              </Text>
+            )}
           </View>
           <View className="items-end">
             <Text
-              className={`text-base font-semibold ${data.amount >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-              {data.amount >= 0 ? '+' : ''}
-              {data.amount.toLocaleString()}
+              className={`text-base font-semibold ${data.isIncome ? 'text-green-600' : 'text-red-600'}`}>
+              {data.isIncome ? '+' : '-'} {data.amount.toLocaleString()}
             </Text>
-            <Text className="text-xs text-gray-400">
-              Balance: {data.balanceAfter.toLocaleString()}
-            </Text>
+            <TransactionBadge status={data.status} />
           </View>
         </View>
 

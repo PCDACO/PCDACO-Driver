@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const regexAccountNumber = /^[0-9]{16}$/;
+const regexAccountNumber = /^[0-9]{10,16}$/;
 const regexUpperCaseNoAccent = /^[A-Z\s]+$/;
 
 export const BankSchema = z.object({

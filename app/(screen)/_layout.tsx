@@ -161,6 +161,18 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
 
+        {/* Withdraw */}
+        <Stack.Screen
+          name="(withdraw)/index"
+          options={{
+            headerShown: false,
+            headerTitle: 'Rút tiền',
+            headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
+          }}
+        />
+
         {/* Optional - Future Feature */}
         {/* <Stack.Screen
           name="search-cars"

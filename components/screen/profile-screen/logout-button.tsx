@@ -9,7 +9,7 @@ const LogoutButton = () => {
   const { removeTokens } = useAuthStore();
   return (
     <TouchableOpacity
-      className="mx-4 mb-24 flex-row items-center justify-center rounded-xl bg-white p-4 shadow-sm"
+      className="mx-4 flex-row items-center justify-center rounded-xl bg-white p-4 shadow-sm"
       onPress={() => {
         removeTokens();
         router.navigate('/(auth)/login');

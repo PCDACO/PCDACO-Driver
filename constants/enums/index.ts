@@ -90,3 +90,9 @@ export enum BookingStatusNumber {
   Cancelled = 7,
   Expired = 8,
 }
+export enum TransactionStatus {
+  Pending = 'Pending',
+  Completed = 'Completed',
+  Failed = 'Failed',
+  Cancelled = 'Cancelled',
+}
