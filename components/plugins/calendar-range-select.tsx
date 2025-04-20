@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 import { LocaleConfig as CalendarLocaleConfig } from '~/configs/calendar.config';
+import { CarUnavailableResponse } from '~/constants/models/car.model';
 
 LocaleConfig.locales['vi'] = CalendarLocaleConfig.locales['vi'];
 LocaleConfig.defaultLocale = CalendarLocaleConfig.defaultLocale;
@@ -12,6 +13,7 @@ interface RangePickerProps {
   initialEndDate?: Date;
   themeColor?: string;
   onRangeSelected?: (range: { start?: Date; end?: Date }) => void;
+  unavailableDates?: CarUnavailableResponse[];
 }
 
 const RangePickerCalendar: React.FC<RangePickerProps> = ({
@@ -19,6 +21,7 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
   initialEndDate,
   themeColor = '#3498db',
   onRangeSelected,
+  unavailableDates = [],
 }) => {
   const [selectedRange, setSelectedRange] = useState<{ start?: Date; end?: Date }>({
     start: initialStartDate,
@@ -27,28 +30,103 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
 
   const [markedDates, setMarkedDates] = useState<{ [key: string]: any }>({});
 
+  // Separate effect for disabled dates
   useEffect(() => {
-    if (initialStartDate && initialEndDate) {
-      setMarkedDates(getDateRange(initialStartDate, initialEndDate, themeColor));
+    const disabledDates: { [key: string]: any } = {};
+    unavailableDates.forEach((unavailable) => {
+      if (!unavailable?.date) return;
+      try {
+        const date = new Date(unavailable.date);
+        if (isNaN(date.getTime())) return;
+        const dateString = date.toISOString().split('T')[0];
+        disabledDates[dateString] = {
+          disabled: true,
+          disableTouchEvent: true,
+          textColor: '#9ca3af', // gray-400 color
+          color: 'transparent',
+        };
+      } catch (error: any) {
+        console.warn('Invalid date format in unavailableDates:', unavailable.date, error);
+      }
+    });
+    setMarkedDates((prev) => ({ ...prev, ...disabledDates }));
+  }, [unavailableDates]);
+
+  // Effect for range selection
+  useEffect(() => {
+    if (selectedRange.start && selectedRange.end) {
+      const rangeDates = getDateRange(selectedRange.start, selectedRange.end, themeColor);
+      setMarkedDates((prev) => {
+        // Preserve disabled dates
+        const disabledDates = Object.entries(prev)
+          .filter(([_, value]) => value.disabled)
+          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+        // Merge with new range
+        return { ...rangeDates, ...disabledDates };
+      });
     }
-  }, [initialStartDate, initialEndDate]);
+  }, [selectedRange, themeColor]);
 
   // Xử lý khi chọn ngày
   const onDayPress = (day: { dateString: string }) => {
-    const selectedDate = new Date(day.dateString); // Chuyển đổi thành Date
+    const selectedDate = new Date(day.dateString);
+
+    // Check if the selected date is disabled
+    const isDisabled = unavailableDates.some((unavailable) => {
+      if (!unavailable?.date) return false;
+      try {
+        const date = new Date(unavailable.date);
+        if (isNaN(date.getTime())) return false;
+        return date.toISOString().split('T')[0] === day.dateString;
+      } catch (error: any) {
+        console.warn('Invalid date format in unavailableDates:', unavailable.date, error);
+        return false;
+      }
+    });
+    if (isDisabled) return;
 
     if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
       // Chọn ngày bắt đầu mới
       setSelectedRange({ start: selectedDate, end: undefined });
-      setMarkedDates({
-        [day.dateString]: { startingDay: true, color: themeColor, textColor: 'white' },
+      setMarkedDates((prev) => {
+        // Preserve disabled dates
+        const disabledDates = Object.entries(prev)
+          .filter(([_, value]) => value.disabled)
+          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+        return {
+          ...disabledDates,
+          [day.dateString]: { startingDay: true, color: themeColor, textColor: 'white' },
+        };
       });
     } else {
       // Chọn ngày kết thúc
-      const range = getDateRange(selectedRange.start, selectedDate, themeColor);
-      setSelectedRange({ start: selectedRange.start, end: selectedDate });
-      setMarkedDates(range);
-      onRangeSelected?.({ start: selectedRange.start, end: selectedDate });
+      // Ensure end date is after start date
+      if (selectedDate < selectedRange.start) {
+        // If selected date is before start date, swap them
+        setSelectedRange({ start: selectedDate, end: selectedRange.start });
+        const range = getDateRange(selectedDate, selectedRange.start, themeColor);
+        setMarkedDates((prev) => {
+          const disabledDates = Object.entries(prev)
+            .filter(([_, value]) => value.disabled)
+            .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+          return { ...range, ...disabledDates };
+        });
+        onRangeSelected?.({ start: selectedDate, end: selectedRange.start });
+      } else {
+        setSelectedRange({ start: selectedRange.start, end: selectedDate });
+        const range = getDateRange(selectedRange.start, selectedDate, themeColor);
+        setMarkedDates((prev) => {
+          const disabledDates = Object.entries(prev)
+            .filter(([_, value]) => value.disabled)
+            .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+          return { ...range, ...disabledDates };
+        });
+        onRangeSelected?.({ start: selectedRange.start, end: selectedDate });
+      }
     }
   };
 
@@ -64,14 +142,24 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    range[startDate.toISOString().split('T')[0]] = { startingDay: true, color, textColor: 'white' };
-    range[endDate.toISOString().split('T')[0]] = { endingDay: true, color, textColor: 'white' };
+    // Ensure start and end dates are marked correctly
+    const startDateString = startDate.toISOString().split('T')[0];
+    const endDateString = endDate.toISOString().split('T')[0];
+
+    range[startDateString] = { startingDay: true, color, textColor: 'white' };
+    range[endDateString] = { endingDay: true, color, textColor: 'white' };
+
     return range;
   };
 
   return (
     <View className="rounded-lg border border-muted bg-white p-1 dark:bg-slate-800">
-      <Calendar markingType="period" markedDates={markedDates} onDayPress={onDayPress} />
+      <Calendar
+        markingType="period"
+        markedDates={markedDates}
+        onDayPress={onDayPress}
+        disableAllTouchEventsForDisabledDays
+      />
     </View>
   );
 };

@@ -161,13 +161,14 @@ export interface Driver {
   name: string;
   phone: string;
   email: string;
+  avatarUrl: string;
 }
 
 export interface Feedback {
   id: string;
   rating: number;
   content: string;
-  type: string;
+  type: number;
   userName: string;
   role: string;
 }

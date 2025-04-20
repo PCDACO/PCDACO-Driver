@@ -12,6 +12,16 @@ export interface CarParams extends Partial<LastIdRootResquest> {
   status: CarStatus;
 }
 
+export interface CarUnavailableParams {
+  id: string;
+  month: number;
+  year: number;
+}
+
+export interface CarUnavailableResponse {
+  date: Date;
+}
+
 export interface CarResponseList {
   id: string;
   modelId: string;
@@ -76,6 +86,17 @@ export interface CarResponseDetail {
   manufacturer: Manufacturer;
   images: Image[];
   amenities: Amenity[];
+  feedbacks: Feedback[];
+}
+
+export interface Feedback {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  rating: number;
+  content: string;
+  createdAt: Date;
 }
 
 export interface Amenity {

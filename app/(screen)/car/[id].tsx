@@ -8,6 +8,7 @@ import { Button } from '~/components/nativewindui/Button';
 import { Text as TextUI } from '~/components/nativewindui/Text';
 import CarBasicInfo from '~/components/screen/car-detail-screen/car-basic-info';
 import CarConfiguration from '~/components/screen/car-detail-screen/car-configuration';
+import CarFeedback from '~/components/screen/car-detail-screen/car-feedback';
 import CarHeader from '~/components/screen/car-detail-screen/car-header';
 import CarImages from '~/components/screen/car-detail-screen/car-images';
 import CarMainInfo from '~/components/screen/car-detail-screen/car-main-info';
@@ -15,7 +16,6 @@ import OwnerContactInfor from '~/components/screen/car-detail-screen/owner-conta
 import { SwiperImageItem } from '~/components/ui/swiper-images';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
 import { usePanResponder } from '~/hooks/plugins/use-pan-responder';
-// import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -98,6 +98,7 @@ const CarDetail: FunctionComponent = () => {
               <CarConfiguration car={data!.value} />
               <OwnerContactInfor car={data!.value} />
               <CarMainInfo car={data!.value} />
+              <CarFeedback feedbacks={data!.value.feedbacks || []} />
             </View>
           </View>
         </ScrollView>

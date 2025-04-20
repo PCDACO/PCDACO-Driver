@@ -6,6 +6,7 @@ import { Text, View, TouchableOpacity, TextInput, Platform } from 'react-native'
 import CardBasic from '~/components/plugins/card-basic';
 import Description from '~/components/ui/description';
 import Subtitle from '~/components/ui/subtitle';
+import { Role } from '~/constants/enums';
 import { BookResponseDetail } from '~/constants/models/book.model';
 import { useFeedbackForm } from '~/hooks/feedback/use-feedback-form';
 import { COLORS } from '~/theme/colors';
@@ -18,8 +19,8 @@ interface FeedbackCardProps {
 const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) => {
   const { form, onSubmit, isLoading } = useFeedbackForm(id);
 
-  const hasOwnerFeedback = feedback?.some((f) => f.role === 'Owner');
-  const nonOwnerFeedbacks = feedback?.filter((f) => f.role !== 'Owner');
+  const hasDriverFeedback = feedback?.some((f) => f.role === Role.Owner);
+  const nonDriverFeedbacks = feedback?.filter((f) => f.role !== Role.Driver);
 
   return (
     <CardBasic>
@@ -29,7 +30,7 @@ const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) =>
         title="Chia sẻ kinh nghiệm của bạn với người thuê xe này để giúp đỡ những chủ xe khác."
       />
 
-      {!hasOwnerFeedback ? (
+      {!hasDriverFeedback ? (
         <>
           <View className="mt-4">
             <Text className="mb-2 text-base font-medium">Đánh giá của bạn</Text>
@@ -104,7 +105,7 @@ const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) =>
         </>
       ) : (
         <View className="mt-4">
-          {nonOwnerFeedbacks?.map((feedback, index) => (
+          {nonDriverFeedbacks?.map((feedback, index) => (
             <View
               key={index}
               className="mb-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700">

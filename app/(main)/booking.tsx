@@ -102,7 +102,6 @@ const BookingScreen: FunctionComponent = () => {
             data={[1, 2, 3, 4]}
             keyExtractor={(item) => item.toString()}
             renderItem={() => <BookingDetailSkeleton />}
-            contentContainerStyle={{ padding: 16 }}
             ItemSeparatorComponent={() => <View className="h-2" />}
           />
         ) : (

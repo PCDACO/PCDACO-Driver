@@ -4,7 +4,7 @@ import Skeleton from '~/components/ui/skeleton';
 
 const BookingDetailSkeleton = () => {
   return (
-    <View className="flex-1 gap-4 bg-white p-4">
+    <View className="flex-1 gap-4 bg-white">
       {/* Car Info */}
       <Skeleton height={120} borderRadius={12} />
       {/* Driver Info */}

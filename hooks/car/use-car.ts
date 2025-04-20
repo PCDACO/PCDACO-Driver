@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { CarParams } from '~/constants/models/car.model';
+import { CarParams, CarUnavailableParams } from '~/constants/models/car.model';
 import { QueryKey } from '~/lib/query-key';
 import { CarService } from '~/services/car.service';
 
@@ -42,4 +42,14 @@ export const useCarsListInfiniteQuery = (params: Partial<CarParams>) => {
   });
 
   return query;
+};
+
+export const useCarUnavailableQuery = ({ id, month, year }: CarUnavailableParams) => {
+  const unavailableQuery = useQuery({
+    queryKey: [QueryKey.Car.Unavailable, id, month, year],
+    queryFn: () => CarService.get.unavailable({ id, month, year }),
+    enabled: !!id && !!month && !!year,
+  });
+
+  return unavailableQuery;
 };

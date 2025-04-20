@@ -98,6 +98,7 @@ const BookingScreen = () => {
                   id: '',
                   name: '',
                   phone: '',
+                  avatarUrl: '',
                 }
               }
             />
@@ -144,16 +145,19 @@ const BookingScreen = () => {
 
             <BookContact id={bookDetail?.id || ''} />
 
-            {bookDetail?.booking.status === BookingStatusEnum.Done ||
-              (bookDetail?.booking.status === BookingStatusEnum.Completed && (
-                <FeedbackCard id={bookDetail?.id || ''} />
-              ))}
+            {(bookDetail?.booking.status === BookingStatusEnum.Done ||
+              bookDetail?.booking.status === BookingStatusEnum.Completed) && (
+              <FeedbackCard id={bookDetail?.id || ''} feedback={bookDetail?.feedbacks} />
+            )}
           </View>
         </ScrollView>
+
+        {/* Button Action */}
         <View className="z-1 absolute bottom-0 left-0 right-0 flex-row gap-2 bg-white p-4">
           {bookDetail?.booking.status !== BookingStatusEnum.Ongoing &&
             bookDetail?.booking.status !== BookingStatusEnum.Completed &&
-            bookDetail?.booking.status !== BookingStatusEnum.Cancelled && (
+            bookDetail?.booking.status !== BookingStatusEnum.Cancelled &&
+            bookDetail?.booking.status !== BookingStatusEnum.Done && (
               <TouchableOpacity
                 onPress={() => {
                   handleApproveOrRejectBooking(false);

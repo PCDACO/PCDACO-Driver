@@ -7,14 +7,16 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FieldLayout from '~/components/layout/form/field-layout';
 import RangePickerCalendar from '~/components/plugins/calendar-range-select';
 import Subtitle from '~/components/ui/subtitle';
+import { CarUnavailableResponse } from '~/constants/models/car.model';
 import { useBookingForm } from '~/hooks/book/use-book-form';
 import { DateFormat, formatDateToString, mergeDateTime } from '~/lib/format';
 
 interface BookFormProps {
   form: ReturnType<typeof useBookingForm>['form'];
+  unavailableDates: CarUnavailableResponse[];
 }
 
-const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
+const BookForm: FunctionComponent<BookFormProps> = ({ form, unavailableDates }) => {
   const [showStartDatePicker, setShowStartDatePicker] = React.useState<boolean>(false);
   const [showEndDatePicker, setShowEndDatePicker] = React.useState<boolean>(false);
 
@@ -63,6 +65,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form }) => {
             form.setValue('startDay', range.start);
             form.setValue('endDay', range.end);
           }}
+          unavailableDates={unavailableDates}
         />
         <View className="gap-2">
           {form.formState.errors.startDay && (

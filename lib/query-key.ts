@@ -26,6 +26,7 @@ export const QueryKey = {
     Update: 'CarUpdate',
     Delete: 'CarDelete',
     PatchImage: 'CarPatchImage',
+    Unavailable: 'CarUnavailable',
   },
 
   Booking: {

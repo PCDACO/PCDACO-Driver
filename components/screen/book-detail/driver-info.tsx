@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import React, { FunctionComponent } from 'react';
 import { Text, View } from 'react-native';
 
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/nativewindui/Avatar';
 import CardBasic from '~/components/plugins/card-basic';
 import Subtitle from '~/components/ui/subtitle';
 import { BookResponseDetail } from '~/constants/models/book.model';
@@ -19,6 +20,16 @@ const DriverInfo: FunctionComponent<DriverInfoProps> = ({ owner }) => {
         <Feather name="user" size={24} color={COLORS.gray} />
         <Subtitle title="Thông tin người đặt" />
       </View>
+
+      <View className="flex-row items-center justify-center gap-2">
+        <Avatar alt={owner.name} className="h-16 w-16">
+          <AvatarFallback>
+            <Text>{owner.name.charAt(0)}</Text>
+          </AvatarFallback>
+          <AvatarImage source={{ uri: owner.avatarUrl }} />
+        </Avatar>
+      </View>
+
       <View className="gap-2">
         <View className="flex-row items-center justify-between gap-2">
           <Text className="text-sm text-gray-500">Họ tên:</Text>

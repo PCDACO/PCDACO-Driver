@@ -133,3 +133,41 @@ export const mergeDateTime = (date: Date, time: Date): Date => {
   merged.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
   return merged;
 };
+/**
+ * Tính thời gian đã trôi qua từ một ngày cụ thể đến hiện tại
+ * @param date - Ngày cần tính
+ * @returns Chuỗi biểu diễn thời gian đã trôi qua (ví dụ: "2 giờ trước")
+ */
+export const getTimeAgo = (date: Date): string => {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - new Date(date).getTime()) / 1000);
+
+  const minute = 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const week = day * 7;
+  const month = day * 30;
+  const year = day * 365;
+
+  if (diffInSeconds < minute) {
+    return 'Vừa xong';
+  } else if (diffInSeconds < hour) {
+    const minutes = Math.floor(diffInSeconds / minute);
+    return `${minutes} phút trước`;
+  } else if (diffInSeconds < day) {
+    const hours = Math.floor(diffInSeconds / hour);
+    return `${hours} giờ trước`;
+  } else if (diffInSeconds < week) {
+    const days = Math.floor(diffInSeconds / day);
+    return `${days} ngày trước`;
+  } else if (diffInSeconds < month) {
+    const weeks = Math.floor(diffInSeconds / week);
+    return `${weeks} tuần trước`;
+  } else if (diffInSeconds < year) {
+    const months = Math.floor(diffInSeconds / month);
+    return `${months} tháng trước`;
+  } else {
+    const years = Math.floor(diffInSeconds / year);
+    return `${years} năm trước`;
+  }
+};

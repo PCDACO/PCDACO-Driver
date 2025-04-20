@@ -7,7 +7,7 @@ import BookForm from '~/components/form-ui/booking/book-form';
 import { Checkbox } from '~/components/layout/checkbox';
 import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import { useBookingForm } from '~/hooks/book/use-book-form';
-import { useCarDetailQuery } from '~/hooks/car/use-car';
+import { useCarUnavailableQuery } from '~/hooks/car/use-car';
 import { useSwipeComplete } from '~/hooks/plugins/use-swipe-complete';
 import { mergeDateTime } from '~/lib/format';
 import { useContractParamsStore } from '~/store/use-params';
@@ -16,8 +16,12 @@ const Booking: FunctionComponent = () => {
   const [isAccepted, setIsAccepted] = React.useState(false);
   const { setParams } = useContractParamsStore();
   const { id } = useLocalSearchParams();
-  const { data: car, isLoading } = useCarDetailQuery(id as string);
   const { form, onSubmit, isLoading: isBookingLoading } = useBookingForm();
+  const { data: unavailableDates, isLoading: isUnavailableLoading } = useCarUnavailableQuery({
+    id: id as string,
+    month: form.getValues('startDay').getMonth() + 1,
+    year: form.getValues('startDay').getFullYear(),
+  });
 
   React.useEffect(() => {
     if (id) {
@@ -56,7 +60,7 @@ const Booking: FunctionComponent = () => {
     onComplete: handleComplete,
   });
 
-  if (isLoading || !car) {
+  if (isUnavailableLoading) {
     return (
       <View className="h-full flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#0000ff" />
@@ -69,7 +73,10 @@ const Booking: FunctionComponent = () => {
     <View className="relative h-screen bg-slate-100 dark:bg-slate-800">
       <ScrollView>
         <View className="min-h-screen rounded-t-3xl bg-white px-6 py-4 dark:bg-slate-800">
-          <BookForm form={form} />
+          <BookForm
+            form={form}
+            unavailableDates={unavailableDates?.value || [{ date: new Date() }]}
+          />
 
           <View className="mt-4 flex-row flex-wrap items-start gap-2">
             <Checkbox
