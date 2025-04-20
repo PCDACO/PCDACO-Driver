@@ -17,7 +17,7 @@ const Booking: FunctionComponent = () => {
   const { setParams } = useContractParamsStore();
   const { id } = useLocalSearchParams();
   const { form, onSubmit, isLoading: isBookingLoading } = useBookingForm();
-  const { data: unavailableDates, isLoading: isUnavailableLoading } = useCarUnavailableQuery({
+  const { data: unavailableDates } = useCarUnavailableQuery({
     id: id as string,
     month: form.getValues('startDay').getMonth() + 1,
     year: form.getValues('startDay').getFullYear(),
@@ -60,14 +60,14 @@ const Booking: FunctionComponent = () => {
     onComplete: handleComplete,
   });
 
-  if (isUnavailableLoading) {
-    return (
-      <View className="h-full flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text className="mt-2 text-muted-foreground">Đang tải thông tin xe...</Text>
-      </View>
-    );
-  }
+  // if (isUnavailableLoading) {
+  //   return (
+  //     <View className="h-full flex-1 items-center justify-center">
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //       <Text className="mt-2 text-muted-foreground">Đang tải thông tin xe...</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View className="relative h-screen bg-slate-100 dark:bg-slate-800">
