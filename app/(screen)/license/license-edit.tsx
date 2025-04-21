@@ -22,10 +22,10 @@ const LicenseEdit = () => {
 
   if (isLoadingList) {
     return (
-      <View className="h-screen flex-1 items-center justify-center">
+      <SafeAreaView className="h-screen flex-1">
         <Header title="Đang tải bằng lái..." />
         <LicenseFormSkeleton />
-      </View>
+      </SafeAreaView>
     );
   }
 

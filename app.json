@@ -67,7 +67,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anhden123.PCDACODriver",
@@ -87,7 +89,10 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO",
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
       ]
     },
     "extra": {
@@ -95,7 +100,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "8c5fcc44-6be0-4345-ae17-7c8ac72bf5af"
+        "projectId": "d709055a-d146-4ac2-85d0-5b0198ffe582"
       }
     }
   }

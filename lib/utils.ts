@@ -38,3 +38,5 @@ export const getImageUrl = (url: string) => {
   const timestamp = new Date().getTime();
   return `${url}${url.includes('?') ? '&' : '?'}_=${timestamp}`;
 };
+
+export const withNoCache = (url: string) => `${url}?ts=${Date.now()}`;

@@ -61,6 +61,9 @@ export const useLicenseForm = ({ id }: LicenseFormProps) => {
                     queryClient.invalidateQueries({
                       queryKey: [QueryKey.License.Detail],
                     });
+                    queryClient.invalidateQueries({
+                      queryKey: [QueryKey.User.Current],
+                    });
                     setTimeout(() => {
                       router.back();
                     }, 3000);
@@ -86,6 +89,9 @@ export const useLicenseForm = ({ id }: LicenseFormProps) => {
               ToastAndroid.show('Cập nhật thành công giấy phép lái xe', ToastAndroid.SHORT);
               queryClient.invalidateQueries({
                 queryKey: [QueryKey.License.Detail],
+              });
+              queryClient.invalidateQueries({
+                queryKey: [QueryKey.User.Current],
               });
 
               setTimeout(() => {
@@ -133,7 +139,11 @@ export const useLicenseForm = ({ id }: LicenseFormProps) => {
                 resetEndpoints();
                 ToastAndroid.show('Tạo thành công hình ảnh giấy phép lái xe', ToastAndroid.SHORT);
                 queryClient.invalidateQueries({
-                  queryKey: [QueryKey.License.Detail],
+                  queryKey: [QueryKey.License.List],
+                });
+
+                queryClient.invalidateQueries({
+                  queryKey: [QueryKey.User.Current],
                 });
 
                 setTimeout(() => {
