@@ -26,6 +26,7 @@ import { BookingStatusEnum } from '~/constants/enums';
 import { useApproveOrRejectBooking } from '~/hooks/book/use-approve-or-reject-booking';
 import { useBookingDetailQuery } from '~/hooks/book/use-book';
 import { useBottomSheet } from '~/hooks/plugins/use-bottom-sheet';
+import { cn } from '~/lib/cn';
 import { COLORS } from '~/theme/colors';
 
 const BookingScreen = () => {
@@ -237,7 +238,19 @@ const BookingScreen = () => {
                       params: { id: id as string },
                     });
                   }}
-                  className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border border-gray-200 bg-foreground p-2 dark:border-gray-700">
+                  disabled={
+                    bookDetail?.booking.status !== BookingStatusEnum.Ongoing &&
+                    bookDetail?.booking.status !== BookingStatusEnum.Completed &&
+                    bookDetail?.booking.status !== BookingStatusEnum.Done
+                  }
+                  className={cn(
+                    'flex-1 flex-row items-center justify-center gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-700',
+                    bookDetail?.booking.status === BookingStatusEnum.Completed ||
+                      bookDetail?.booking.status === BookingStatusEnum.Done ||
+                      bookDetail?.booking.status === BookingStatusEnum.Ongoing
+                      ? 'bg-foreground'
+                      : 'bg-foreground/70'
+                  )}>
                   <FontAwesome5 name="flag" size={20} color={COLORS.white} />
                   <Text className="text-background">Báo cáo</Text>
                 </Pressable>

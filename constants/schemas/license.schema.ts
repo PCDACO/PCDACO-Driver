@@ -20,15 +20,18 @@ export const licenseSchema = z.object({
       message: 'Ngày hết hạn phải lớn hơn 1 tháng so với hiện tại',
     }
   ),
-  licenseImageFront: z.any().refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.type)),
+  licenseImageFront: z
+    .any()
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.type))
+    .optional(),
 
   licenseImageBack: z
     .any()
-    // .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
       'Chỉ nhận ảnh định dạng jpg, jpeg, png, webp'
-    ),
+    )
+    .optional(),
 });
 
 export type LicensePayloadSchema = z.infer<typeof licenseSchema>;

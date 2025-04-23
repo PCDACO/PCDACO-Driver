@@ -60,6 +60,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form, unavailableDates }) 
           initialStartDate={form.getValues('startDay')}
           initialEndDate={form.getValues('endDay')}
           themeColor="#3498db"
+          minimumDate={new Date()}
           onRangeSelected={(range) => {
             if (!range.start || !range.end) return;
             form.setValue('startDay', range.start);

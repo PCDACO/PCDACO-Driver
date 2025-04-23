@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 
@@ -88,9 +89,11 @@ const Transaction = () => {
       <View className="mb-2 mt-4 flex-row items-center justify-between px-2">
         <Text className="text-sm font-semibold text-gray-500 dark:text-gray-500">{item.date}</Text>
       </View>
-      {item.transactions.map((transaction) => (
-        <CardTransaction key={transaction.id} data={transaction} />
-      ))}
+      <View className="flex-1 gap-2">
+        {item.transactions.map((transaction) => (
+          <CardTransaction key={transaction.id} data={transaction} />
+        ))}
+      </View>
     </View>
   );
 
@@ -124,6 +127,12 @@ const Transaction = () => {
         }}
         contentContainerStyle={{ padding: 16 }}
         ItemSeparatorComponent={() => <View className="h-4" />}
+        ListEmptyComponent={() => (
+          <View className="h-[calc(100vh-200px)] flex-1 items-center justify-center">
+            <AntDesign name="file1" size={48} color="gray" />
+            <Text className="text-sm text-gray-500">Chưa có giao dịch nào</Text>
+          </View>
+        )}
       />
     </View>
   );

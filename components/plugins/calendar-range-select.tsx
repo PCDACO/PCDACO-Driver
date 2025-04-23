@@ -12,6 +12,8 @@ interface RangePickerProps {
   initialStartDate?: Date;
   initialEndDate?: Date;
   themeColor?: string;
+  minimumDate?: Date;
+  maximumDate?: Date;
   onRangeSelected?: (range: { start?: Date; end?: Date }) => void;
   unavailableDates?: CarUnavailableResponse[];
 }
@@ -20,6 +22,8 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
   initialStartDate,
   initialEndDate,
   themeColor = '#3498db',
+  minimumDate,
+  maximumDate,
   onRangeSelected,
   unavailableDates = [],
 }) => {
@@ -159,6 +163,8 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
         markedDates={markedDates}
         onDayPress={onDayPress}
         disableAllTouchEventsForDisabledDays
+        minDate={minimumDate}
+        maxDate={maximumDate}
       />
     </View>
   );
