@@ -57,6 +57,7 @@ const BookForm: FunctionComponent<BookFormProps> = ({ form, unavailableDates }) 
       </View>
       <View>
         <RangePickerCalendar
+          key={`${form.getValues('startDay')?.toISOString()}-${form.getValues('endDay')?.toISOString()}`}
           initialStartDate={form.getValues('startDay')}
           initialEndDate={form.getValues('endDay')}
           themeColor="#3498db"

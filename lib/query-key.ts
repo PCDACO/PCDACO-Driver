@@ -55,6 +55,7 @@ export const QueryKey = {
       Confirm: 'BookingConfirm',
       Return: 'BookingReturn',
       StartTrip: 'BookingStartTrip',
+      Extend: 'BookingExtend',
     },
   },
 

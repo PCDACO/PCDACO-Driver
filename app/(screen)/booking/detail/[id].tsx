@@ -27,12 +27,18 @@ import { useApproveOrRejectBooking } from '~/hooks/book/use-approve-or-reject-bo
 import { useBookingDetailQuery } from '~/hooks/book/use-book';
 import { useBottomSheet } from '~/hooks/plugins/use-bottom-sheet';
 import { cn } from '~/lib/cn';
+import { useContractParamsStore } from '~/store/use-params';
 import { COLORS } from '~/theme/colors';
 
 const BookingScreen = () => {
   const { id } = useLocalSearchParams();
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const { setParams } = useContractParamsStore();
+
+  // get booking detail
   const { data: bookingDetail, isLoading, refetch } = useBookingDetailQuery(id as string);
+
+  // handle approve or reject booking
   const { handleApproveOrRejectBooking, handleComplete } = useApproveOrRejectBooking({
     id: id as string,
   });
@@ -54,8 +60,9 @@ const BookingScreen = () => {
 
   if (isLoading || !bookingDetail) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="h-full flex-1 items-center justify-center gap-2">
         <Loading />
+        <Text className="text-gray-400">Đang tải thông tin đơn đặt xe...</Text>
       </View>
     );
   }
@@ -169,6 +176,23 @@ const BookingScreen = () => {
               </TouchableOpacity>
             )}
 
+          {bookDetail?.booking.status === BookingStatusEnum.Pending && (
+            <TouchableOpacity
+              onPress={() => {
+                setParams({
+                  endTime: bookDetail?.booking.endTime,
+                  startTime: bookDetail?.booking.startTime,
+                });
+                router.push({
+                  pathname: '/(screen)/booking/page',
+                  params: { bookingId: id as string },
+                });
+              }}
+              className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-2">
+              <Feather name="clock" size={20} color={COLORS.white} />
+              <Text className="text-background">Thay đổi thời gian</Text>
+            </TouchableOpacity>
+          )}
           {(bookDetail?.booking.status === BookingStatusEnum.Approved ||
             bookDetail?.booking.status === BookingStatusEnum.ReadyForPickup) &&
             !bookDetail.payment.isPaid && (

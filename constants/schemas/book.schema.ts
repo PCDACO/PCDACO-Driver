@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const bookSchema = z
   .object({
-    carId: z.string().min(1, 'Vui lòng chọn xe'),
+    // carId: z.string().min(1, 'Vui lòng chọn xe').optional(),
     startDay: z.coerce.date().refine(
       (date: Date) => {
         const now = new Date();

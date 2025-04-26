@@ -5,7 +5,6 @@ import { TouchableOpacity } from 'react-native';
 
 import BankAccount from './bank-account';
 import Transaction from './transaction';
-import Wallet from './wallet';
 
 import { COLORS } from '~/theme/colors';
 

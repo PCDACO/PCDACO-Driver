@@ -13,7 +13,7 @@
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "web": "expo start --web",
-    "generate": "openapi --input https://pcdaco-api.persiehomeserver.com/swagger/v1/swagger.json --output ./generated"
+    "generate": "openapi --input http://144.91.64.170:8080/swagger/v1/swagger.json --output ./generated"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^4.1.0",

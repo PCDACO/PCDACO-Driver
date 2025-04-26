@@ -34,6 +34,11 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
 
   const [markedDates, setMarkedDates] = useState<{ [key: string]: any }>({});
 
+  // Convert Date to YYYY-MM-DD string format
+  const formatDateToString = (date: Date) => {
+    return date.toISOString().split('T')[0];
+  };
+
   // Separate effect for disabled dates
   useEffect(() => {
     const disabledDates: { [key: string]: any } = {};
@@ -42,7 +47,7 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
       try {
         const date = new Date(unavailable.date);
         if (isNaN(date.getTime())) return;
-        const dateString = date.toISOString().split('T')[0];
+        const dateString = formatDateToString(date);
         disabledDates[dateString] = {
           disabled: true,
           disableTouchEvent: true,
@@ -82,7 +87,7 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
       try {
         const date = new Date(unavailable.date);
         if (isNaN(date.getTime())) return false;
-        return date.toISOString().split('T')[0] === day.dateString;
+        return formatDateToString(date) === day.dateString;
       } catch (error: any) {
         console.warn('Invalid date format in unavailableDates:', unavailable.date, error);
         return false;
@@ -141,14 +146,14 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
     const lastDate = new Date(endDate);
 
     while (currentDate <= lastDate) {
-      const dateString = currentDate.toISOString().split('T')[0];
+      const dateString = formatDateToString(currentDate);
       range[dateString] = { color, textColor: 'white' };
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
     // Ensure start and end dates are marked correctly
-    const startDateString = startDate.toISOString().split('T')[0];
-    const endDateString = endDate.toISOString().split('T')[0];
+    const startDateString = formatDateToString(startDate);
+    const endDateString = formatDateToString(endDate);
 
     range[startDateString] = { startingDay: true, color, textColor: 'white' };
     range[endDateString] = { endingDay: true, color, textColor: 'white' };
@@ -163,8 +168,8 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
         markedDates={markedDates}
         onDayPress={onDayPress}
         disableAllTouchEventsForDisabledDays
-        minDate={minimumDate}
-        maxDate={maximumDate}
+        minDate={minimumDate ? formatDateToString(minimumDate) : undefined}
+        maxDate={maximumDate ? formatDateToString(maximumDate) : undefined}
       />
     </View>
   );

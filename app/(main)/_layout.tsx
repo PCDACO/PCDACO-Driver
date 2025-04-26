@@ -12,16 +12,33 @@ const MainLayout = () => {
           headerShown: false,
           tabBarActiveTintColor: '#000',
           tabBarInactiveTintColor: '#888',
-          tabBarStyle: { backgroundColor: '#fff' },
+          tabBarStyle: {
+            backgroundColor: '#fff',
+            height: 60,
+            paddingBottom: 10,
+          },
+          tabBarLabelStyle: {
+            display: 'none',
+          },
         }}>
         <Tabs.Screen
           name="index"
           options={{
-            tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} />,
-            tabBarLabel: 'Trang chủ',
+            tabBarIcon: ({ color }) => <Icon name="home" color={color} size={20} />,
             headerStyle: {
               height: 30,
             },
+            animation: 'fade',
+          }}
+        />
+        <Tabs.Screen
+          name="car"
+          options={{
+            tabBarIcon: ({ color }) => <Icon name="car" color={color} size={20} />,
+            headerStyle: {
+              height: 30,
+            },
+            animation: 'fade',
           }}
         />
         <Tabs.Screen
@@ -34,8 +51,8 @@ const MainLayout = () => {
               fontWeight: 'bold',
             },
             headerTitleAlign: 'center',
-            tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={24} />,
-            tabBarLabel: 'Đặt xe',
+            tabBarIcon: ({ color }) => <Icon name="calendar" color={color} size={20} />,
+            animation: 'fade',
             headerStyle: {
               height: 30,
             },
@@ -44,9 +61,8 @@ const MainLayout = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} />,
-            tabBarLabel: 'Hồ sơ cá nhân',
-            animation: 'shift',
+            tabBarIcon: ({ color }) => <Icon name="user" color={color} size={20} />,
+            animation: 'fade',
           }}
         />
       </Tabs>

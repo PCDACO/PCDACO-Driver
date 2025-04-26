@@ -14,21 +14,40 @@ import { useContractParamsStore } from '~/store/use-params';
 
 const Booking: FunctionComponent = () => {
   const [isAccepted, setIsAccepted] = React.useState(false);
-  const { setParams } = useContractParamsStore();
-  const { id } = useLocalSearchParams();
-  const { form, onSubmit, isLoading: isBookingLoading } = useBookingForm();
+  const { setParams, params } = useContractParamsStore();
+  const { id, bookingId } = useLocalSearchParams();
+
+  // form action booking
+  const {
+    form,
+    onSubmit,
+    isLoading: isBookingLoading,
+  } = useBookingForm({
+    bookingId: bookingId as string,
+    carId: id as string,
+  });
+
+  // get unavailable dates
   const { data: unavailableDates } = useCarUnavailableQuery({
     id: id as string,
     month: form.getValues('startDay').getMonth() + 1,
     year: form.getValues('startDay').getFullYear(),
   });
 
+  // set default value for startTime and endTime if bookingId is not undefined
   React.useEffect(() => {
-    if (id) {
-      form.setValue('carId', id as string);
-    }
-  }, [id]);
+    if (bookingId && params.startTime && params.endTime) {
+      const startDay = new Date(params.startTime);
+      const endDay = new Date(params.endTime);
 
+      form.setValue('startDay', startDay);
+      form.setValue('endDay', endDay);
+      form.setValue('startTime', startDay);
+      form.setValue('endTime', endDay);
+    }
+  }, [bookingId, params.startTime, params.endTime]);
+
+  // set params for booking
   React.useEffect(() => {
     setParams({
       carId: id as string,
@@ -52,6 +71,7 @@ const Booking: FunctionComponent = () => {
     });
   }, [onSubmit, isAccepted]);
 
+  // handle swipe to complete booking
   const {
     panResponder,
     translateX: buttonTranslateX,
@@ -59,15 +79,6 @@ const Booking: FunctionComponent = () => {
   } = useSwipeComplete({
     onComplete: handleComplete,
   });
-
-  // if (isUnavailableLoading) {
-  //   return (
-  //     <View className="h-full flex-1 items-center justify-center">
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //       <Text className="mt-2 text-muted-foreground">Đang tải thông tin xe...</Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <View className="relative h-screen bg-slate-100 dark:bg-slate-800">

@@ -11,8 +11,6 @@
     },
     "plugins": [
       "expo-router",
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth",
       [
         "expo-location",
         {
@@ -72,19 +70,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anhden123.PCDACODriver",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "networkSecurityConfig": "./network_security_config.xml",
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo-driver.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anhden123.PCDACODriver",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
@@ -93,14 +87,15 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.ACCESS_MEDIA_LOCATION"
-      ]
+      ],
+      "package": "com.anhden123.PCDACODriver"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "d709055a-d146-4ac2-85d0-5b0198ffe582"
+        "projectId": "4a536619-09ae-4a0e-9b77-14b6e46802ad"
       }
     }
   }

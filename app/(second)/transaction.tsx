@@ -101,6 +101,7 @@ const Transaction = () => {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" />
+        <Text>Đang kiểm tra dữ liệu...</Text>
       </View>
     );
   }
@@ -128,9 +129,9 @@ const Transaction = () => {
         contentContainerStyle={{ padding: 16 }}
         ItemSeparatorComponent={() => <View className="h-4" />}
         ListEmptyComponent={() => (
-          <View className="h-[calc(100vh-200px)] flex-1 items-center justify-center">
+          <View className="h-96 flex-1 items-center justify-center gap-2">
             <AntDesign name="file1" size={48} color="gray" />
-            <Text className="text-sm text-gray-500">Chưa có giao dịch nào</Text>
+            <Text className="text-sm font-semibold text-gray-400">Chưa có giao dịch nào</Text>
           </View>
         )}
       />

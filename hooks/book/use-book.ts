@@ -7,6 +7,7 @@ import {
   BookPostInspectionPayload,
   BookPreInspectionPayload,
   BookStartTripPayload,
+  BookUpdatePayload,
   Webhook,
 } from '~/constants/models/book.model';
 import { QueryKey } from '~/lib/query-key';
@@ -122,6 +123,12 @@ export const useBookingMutation = () => {
       await BookService.put.startTrip(id, payload),
   });
 
+  const extendBooking = useMutation({
+    mutationKey: [QueryKey.Booking.put.Extend],
+    mutationFn: async ({ id, payload }: { id: string; payload: BookUpdatePayload }) =>
+      await BookService.put.extend(id, payload),
+  });
+
   return {
     createBooking,
     trackBooking,
@@ -134,6 +141,7 @@ export const useBookingMutation = () => {
     cancelBooking,
     returnBooking,
     startTripBooking,
+    extendBooking,
   };
 };
 

@@ -82,7 +82,7 @@ const WithdrawalForm: FunctionComponent<WithdrawalFormProps> = ({
         </View>
 
         {/* Balance Card */}
-        <View className="rounded-xl bg-white p-4 shadow-sm">
+        <View className="rounded-xl border-l-4 border-l-green-400 bg-white p-4 shadow-sm">
           <Text className="mb-2 text-sm font-medium text-gray-500">Số dư khả dụng</Text>
           <View className="flex-row items-center gap-2">
             <FontAwesome name="money" size={20} color="#4B5563" />
@@ -145,7 +145,7 @@ const WithdrawalForm: FunctionComponent<WithdrawalFormProps> = ({
         {/* Bank Account Selection */}
         <View className="gap-2">
           <Text className="text-sm font-medium text-gray-500">Tài khoản ngân hàng</Text>
-          <TouchableOpacity className="flex-row items-center justify-between rounded-lg border border-gray-300 p-4">
+          <TouchableOpacity className="flex-row items-center justify-between rounded-lg border border-b-2 border-l-4 border-gray-300 border-l-green-400 p-4 ">
             <View className="flex-row items-center gap-3">
               <FontAwesome name="credit-card" size={20} color="#4B5563" />
               <View>

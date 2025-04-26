@@ -1,6 +1,6 @@
 import { CarStatus } from '../enums';
 
-export interface CarParams extends Partial<LastIdRootResquest> {
+export interface CarParams extends Partial<RootRequest> {
   latitude: number;
   longtitude: number;
   radius: number;

@@ -10,7 +10,7 @@ import {
 export const CarService = {
   get: {
     list: async (
-      params: Partial<CarParams>
+      params?: Partial<CarParams>
     ): Promise<RootResponse<Pagination<CarResponseList>>> => {
       const response = await axiosInstance.get('/api/cars', { params });
       return response.data;

@@ -2,10 +2,12 @@ export const translate = {
   booking: {
     success: {
       title: 'Đặt xe thành công',
+      extend: 'Cập nhật đơn đặt xe thành công',
       message: 'Đơn đặt xe đã được đặt thành công, vui lòng chờ xác nhận từ tài xế',
     },
     failed: {
       title: 'Đặt xe thất bại',
+      extend: 'Cập nhật đơn đặt xe thất bại',
       message: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
     },
     status: {
@@ -28,6 +30,8 @@ export const translate = {
       complete: 'Hoàn tất chuyến đi thành công!',
       return: 'Trả xe thành công!',
     },
+    totalAmount: 'Tổng tiền',
+    distance: 'Quãng đường',
   },
   bank: {
     toast: {
@@ -69,6 +73,7 @@ export const translate = {
       Resolved: 'Đã xử lý',
       Rejected: 'Đã từ chối',
     },
+    bookingId: 'Mã đơn',
   },
 
   transaction: {
@@ -104,5 +109,20 @@ export const translate = {
       create: 'Đánh giá thành công!',
       error_create: 'Đánh giá thất bại!',
     },
+  },
+
+  home: {
+    welcome: 'Xin chào',
+    welcomeSubtitle: 'Chào mừng bạn đến với PCDACO Driver',
+    nearbyCars: 'Xe gần bạn',
+    recentBookings: 'Đơn đặt xe gần đây',
+    recentReports: 'Báo cáo gần đây',
+    noNearbyCars: 'Không có xe nào gần bạn',
+    noRecentBookings: 'Không có đơn đặt xe gần đây',
+    noRecentReports: 'Không có báo cáo gần đây',
+  },
+
+  common: {
+    seeAll: 'Xem tất cả',
   },
 };

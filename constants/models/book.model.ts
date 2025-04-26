@@ -12,6 +12,17 @@ export interface BookPayload {
   endTime: Date;
 }
 
+export interface BookUpdatePayload {
+  newStartTime: Date;
+  newEndTime: Date;
+}
+
+export interface BookUpdateResponse {
+  bookingId: string;
+  newStartDate: Date;
+  newEndDate: Date;
+}
+
 export interface BookPreInspectionPayload {
   exteriorPhotos: File;
   fuelGaugePhotos: File;

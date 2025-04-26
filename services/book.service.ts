@@ -11,6 +11,8 @@ import {
   BookResponseDetail,
   BookResponseList,
   BookStartTripPayload,
+  BookUpdatePayload,
+  BookUpdateResponse,
   Webhook,
 } from '~/constants/models/book.model';
 
@@ -116,6 +118,14 @@ export const BookService = {
     },
     return: async (id: string) => {
       const response = await axiosInstance.put(`/api/bookings/${id}/return`);
+      return response.data;
+    },
+
+    extend: async (
+      id: string,
+      payload: BookUpdatePayload
+    ): Promise<RootResponse<BookUpdateResponse>> => {
+      const response = await axiosInstance.put(`/api/bookings/${id}/extend`, payload);
       return response.data;
     },
   },
