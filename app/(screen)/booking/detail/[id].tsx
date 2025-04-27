@@ -52,7 +52,15 @@ const BookingScreen = () => {
     }
   };
 
-  const snapPoints = React.useMemo(() => ['1%', '10%'], []);
+  const isExtendBooking =
+    bookingDetail?.value?.booking.status === BookingStatusEnum.ReadyForPickup ||
+    bookingDetail?.value?.booking.status === BookingStatusEnum.Ongoing ||
+    bookingDetail?.value?.booking.status === BookingStatusEnum.Approved;
+
+  const snapPoints = React.useMemo(
+    () => ['1%', isExtendBooking ? '15%' : '10%'],
+    [isExtendBooking]
+  );
   const { sheetRef, isSheetOpen, handleSnapPress, handleSheetChange, handleClosePress } =
     useBottomSheet({ snapPoints });
 
@@ -66,6 +74,24 @@ const BookingScreen = () => {
       </View>
     );
   }
+
+  const handleExtendBooking = () => {
+    router.push({
+      pathname: '/(screen)/booking/extend',
+      params: {
+        bookingId: id as string,
+        id: bookDetail?.car.id,
+        status: bookDetail?.booking.status,
+      },
+    });
+
+    setParams({
+      endTime: bookDetail?.booking.endTime,
+      startTime: bookDetail?.booking.startTime,
+    });
+
+    handleClosePress();
+  };
 
   return (
     <KeyboardAvoidingView
@@ -122,6 +148,8 @@ const BookingScreen = () => {
                   isRefund: false,
                   refundDate: new Date(),
                   refundAmount: 0,
+                  extensionAmount: 0,
+                  isExtensionPaid: false,
                   preInspectionPhotos: {
                     carKey: [],
                     exteriorCar: [],
@@ -171,7 +199,7 @@ const BookingScreen = () => {
                   handleApproveOrRejectBooking(false);
                 }}
                 className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border border-gray-200 bg-background p-2 dark:border-gray-700">
-                <Feather name="x-circle" size={20} color={COLORS.black} />
+                <Feather name="x-circle" size={16} color={COLORS.black} />
                 <Text className="text-foreground">Hủy bỏ đặt xe</Text>
               </TouchableOpacity>
             )}
@@ -189,7 +217,7 @@ const BookingScreen = () => {
                 });
               }}
               className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-2">
-              <Feather name="clock" size={20} color={COLORS.white} />
+              <Feather name="clock" size={16} color={COLORS.white} />
               <Text className="text-background">Thay đổi thời gian</Text>
             </TouchableOpacity>
           )}
@@ -201,7 +229,7 @@ const BookingScreen = () => {
                   handleApproveOrRejectBooking(true);
                 }}
                 className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-2">
-                <Feather name="check-circle" size={20} color={COLORS.white} />
+                <Feather name="check-circle" size={16} color={COLORS.white} />
                 <Text className="text-background">Thanh toán</Text>
               </TouchableOpacity>
             )}
@@ -216,7 +244,7 @@ const BookingScreen = () => {
                     params: { id: id as string },
                   });
                 }}>
-                <Feather name="check-circle" size={20} color={COLORS.white} />
+                <Feather name="check-circle" size={16} color={COLORS.white} />
                 <Text className="text-background">Bắt đầu chuyến đi</Text>
               </TouchableOpacity>
             )}
@@ -226,7 +254,7 @@ const BookingScreen = () => {
               <TouchableOpacity
                 className="flex-1 flex-row items-center justify-center gap-2 rounded-lg bg-primary p-2"
                 onPress={handleComplete}>
-                <Feather name="check-circle" size={20} color={COLORS.white} />
+                <Feather name="check-circle" size={16} color={COLORS.white} />
                 <Text className="text-background">Hoàn thành chuyến đi</Text>
               </TouchableOpacity>
             )}
@@ -251,7 +279,7 @@ const BookingScreen = () => {
                     });
                   }}
                   className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-700">
-                  <FontAwesome5 name="car" size={20} color={COLORS.black} />
+                  <FontAwesome5 name="car" size={16} color={COLORS.black} />
                   <Text className="text-foreground">Trạng thái xe</Text>
                 </Pressable>
 
@@ -275,10 +303,31 @@ const BookingScreen = () => {
                       ? 'bg-foreground'
                       : 'bg-foreground/70'
                   )}>
-                  <FontAwesome5 name="flag" size={20} color={COLORS.white} />
+                  <FontAwesome5 name="flag" size={16} color={COLORS.white} />
                   <Text className="text-background">Báo cáo</Text>
                 </Pressable>
               </View>
+
+              {isExtendBooking && (
+                <Pressable
+                  onPress={handleExtendBooking}
+                  disabled={
+                    bookDetail?.booking.status !== BookingStatusEnum.ReadyForPickup &&
+                    bookDetail?.booking.status !== BookingStatusEnum.Ongoing &&
+                    bookDetail?.booking.status !== BookingStatusEnum.Approved
+                  }
+                  className={cn(
+                    'flex-row items-center justify-center gap-2 rounded-lg border border-gray-200 p-2 dark:border-gray-700',
+                    bookDetail?.booking.status === BookingStatusEnum.ReadyForPickup ||
+                      bookDetail?.booking.status === BookingStatusEnum.Ongoing ||
+                      bookDetail?.booking.status === BookingStatusEnum.Approved
+                      ? 'bg-primary'
+                      : 'bg-primary/70'
+                  )}>
+                  <Feather name="clock" size={16} color={COLORS.white} />
+                  <Text className="text-background">Gia hạn chuyến đi</Text>
+                </Pressable>
+              )}
             </View>
           </BottomSheetView>
         </BottomSheet>

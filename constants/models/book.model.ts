@@ -121,6 +121,8 @@ export interface Booking {
   endTime: Date;
   actualReturnTime: Date;
   totalDistance: number;
+  extensionAmount: number;
+  isExtensionPaid: boolean;
   isRefund: boolean;
   status: string;
   note: string;

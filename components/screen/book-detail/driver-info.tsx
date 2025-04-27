@@ -24,7 +24,7 @@ const DriverInfo: FunctionComponent<DriverInfoProps> = ({ owner }) => {
       <View className="flex-row items-center justify-center gap-2">
         <Avatar alt={owner.name} className="h-16 w-16">
           <AvatarFallback>
-            <Text>{owner.name.charAt(0)}</Text>
+            <Text className="text-lg">{owner.name.charAt(0)}</Text>
           </AvatarFallback>
           <AvatarImage source={{ uri: owner.avatarUrl }} />
         </Avatar>

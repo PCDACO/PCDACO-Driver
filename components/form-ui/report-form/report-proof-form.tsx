@@ -54,7 +54,7 @@ const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({
   };
 
   return (
-    <CardBasic className="gap-2">
+    <CardBasic className="mb-10 gap-2">
       <FieldLayout label="Chứng từ bồi thường">
         <View className="gap-2">
           <RenderInfo label="Lý do bồi thường" value={compensationReason} />
@@ -62,7 +62,7 @@ const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({
           <RenderInfo label="Trạng thái" value={isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'} />
         </View>
       </FieldLayout>
-      {role !== Role.Driver && !isPaid && (
+      {role !== Role.Driver && !isPaid ? (
         <View>
           <View className="relative">
             {image && (
@@ -106,8 +106,9 @@ const ReportProofForm: FunctionComponent<ReportProofFormProps> = ({
             </Text>
           )}
         </View>
+      ) : (
+        renderImage()
       )}
-      {renderImage()}
     </CardBasic>
   );
 };

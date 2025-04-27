@@ -65,6 +65,18 @@ const ScreenLayout: FunctionComponent = () => {
         />
 
         <Stack.Screen
+          name="booking/extend"
+          options={{
+            headerShown: true,
+            headerTitle: 'Gia hạn chuyến đi',
+            headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
+            presentation: 'modal',
+          }}
+        />
+
+        <Stack.Screen
           name="(signature)/book/[id]"
           options={{
             headerShown: true,

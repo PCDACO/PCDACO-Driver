@@ -23,28 +23,28 @@ const CarInfo: FunctionComponent<CarInfoProps> = ({ car }) => {
       <BookImages car={car} />
       <View className="gap-2 py-2">
         <View className="flex-row items-center justify-between">
-          <Text>Tên xe</Text>
-          <Text>{car.modelName || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Tên xe</Text>
+          <Text className="text-sm">{car.modelName || ''}</Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <Text>Biển số xe</Text>
-          <Text>{car.licensePlate || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Biển số xe</Text>
+          <Text className="text-sm">{car.licensePlate || ''}</Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <Text>Màu xe</Text>
-          <Text>{car.color || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Màu xe</Text>
+          <Text className="text-sm">{car.color || ''}</Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <Text>Ghế ngồi</Text>
-          <Text>{car.seat || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Ghế ngồi</Text>
+          <Text className="text-sm">{car.seat || ''}</Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <Text>Hộp số</Text>
-          <Text>{car.transmissionType || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Hộp số</Text>
+          <Text className="text-sm">{car.transmissionType || ''}</Text>
         </View>
         <View className="flex-row items-center justify-between">
-          <Text>Nhiên liệu</Text>
-          <Text>{car.fuelType || ''}</Text>
+          <Text className="text-sm font-bold text-gray-400">Nhiên liệu</Text>
+          <Text className="text-sm">{car.fuelType || ''}</Text>
         </View>
       </View>
     </CardBasic>
