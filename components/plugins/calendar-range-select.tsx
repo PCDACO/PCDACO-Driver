@@ -16,6 +16,10 @@ interface RangePickerProps {
   maximumDate?: Date;
   onRangeSelected?: (range: { start?: Date; end?: Date }) => void;
   unavailableDates?: CarUnavailableResponse[];
+  isOnGoing?: boolean;
+  isReadyForPickup?: boolean;
+  isApproved?: boolean;
+  originalDuration?: number;
 }
 
 const RangePickerCalendar: React.FC<RangePickerProps> = ({
@@ -26,6 +30,10 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
   maximumDate,
   onRangeSelected,
   unavailableDates = [],
+  isOnGoing = false,
+  isReadyForPickup = false,
+  isApproved = false,
+  originalDuration = 0,
 }) => {
   const [selectedRange, setSelectedRange] = useState<{ start?: Date; end?: Date }>({
     start: initialStartDate,
@@ -95,38 +103,43 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
     });
     if (isDisabled) return;
 
-    if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
-      // Chọn ngày bắt đầu mới
-      setSelectedRange({ start: selectedDate, end: undefined });
+    if (isOnGoing) {
+      // For ongoing bookings, only allow changing end date
+      if (!selectedRange.start) return;
+      if (selectedDate <= selectedRange.start) return; // End date must be after start date
+
+      setSelectedRange({ start: selectedRange.start, end: selectedDate });
+      const range = getDateRange(selectedRange.start, selectedDate, themeColor);
       setMarkedDates((prev) => {
-        // Preserve disabled dates
         const disabledDates = Object.entries(prev)
           .filter(([_, value]) => value.disabled)
           .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
-        return {
-          ...disabledDates,
-          [day.dateString]: { startingDay: true, color: themeColor, textColor: 'white' },
-        };
+        return { ...range, ...disabledDates };
       });
-    } else {
-      // Chọn ngày kết thúc
-      // Ensure end date is after start date
-      if (selectedDate < selectedRange.start) {
-        // If selected date is before start date, swap them
-        setSelectedRange({ start: selectedDate, end: selectedRange.start });
-        const range = getDateRange(selectedDate, selectedRange.start, themeColor);
+      onRangeSelected?.({ start: selectedRange.start, end: selectedDate });
+    } else if (isReadyForPickup || isApproved) {
+      // For ready for pickup or approved bookings, when changing start date, end date is calculated based on original duration
+      if (!selectedRange.start) {
+        // First selection - set start date
+        setSelectedRange({ start: selectedDate, end: undefined });
         setMarkedDates((prev) => {
           const disabledDates = Object.entries(prev)
             .filter(([_, value]) => value.disabled)
             .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
-          return { ...range, ...disabledDates };
+          return {
+            ...disabledDates,
+            [day.dateString]: { startingDay: true, color: themeColor, textColor: 'white' },
+          };
         });
-        onRangeSelected?.({ start: selectedDate, end: selectedRange.start });
       } else {
-        setSelectedRange({ start: selectedRange.start, end: selectedDate });
-        const range = getDateRange(selectedRange.start, selectedDate, themeColor);
+        // Calculate end date based on original duration
+        const newEndDate = new Date(selectedDate);
+        newEndDate.setDate(newEndDate.getDate() + originalDuration);
+
+        setSelectedRange({ start: selectedDate, end: newEndDate });
+        const range = getDateRange(selectedDate, newEndDate, themeColor);
         setMarkedDates((prev) => {
           const disabledDates = Object.entries(prev)
             .filter(([_, value]) => value.disabled)
@@ -134,7 +147,46 @@ const RangePickerCalendar: React.FC<RangePickerProps> = ({
 
           return { ...range, ...disabledDates };
         });
-        onRangeSelected?.({ start: selectedRange.start, end: selectedDate });
+        onRangeSelected?.({ start: selectedDate, end: newEndDate });
+      }
+    } else {
+      // Normal case - allow selecting both dates independently
+      if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
+        setSelectedRange({ start: selectedDate, end: undefined });
+        setMarkedDates((prev) => {
+          const disabledDates = Object.entries(prev)
+            .filter(([_, value]) => value.disabled)
+            .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+          return {
+            ...disabledDates,
+            [day.dateString]: { startingDay: true, color: themeColor, textColor: 'white' },
+          };
+        });
+      } else {
+        if (selectedDate < selectedRange.start) {
+          setSelectedRange({ start: selectedDate, end: selectedRange.start });
+          const range = getDateRange(selectedDate, selectedRange.start, themeColor);
+          setMarkedDates((prev) => {
+            const disabledDates = Object.entries(prev)
+              .filter(([_, value]) => value.disabled)
+              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+            return { ...range, ...disabledDates };
+          });
+          onRangeSelected?.({ start: selectedDate, end: selectedRange.start });
+        } else {
+          setSelectedRange({ start: selectedRange.start, end: selectedDate });
+          const range = getDateRange(selectedRange.start, selectedDate, themeColor);
+          setMarkedDates((prev) => {
+            const disabledDates = Object.entries(prev)
+              .filter(([_, value]) => value.disabled)
+              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+            return { ...range, ...disabledDates };
+          });
+          onRangeSelected?.({ start: selectedRange.start, end: selectedDate });
+        }
       }
     }
   };

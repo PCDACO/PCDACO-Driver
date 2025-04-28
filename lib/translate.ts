@@ -4,11 +4,13 @@ export const translate = {
       title: 'Đặt xe thành công',
       extend: 'Cập nhật đơn đặt xe thành công',
       message: 'Đơn đặt xe đã được đặt thành công, vui lòng chờ xác nhận từ tài xế',
+      payment: 'Đang chuyển hướng đến trang thanh toán...',
     },
     failed: {
       title: 'Đặt xe thất bại',
       extend: 'Cập nhật đơn đặt xe thất bại',
       message: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
+      payment: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
     },
     status: {
       Pending: 'Chờ xác nhận',

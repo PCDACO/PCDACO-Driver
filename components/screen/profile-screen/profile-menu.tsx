@@ -46,12 +46,6 @@ const ProfileMenu = ({ id }: ProfileMenuProps) => {
       />
 
       <ProfileMenuItem
-        icon={<Ionicons size={20} name="star-outline" />}
-        text="Đánh giá"
-        onPress={() => console.log('Reviews pressed')}
-      />
-
-      <ProfileMenuItem
         icon={<Ionicons size={20} name="lock-closed-outline" />}
         text="Thay đổi mật khẩu"
         onPress={() =>

@@ -6,20 +6,26 @@ import { ToastAndroid } from 'react-native';
 
 import { useBookingMutation } from './use-book';
 
+import { BookingStatusEnum } from '~/constants/enums';
 import { BookPayloadSchema, bookSchema } from '~/constants/schemas/book.schema';
 import { mergeDateTime } from '~/lib/format';
 import { QueryKey } from '~/lib/query-key';
 import { translate } from '~/lib/translate';
+import { PaymentResponseStore } from '~/store/use-response';
 
 interface BookFormProps {
   bookingId?: string;
   carId?: string;
+  status?: string;
 }
 
-export const useBookingForm = ({ bookingId, carId }: BookFormProps) => {
+export const useBookingForm = ({ bookingId, carId, status }: BookFormProps) => {
+  const { setResponse } = PaymentResponseStore();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { createBooking, extendBooking } = useBookingMutation();
+  const { createBooking, extendBooking, paymentBooking } = useBookingMutation();
+
+  const isOnGoing = status === BookingStatusEnum.Ongoing;
 
   const form = useForm<BookPayloadSchema>({
     resolver: zodResolver(bookSchema),
@@ -55,12 +61,41 @@ export const useBookingForm = ({ bookingId, carId }: BookFormProps) => {
               queryKey: [QueryKey.Booking.get.Detail, bookingId],
             });
             form.reset();
-            setTimeout(() => {
-              router.navigate({
-                pathname: '/(screen)/booking/detail/[id]',
-                params: { id: response.value.bookingId },
+
+            if (isOnGoing) {
+              paymentBooking.mutate(bookingId, {
+                onSuccess: (response) => {
+                  queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.Detail] });
+                  queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
+                  ToastAndroid.show(translate.booking.toast.payment, ToastAndroid.SHORT);
+                  setResponse(response.value);
+                  form.reset();
+                  if (response.value) {
+                    router.push({
+                      pathname: '/booking/payment',
+                      params: {
+                        id: bookingId,
+                      },
+                    });
+                  } else {
+                    ToastAndroid.show(translate.booking.failed.message, ToastAndroid.SHORT);
+                  }
+                },
+                onError: (error: any) => {
+                  ToastAndroid.show(
+                    error.response.data.message || translate.booking.failed.payment,
+                    ToastAndroid.SHORT
+                  );
+                },
               });
-            }, 1000);
+            } else {
+              setTimeout(() => {
+                router.navigate({
+                  pathname: '/(screen)/booking/detail/[id]',
+                  params: { id: response.value.bookingId },
+                });
+              }, 1000);
+            }
           },
           onError: (error: any) => {
             ToastAndroid.show(

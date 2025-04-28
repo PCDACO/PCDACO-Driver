@@ -2,7 +2,6 @@ import { Feather } from '@expo/vector-icons';
 import React, { FunctionComponent } from 'react';
 import { Controller } from 'react-hook-form';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Calendar } from 'react-native-calendars';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import FieldLayout from '~/components/layout/form/field-layout';
@@ -36,6 +35,8 @@ const BookForm: FunctionComponent<BookFormProps> = ({
   const isOnGoing = status === BookingStatusEnum.Ongoing;
   const isReadyForPickup = status === BookingStatusEnum.ReadyForPickup;
   const isApproved = status === BookingStatusEnum.Approved;
+
+  console.log('status', isOnGoing, isReadyForPickup, isApproved);
 
   // Watch all relevant form fields
   const startDay = form.watch('startDay');
@@ -82,24 +83,19 @@ const BookForm: FunctionComponent<BookFormProps> = ({
           initialStartDate={form.getValues('startDay')}
           initialEndDate={form.getValues('endDay')}
           themeColor="#3498db"
-          minimumDate={new Date()}
+          minimumDate={new Date(new Date().setDate(new Date().getDate()))}
           onRangeSelected={(range) => {
             if (!range.start) return;
-
-            if (isOnGoing) {
-              // For ongoing bookings, only update startDay and calculate endDay based on originalDuration
-              form.setValue('startDay', range.start);
-              const newEndDate = new Date(range.start);
-              newEndDate.setDate(newEndDate.getDate() + originalDuration);
-              form.setValue('endDay', newEndDate);
-            } else {
-              // Normal case - update both dates
-              if (!range.end) return;
-              form.setValue('startDay', range.start);
+            form.setValue('startDay', range.start);
+            if (range.end) {
               form.setValue('endDay', range.end);
             }
           }}
           unavailableDates={unavailableDates}
+          isOnGoing={isOnGoing}
+          isReadyForPickup={isReadyForPickup}
+          isApproved={isApproved}
+          originalDuration={originalDuration}
         />
 
         <View className="gap-2">

@@ -139,6 +139,16 @@ const ScreenLayout: FunctionComponent = () => {
             headerTitleAlign: 'center',
             headerBackButtonDisplayMode: 'minimal',
             animation: 'slide_from_right',
+            headerLeft: () => (
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: '/profile',
+                  })
+                }>
+                <Feather name="arrow-left" size={24} color="black" />
+              </Pressable>
+            ),
           }}
         />
         <Stack.Screen

@@ -57,6 +57,13 @@ const BookingScreen = () => {
     bookingDetail?.value?.booking.status === BookingStatusEnum.Ongoing ||
     bookingDetail?.value?.booking.status === BookingStatusEnum.Approved;
 
+  const status = React.useMemo(() => {
+    if (bookDetail?.booking.status === BookingStatusEnum.ReadyForPickup) {
+      return BookingStatusEnum.ReadyForPickup;
+    }
+    return bookingDetail?.value?.booking.status;
+  }, [bookingDetail?.value?.booking.status]);
+
   const snapPoints = React.useMemo(
     () => ['1%', isExtendBooking ? '15%' : '10%'],
     [isExtendBooking]
@@ -81,7 +88,7 @@ const BookingScreen = () => {
       params: {
         bookingId: id as string,
         id: bookDetail?.car.id,
-        status: bookDetail?.booking.status,
+        status,
       },
     });
 

@@ -18,6 +18,7 @@ const ExtendScreen: FunctionComponent = () => {
 
   const { form, onSubmit, isLoading } = useBookingForm({
     bookingId: bookingId as string,
+    status: status as string,
   });
 
   React.useEffect(() => {
@@ -73,7 +74,7 @@ const ExtendScreen: FunctionComponent = () => {
           {isLoading ? (
             <View className="flex-row items-center justify-center gap-2">
               <Loading size="small" />
-              <Text className="text-base font-bold text-background ">Đang đặt xe...</Text>
+              <Text className="text-base font-bold text-background ">Đang gia hạn...</Text>
             </View>
           ) : (
             <>
@@ -86,7 +87,7 @@ const ExtendScreen: FunctionComponent = () => {
                 <FontAwesome name="arrow-right" size={20} color="white" />
               </Animated.View>
               <View className="h-full w-full items-center justify-center">
-                <Text className="text-base font-bold text-background ">Vuốt để đặt xe</Text>
+                <Text className="text-base font-bold text-background ">Vuốt để gia hạn</Text>
               </View>
             </>
           )}
