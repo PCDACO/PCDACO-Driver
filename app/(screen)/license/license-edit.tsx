@@ -3,13 +3,12 @@ import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import LicenseFormSkeleton from './license-sekeleton';
-
 import LicensesImageForm from '~/components/auth-component/register/licenses-image-form';
 import LicensesUserForm from '~/components/auth-component/register/licenses-user-form';
 import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
 import Header from '~/components/plugins/header';
+import LicenseFormSkeleton from '~/components/screen/license-edit/license-sekeleton';
 import { useLicensesListQuery } from '~/hooks/license/use-license';
 import { useLicenseForm } from '~/hooks/license/use-license-form';
 

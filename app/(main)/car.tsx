@@ -11,6 +11,7 @@ import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
 import { SearchInput } from '~/components/plugins/search-input';
 import CarParams from '~/components/screen/car-list/car-params';
+import CarSkeleton from '~/components/screen/car-list/car-skeleton';
 import { CarParams as CarParamsState } from '~/constants/models/car.model';
 import { useCarsListInfiniteQuery } from '~/hooks/car/use-car';
 import { useCarParamsStore } from '~/store/use-params';
@@ -25,7 +26,7 @@ const HomeScreen = () => {
   const { searchKeyword } = useSearchStore();
   const { params: carParams } = useCarParamsStore();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch, isLoading } =
     useCarsListInfiniteQuery(params);
 
   const carList = data?.pages.flatMap((page) => page.value.items);
@@ -103,37 +104,41 @@ const HomeScreen = () => {
         <SearchInput className="flex-1" />
       </View>
 
-      {/* Danh sách xe */}
-      <FlatList
-        data={carList}
-        keyExtractor={(item) => item.id}
-        refreshing={isRefreshing}
-        onRefresh={handleRefresh}
-        renderItem={({ item }) => (
-          <CarCard
-            car={item}
-            onPress={() =>
-              router.push({
-                pathname: '/car/[id]',
-                params: { id: item.id },
-              })
+      {/* Show skeleton when loading */}
+      {isLoading ? (
+        <CarSkeleton />
+      ) : (
+        <FlatList
+          data={carList}
+          keyExtractor={(item) => item.id}
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          renderItem={({ item }) => (
+            <CarCard
+              car={item}
+              onPress={() =>
+                router.push({
+                  pathname: '/car/[id]',
+                  params: { id: item.id },
+                })
+              }
+            />
+          )}
+          ItemSeparatorComponent={() => <View className="h-1" />}
+          ListEmptyComponent={() => (
+            <View className="h-96 flex-1 items-center justify-center">
+              <Text className="text-muted-foreground">Không có xe</Text>
+            </View>
+          )}
+          ListFooterComponent={isFetchingNextPage ? <Loading /> : null}
+          onEndReached={() => {
+            if (hasNextPage) {
+              fetchNextPage();
             }
-          />
-        )}
-        ItemSeparatorComponent={() => <View className="h-1" />}
-        ListEmptyComponent={() => (
-          <View className="h-96 flex-1 items-center justify-center">
-            <Text className="text-muted-foreground">Không có xe</Text>
-          </View>
-        )}
-        ListFooterComponent={isFetchingNextPage ? <Loading /> : null}
-        onEndReached={() => {
-          if (hasNextPage) {
-            fetchNextPage();
-          }
-        }}
-        onEndReachedThreshold={0.5}
-      />
+          }}
+          onEndReachedThreshold={0.5}
+        />
+      )}
 
       {/* BottomSheet Filter */}
       <BottomSheet

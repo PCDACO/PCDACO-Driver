@@ -22,7 +22,7 @@ const MainLayout = () => {
           },
         }}>
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             tabBarIcon: ({ color }) => <Icon name="home" color={color} size={20} />,
             headerStyle: {

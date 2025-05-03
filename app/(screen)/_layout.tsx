@@ -174,7 +174,7 @@ const ScreenLayout: FunctionComponent = () => {
               <Pressable
                 onPress={() =>
                   router.push({
-                    pathname: '/(main)',
+                    pathname: '/(main)/home',
                   })
                 }>
                 <Feather name="home" size={24} color="black" />

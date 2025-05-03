@@ -136,7 +136,7 @@ export const useAuthForm = ({ type }: UseAuthFormProps) => {
                     ToastAndroid.show('Đăng nhập thành công', ToastAndroid.SHORT);
 
                     setIsAuthenticated(true);
-                    router.push('/(main)');
+                    router.push('/(main)/home');
                     form.reset();
                   } else {
                     ToastAndroid.show('Đây không là tài khoản chủ xe', ToastAndroid.SHORT);

@@ -12,7 +12,7 @@ const LogoutButton = () => {
       className="mx-4 flex-row items-center justify-center rounded-xl bg-white p-4 shadow-sm"
       onPress={() => {
         removeTokens();
-        router.navigate('/(auth)/login');
+        router.navigate('/');
       }}>
       <MaterialIcons size={20} name="logout" color="red" />
       <Text className="ml-2 font-medium text-destructive">Đăng xuất</Text>
