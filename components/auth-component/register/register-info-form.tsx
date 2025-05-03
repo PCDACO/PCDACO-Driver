@@ -16,12 +16,12 @@ interface RegisterInfoFormProps {
 const RegisterInfoForm: React.FC<RegisterInfoFormProps> = ({ form }) => {
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   return (
-    <View>
+    <View className="w-full px-4">
       <TextUI variant="largeTitle" color="secondary">
         Thông tin cá nhân
       </TextUI>
 
-      <View className="mt-4 gap-2">
+      <View className="mt-4  gap-2">
         <FieldLayout label="Họ và tên">
           <Controller
             control={form.control}

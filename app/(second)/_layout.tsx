@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 function HomeButton() {
   const router = useRouter();
   return (
-    <TouchableOpacity onPress={() => router.replace('/(main)')} style={{ marginRight: 16 }}>
+    <TouchableOpacity onPress={() => router.replace('/(main)/home')} style={{ marginRight: 16 }}>
       <Ionicons name="home" size={24} color={COLORS.dark.background} />
     </TouchableOpacity>
   );

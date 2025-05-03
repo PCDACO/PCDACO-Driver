@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { FunctionComponent, useEffect } from 'react';
 import { Text, View, Dimensions, ScrollView, Animated } from 'react-native';
@@ -15,7 +16,9 @@ import CarMainInfo from '~/components/screen/car-detail-screen/car-main-info';
 import OwnerContactInfor from '~/components/screen/car-detail-screen/owner-contact-infor';
 import { SwiperImageItem } from '~/components/ui/swiper-images';
 import { useCarDetailQuery } from '~/hooks/car/use-car';
+import { useLicensesListQuery } from '~/hooks/license/use-license';
 import { usePanResponder } from '~/hooks/plugins/use-pan-responder';
+import { COLORS } from '~/theme/colors';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -23,6 +26,7 @@ const CarDetail: FunctionComponent = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const { data: licenseData, isLoading: isLoadingLicense } = useLicensesListQuery();
   const translateY = useSharedValue(SCREEN_HEIGHT * 0.6);
 
   // Sheet
@@ -49,7 +53,7 @@ const CarDetail: FunctionComponent = () => {
     });
   }, []);
 
-  if (isLoading) {
+  if (isLoading || isLoadingLicense) {
     return (
       <View className="h-full flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#0000ff" />
@@ -105,9 +109,22 @@ const CarDetail: FunctionComponent = () => {
       </Animated.View>
 
       <View className="absolute bottom-8 left-0 right-0 z-20 px-6 shadow-sm">
-        <Button onPress={handleComplete} className="w-full">
-          <TextUI>Đặt xe</TextUI>
-        </Button>
+        {licenseData?.value || licenseData?.value.isApproved ? (
+          <Button onPress={handleComplete} className="w-full">
+            <TextUI>Đặt xe</TextUI>
+          </Button>
+        ) : (
+          <Button
+            onPress={() => {
+              router.replace({
+                pathname: '/(screen)/license/license-edit',
+              });
+            }}
+            className="w-full">
+            <Feather name="file-text" size={16} color={COLORS.light.background} />
+            <TextUI>Cung cấp bằng lái được xác nhận</TextUI>
+          </Button>
+        )}
       </View>
     </View>
   );

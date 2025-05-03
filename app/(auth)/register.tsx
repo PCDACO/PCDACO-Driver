@@ -33,7 +33,7 @@ const Register: FunctionComponent = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 justify-between gap-8 px-6 py-8">
+      <View className="flex-1 justify-between gap-8 px-4 py-8">
         {/* Logo + Tiêu đề */}
         <View>
           {step < 4 && (

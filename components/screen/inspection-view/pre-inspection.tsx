@@ -1,6 +1,6 @@
 import { Feather, Ionicons, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import React, { FunctionComponent } from 'react';
-import { LayoutChangeEvent, Text, View, Dimensions } from 'react-native';
+import { LayoutChangeEvent, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 

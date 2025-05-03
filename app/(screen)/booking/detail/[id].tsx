@@ -73,7 +73,7 @@ const BookingScreen = () => {
 
   const bookDetail = bookingDetail?.value;
 
-  if (isLoading || !bookingDetail) {
+  if (isLoading) {
     return (
       <View className="h-full flex-1 items-center justify-center gap-2">
         <Loading />
