@@ -3,12 +3,13 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import * as React from 'react';
-import { FlatList, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Animated, FlatList, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CarCard } from '~/components/card/car/card';
 import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import { SearchInput } from '~/components/plugins/search-input';
 import CarParams from '~/components/screen/car-list/car-params';
 import CarSkeleton from '~/components/screen/car-list/car-skeleton';
@@ -22,6 +23,8 @@ const HomeScreen = () => {
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
   const [params, setParams] = React.useState<Partial<CarParamsState>>({});
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   const { searchKeyword } = useSearchStore();
   const { params: carParams } = useCarParamsStore();
@@ -41,6 +44,16 @@ const HomeScreen = () => {
       });
     }
   }, [carParams, searchKeyword]);
+
+  React.useEffect(() => {
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fadeAnim]);
 
   React.useEffect(() => {
     async function getCurrentLocation() {
@@ -106,38 +119,48 @@ const HomeScreen = () => {
 
       {/* Show skeleton when loading */}
       {isLoading ? (
-        <CarSkeleton />
+        <View className="flex-1 items-center justify-center">
+          <LoadingAnimation />
+        </View>
       ) : (
-        <FlatList
-          data={carList}
-          keyExtractor={(item) => item.id}
-          refreshing={isRefreshing}
-          onRefresh={handleRefresh}
-          renderItem={({ item }) => (
-            <CarCard
-              car={item}
-              onPress={() =>
-                router.push({
-                  pathname: '/car/[id]',
-                  params: { id: item.id },
-                })
+        <Animated.View style={{ opacity: fadeAnim }} className="flex-1">
+          <FlatList
+            data={carList}
+            keyExtractor={(item) => item.id}
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            renderItem={({ item }) => (
+              <CarCard
+                car={item}
+                onPress={() =>
+                  router.push({
+                    pathname: '/car/[id]',
+                    params: { id: item.id },
+                  })
+                }
+              />
+            )}
+            ItemSeparatorComponent={() => <View className="h-1" />}
+            ListEmptyComponent={() => (
+              <View className="h-96 flex-1 items-center justify-center gap-2">
+                <Ionicons name="car-outline" size={64} color={COLORS.light.grey4} />
+                <View className="items-center justify-center">
+                  <Text className="text-xl font-semibold text-gray-400">Không tìm thấy xe</Text>
+                  <Text className="w-72 px-8 text-center text-sm text-gray-400">
+                    Hãy thử điều chỉnh bộ lọc hoặc tìm kiếm với từ khóa khác
+                  </Text>
+                </View>
+              </View>
+            )}
+            ListFooterComponent={isFetchingNextPage ? <Loading /> : null}
+            onEndReached={() => {
+              if (hasNextPage) {
+                fetchNextPage();
               }
-            />
-          )}
-          ItemSeparatorComponent={() => <View className="h-1" />}
-          ListEmptyComponent={() => (
-            <View className="h-96 flex-1 items-center justify-center">
-              <Text className="text-muted-foreground">Không có xe</Text>
-            </View>
-          )}
-          ListFooterComponent={isFetchingNextPage ? <Loading /> : null}
-          onEndReached={() => {
-            if (hasNextPage) {
-              fetchNextPage();
-            }
-          }}
-          onEndReachedThreshold={0.5}
-        />
+            }}
+            onEndReachedThreshold={0.5}
+          />
+        </Animated.View>
       )}
 
       {/* BottomSheet Filter */}

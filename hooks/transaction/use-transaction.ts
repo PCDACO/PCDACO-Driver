@@ -38,6 +38,7 @@ export const useInfiniteTransactions = (params: Partial<TransactionParams>) => {
   return useInfiniteQuery({
     queryKey: [QueryKey.Transaction.Transaction, 'infinite', params],
     queryFn: async ({ pageParam = 1 }) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await TransactionService.get.transaction({
         ...params,
         index: pageParam,

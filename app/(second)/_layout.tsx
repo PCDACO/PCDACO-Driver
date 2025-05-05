@@ -48,8 +48,25 @@ export default function SecondLayout() {
 
           return <Ionicons name={iconName as any} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: '#007AFF',
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          elevation: 0,
+          paddingTop: 4,
+          paddingHorizontal: 12,
+        },
+        tabBarButton: (props) => {
+          // @ts-ignore toi qua met moi roi
+          const newProps: TouchableOpacityProps = {
+            ...props,
+            delayLongPress: props.delayLongPress ?? undefined,
+            activeOpacity: 1,
+            disabled: props.disabled ?? undefined,
+            onBlur: props.onBlur ?? undefined,
+          };
+          return <TouchableOpacity {...newProps} />;
+        },
       })}>
       <Tab.Screen
         name="Transaction"

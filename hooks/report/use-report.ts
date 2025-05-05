@@ -20,8 +20,11 @@ interface ReportProps {
 export const useReportQuery = ({ params }: ReportProps) => {
   const listQuery = useQuery({
     queryKey: [QueryKey.Report.List, params ? params : {}],
-    queryFn: () => ReportService.get.list(params),
-    staleTime: 1000,
+    queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return ReportService.get.list(params);
+    },
+    staleTime: 0,
   });
 
   return listQuery;

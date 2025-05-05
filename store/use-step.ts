@@ -5,6 +5,7 @@ type StepState = {
   nextStep: () => void;
   prevStep: () => void;
   resetStep: () => void;
+  setStep: (step: number) => void;
 };
 
 export const useStepStore = create<StepState>((set) => ({
@@ -12,4 +13,5 @@ export const useStepStore = create<StepState>((set) => ({
   nextStep: () => set((state) => ({ step: state.step + 1 })),
   prevStep: () => set((state) => ({ step: state.step - 1 })),
   resetStep: () => set({ step: 1 }),
+  setStep: (step: number) => set({ step }),
 }));

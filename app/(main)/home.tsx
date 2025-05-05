@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import {
   BalanceCard,
   HomeLayout,
-  HomeSkeleton,
   NearbyCarsSection,
   RecentBookingsSection,
   RecentReportsSection,
@@ -37,7 +37,11 @@ const Home = () => {
   };
 
   if (isLoading) {
-    return <HomeSkeleton />;
+    return (
+      <View className="h-full flex-1 items-center justify-center">
+        <LoadingAnimation />
+      </View>
+    );
   }
 
   return (

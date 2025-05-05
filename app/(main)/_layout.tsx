@@ -1,7 +1,7 @@
 import Icon from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, TouchableOpacity } from 'react-native';
 
 const MainLayout = () => {
   return (
@@ -14,11 +14,20 @@ const MainLayout = () => {
           tabBarInactiveTintColor: '#888',
           tabBarStyle: {
             backgroundColor: '#fff',
-            height: 60,
-            paddingBottom: 10,
+            elevation: 0,
+            paddingTop: 4,
+            paddingHorizontal: 12,
           },
-          tabBarLabelStyle: {
-            display: 'none',
+          tabBarButton: (props) => {
+            // @ts-ignore toi qua met moi roi
+            const newProps: TouchableOpacityProps = {
+              ...props,
+              delayLongPress: props.delayLongPress ?? undefined,
+              activeOpacity: 1,
+              disabled: props.disabled ?? undefined,
+              onBlur: props.onBlur ?? undefined,
+            };
+            return <TouchableOpacity {...newProps} />;
           },
         }}>
         <Tabs.Screen

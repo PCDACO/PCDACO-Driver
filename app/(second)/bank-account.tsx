@@ -149,7 +149,7 @@ const BankAccount: FunctionComponent = () => {
 
       <CardBasic>
         {isLoading ? (
-          <View className="h-40 flex-1 items-center justify-center">
+          <View className="h-40 items-center justify-center">
             <Loading />
           </View>
         ) : (
