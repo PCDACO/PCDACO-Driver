@@ -4,10 +4,15 @@ import { LicenseImagesPayload, LicensePayload } from '~/constants/models/license
 import { QueryKey } from '~/lib/query-key';
 import { LiccenseService } from '~/services/license.service';
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const useLicensesListQuery = () => {
   const query = useQuery({
     queryKey: [QueryKey.License.List],
-    queryFn: async () => await LiccenseService.get.license(),
+    queryFn: async () => {
+      await delay(2000); // Add 2 second delay
+      return await LiccenseService.get.license();
+    },
     staleTime: 0,
     retry: 1,
   });

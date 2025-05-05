@@ -1,9 +1,11 @@
-import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 
 import CardTransaction from '~/components/card/transaction/card-transaction';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import { useInfiniteTransactions } from '~/hooks/transaction/use-transaction';
+import { COLORS } from '~/theme/colors';
 
 interface GroupedTransactions {
   date: string;
@@ -100,8 +102,7 @@ const Transaction = () => {
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" />
-        <Text>Đang kiểm tra dữ liệu...</Text>
+        <LoadingAnimation />
       </View>
     );
   }
@@ -129,9 +130,9 @@ const Transaction = () => {
         contentContainerStyle={{ padding: 16 }}
         ItemSeparatorComponent={() => <View className="h-4" />}
         ListEmptyComponent={() => (
-          <View className="h-96 flex-1 items-center justify-center gap-2">
-            <AntDesign name="file1" size={48} color="gray" />
-            <Text className="text-sm font-semibold text-gray-400">Chưa có giao dịch nào</Text>
+          <View className="h-96 flex-1 items-center justify-center">
+            <Feather name="file-text" size={40} color={COLORS.light.grey4} />
+            <Text className="text-lg font-bold text-muted">Không có giao dịch nào</Text>
           </View>
         )}
       />

@@ -14,7 +14,7 @@ import {
 
 import { Text } from '~/components/nativewindui/Text';
 import Backdrop from '~/components/plugins/back-drop';
-import Loading from '~/components/plugins/loading';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import BookContact from '~/components/screen/book-detail/book-contact';
 import BookHeader from '~/components/screen/book-detail/book-header';
 import BookInfo from '~/components/screen/book-detail/book-info';
@@ -76,8 +76,7 @@ const BookingScreen = () => {
   if (isLoading) {
     return (
       <View className="h-full flex-1 items-center justify-center gap-2">
-        <Loading />
-        <Text className="text-gray-400">Đang tải thông tin đơn đặt xe...</Text>
+        <LoadingAnimation />
       </View>
     );
   }

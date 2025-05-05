@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { FunctionComponent, useEffect } from 'react';
-import { Text, View, Dimensions, ScrollView, Animated } from 'react-native';
+import { View, Dimensions, ScrollView, Animated } from 'react-native';
 import { useSharedValue, withSpring } from 'react-native-reanimated';
 
-import { ActivityIndicator } from '~/components/nativewindui/ActivityIndicator';
 import { Button } from '~/components/nativewindui/Button';
 import { Text as TextUI } from '~/components/nativewindui/Text';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import CarBasicInfo from '~/components/screen/car-detail-screen/car-basic-info';
 import CarConfiguration from '~/components/screen/car-detail-screen/car-configuration';
 import CarFeedback from '~/components/screen/car-detail-screen/car-feedback';
@@ -56,8 +56,7 @@ const CarDetail: FunctionComponent = () => {
   if (isLoading || isLoadingLicense) {
     return (
       <View className="h-full flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text className="mt-2 text-muted-foreground">Đang tải thông tin xe...</Text>
+        <LoadingAnimation />
       </View>
     );
   }

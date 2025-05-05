@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BookCard from '~/components/card/book/book-card';
 import Backdrop from '~/components/plugins/back-drop';
 import Loading from '~/components/plugins/loading';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookListParams from '~/components/screen/book-list/book-params';
 import BookingDetailSkeleton from '~/components/ui/book-skeleton';
@@ -98,12 +99,9 @@ const BookingScreen: FunctionComponent = () => {
       </View>
       <View className="flex-1 px-4">
         {isLoading ? (
-          <FlatList
-            data={[1, 2, 3, 4]}
-            keyExtractor={(item) => item.toString()}
-            renderItem={() => <BookingDetailSkeleton />}
-            ItemSeparatorComponent={() => <View className="h-2" />}
-          />
+          <View className="flex-1 items-center justify-center">
+            <LoadingAnimation />
+          </View>
         ) : (
           <FlatList
             data={bookingList}

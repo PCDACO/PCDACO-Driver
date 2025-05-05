@@ -6,9 +6,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ReportCard from '~/components/card/report/report-card';
 import Backdrop from '~/components/plugins/back-drop';
+import LoadingAnimation from '~/components/plugins/loading-animation';
 import { SearchInput } from '~/components/plugins/search-input';
 import ReportParams from '~/components/screen/report-list/report-params';
-import ReportSkeleton from '~/components/ui/report-skeleton';
 import { useReportQuery } from '~/hooks/report/use-report';
 import { useReportParamsStore } from '~/store/use-params';
 import { useSearchStore } from '~/store/use-search';
@@ -67,16 +67,9 @@ const ReportsScreen = () => {
       </View>
       <View className="flex-1">
         {isLoading ? (
-          <FlatList
-            data={[1, 2, 3, 4]}
-            keyExtractor={(item) => `skeleton-${item}`}
-            renderItem={() => <ReportSkeleton />}
-            contentContainerStyle={{
-              paddingHorizontal: 16,
-              paddingTop: 16,
-            }}
-            ItemSeparatorComponent={() => <View className="h-2" />}
-          />
+          <View className="h-full flex-1 items-center justify-center">
+            <LoadingAnimation />
+          </View>
         ) : (
           <FlatList
             data={reportList}
