@@ -2,7 +2,15 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { FunctionComponent } from 'react';
 import { Controller } from 'react-hook-form';
-import { Text, View, Image, TouchableOpacity, Platform } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Platform,
+  ToastAndroid,
+  Dimensions,
+} from 'react-native';
 
 import FieldLayout from '~/components/layout/form/field-layout';
 import { Input } from '~/components/layout/input-with-icon/input';
@@ -18,6 +26,8 @@ import { DateFormat, formatDateToString } from '~/lib/format';
 import { useLicenseMethodStore } from '~/store/use-license-method';
 import { useStepStore } from '~/store/use-step';
 import { COLORS } from '~/theme/colors';
+
+const { height: HeightScreen } = Dimensions.get('screen');
 
 interface LicenseFrontProps {
   form: ReturnType<typeof useLicenseForm>['form'];
@@ -45,18 +55,26 @@ const LicenseFront: FunctionComponent<LicenseFrontProps> = ({ form }) => {
       // Call AI mutation to process the image
       aiMutation(file, {
         onSuccess: (response) => {
-          if (response.data && response.data.length > 0 && 'id' in response.data[0]) {
+          console.log('reponse');
+          if (response.data && response.data.length > 0) {
             const licenseData = response.data[0] as AILicensePlatePrevResponse;
-            // Set the license number and expiration date from AI response
-            form.setValue('licenseNumber', licenseData.id);
-            form.setValue('expirationDate', parseDateString(licenseData.doe));
-            form.setValue('licenseImageFront', file);
 
-            setLicenseFront(value.uri);
+            if (!/[aA]/.test(licenseData.class)) {
+              form.setValue('licenseNumber', licenseData.id);
+              form.setValue('expirationDate', parseDateString(licenseData.doe));
+              form.setValue('licenseImageFront', file);
 
-            // Trigger form update
-            form.trigger(['licenseNumber', 'expirationDate']);
+              setLicenseFront(value.uri);
+
+              // Trigger form update
+              form.trigger(['licenseNumber', 'expirationDate']);
+            } else {
+              ToastAndroid.show('Vui lòng cung cấp bằng lái xe hơi!', ToastAndroid.BOTTOM);
+            }
           }
+        },
+        onError: () => {
+          ToastAndroid.show('Vui lòng chọn ảnh bằng lái', ToastAndroid.BOTTOM);
         },
       });
     },
@@ -76,7 +94,7 @@ const LicenseFront: FunctionComponent<LicenseFrontProps> = ({ form }) => {
     <View
       className="relative flex-1 gap-4 px-2 py-4"
       style={{
-        height: 730,
+        height: HeightScreen - 140,
       }}>
       <View>
         {form.formState.errors.licenseImageFront && (
@@ -96,7 +114,8 @@ const LicenseFront: FunctionComponent<LicenseFrontProps> = ({ form }) => {
                 setLicenseFront(undefined);
                 form.setValue('licenseImageFront', undefined);
                 form.setValue('expirationDate', new Date());
-                form.setValue('licenseImageFront', undefined);
+                form.setValue('licenseNumber', '');
+                form.trigger(['licenseImageFront', 'expirationDate', 'licenseNumber']);
               }}>
               <Ionicons name="close-circle" size={24} color="red" />
             </TouchableOpacity>
