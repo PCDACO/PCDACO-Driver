@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, TouchableOpacityProps, View } from 'reac
 
 import { CarResponseList } from '~/constants/models/car.model';
 import { cn } from '~/lib/cn';
-import { formatPriceToVND } from '~/lib/format';
+import { formatNumber, formatRating } from '~/lib/format';
 
 interface CarCardProps extends TouchableOpacityProps {
   car: CarResponseList;
@@ -20,7 +20,7 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
     <TouchableOpacity
       {...props}
       onPress={onPress}
-      className={cn('gap-2  rounded-xl bg-white p-3 shadow-sm', className)}>
+      className={cn('gap-4  rounded-xl bg-white p-4 shadow-sm', className)}>
       {/* Car Info Header */}
       <View className="flex-row items-start justify-between">
         {ownerAvatarUrl ? (
@@ -45,10 +45,15 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
           </View>
         )}
 
-        <View>
-          <Text className="text-xl font-bold text-gray-800 dark:text-gray-800">
-            {formatPriceToVND(car.price)}/ngày
-          </Text>
+        <View className="items-end">
+          <Text className="text-xl font-bold">{formatNumber(car.price || 0)} ngày</Text>
+          <View className="flex-row items-end justify-end gap-2">
+            <FontAwesome name="star" size={16} color="#FACC15" />
+            <Text>
+              {formatRating(car.averageRating)}
+              <Text className="text-sm text-gray-500">({car.totalRented} lượt thuê)</Text>
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -63,7 +68,7 @@ export const CarCard = ({ car, onPress, className, ...props }: CarCardProps) => 
       ) : (
         <View className="mb-3 h-40 w-full items-center justify-center rounded-xl bg-gray-200">
           <FontAwesome name="car" size={40} color="#666" />
-          <Text className="text-gray-600">No image</Text>
+          <Text className="text-gray-600">Không có hình ảnh</Text>
         </View>
       )}
 

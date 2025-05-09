@@ -10,7 +10,7 @@ import Loading from '~/components/plugins/loading';
 import LoadingAnimation from '~/components/plugins/loading-animation';
 import { SearchInput } from '~/components/plugins/search-input';
 import BookListParams from '~/components/screen/book-list/book-params';
-import BookingDetailSkeleton from '~/components/ui/book-skeleton';
+import { ANIMATION_CONFIGS } from '~/configs/animated.config';
 import { BookParams, BookResponseList } from '~/constants/models/book.model';
 import { useBookingListQuery } from '~/hooks/book/use-book';
 import { useBottomSheet } from '~/hooks/plugins/use-bottom-sheet';
@@ -135,6 +135,7 @@ const BookingScreen: FunctionComponent = () => {
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
+        animationConfigs={ANIMATION_CONFIGS}
         enableDynamicSizing={false}
         backdropComponent={
           isSheetOpen ? (props) => <Backdrop {...props} onPress={handleClosePress} /> : null

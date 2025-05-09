@@ -109,7 +109,7 @@ const ReportParams: FunctionComponent<ReportParamsProps> = ({ close }) => {
       {/* Button xác nhận */}
       <View className="absolute bottom-4 left-0 right-0 flex-row gap-2 px-4">
         <TouchableOpacity
-          className="flex-1 items-center justify-center rounded-full bg-primary p-3"
+          className="flex-1 items-center justify-center rounded-lg bg-primary p-3"
           onPress={handleConfirm}>
           <Text className="font-semibold text-white dark:text-black">Xác nhận</Text>
         </TouchableOpacity>

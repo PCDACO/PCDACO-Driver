@@ -8,6 +8,15 @@ export function formatPriceToVND(price: number): string {
 }
 
 /**
+ * Định dạng số rating với 2 chữ số thập phân.
+ * @param rating - Số rating cần định dạng.
+ * @returns Chuỗi biểu diễn rating với 2 chữ số thập phân.
+ */
+export function formatRating(rating: number): string {
+  return rating.toFixed(2);
+}
+
+/**
  * Định nghĩa kiểu định dạng ngày.
  */
 export enum DateFormat {

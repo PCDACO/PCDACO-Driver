@@ -183,6 +183,18 @@ const ScreenLayout: FunctionComponent = () => {
           }}
         />
 
+        {/* PRivacy */}
+        <Stack.Screen
+          name="privacy/index"
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerTitleAlign: 'center',
+            headerBackButtonDisplayMode: 'minimal',
+            animation: 'slide_from_right',
+          }}
+        />
+
         {/* Withdraw */}
         <Stack.Screen
           name="(withdraw)/index"

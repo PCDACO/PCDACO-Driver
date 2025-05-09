@@ -122,7 +122,7 @@ const BookListParams: FunctionComponent<BookListParamsProps> = ({ close }) => {
       {/* Confirm Button */}
       <View className="absolute bottom-4 left-0 right-0 flex-row gap-2 px-4">
         <TouchableOpacity
-          className="flex-1 items-center justify-center rounded-full bg-primary p-2"
+          className="flex-1 items-center justify-center rounded-lg bg-primary p-2"
           onPress={handleConfirm}>
           <Text className="font-semibold text-white dark:text-black">Xác nhận</Text>
         </TouchableOpacity>

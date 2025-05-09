@@ -55,7 +55,7 @@ const LicenseFront: FunctionComponent<LicenseFrontProps> = ({ form }) => {
       // Call AI mutation to process the image
       aiMutation(file, {
         onSuccess: (response) => {
-          console.log('reponse');
+          console.log('reponse', response);
           if (response.data && response.data.length > 0) {
             const licenseData = response.data[0] as AILicensePlatePrevResponse;
 
@@ -204,7 +204,7 @@ const LicenseFront: FunctionComponent<LicenseFrontProps> = ({ form }) => {
         <Button
           className="py-4"
           size="lg"
-          disabled={!licenseFront && loading}
+          disabled={!licenseFront || loading}
           onPress={handleSubmit}>
           <Text className="font-semibold text-background">Tiếp tục thêm hình ảnh</Text>
         </Button>

@@ -44,16 +44,16 @@ export const RecentReportsSection: React.FC<RecentReportsSectionProps> = ({ repo
                     {report.description}
                   </Text>
                 </View>
-                <View className="flex-row space-x-2">
+                <View className="flex-row gap-2">
                   <ReportBadgeType type={report.reportType} />
                   <ReportBadgeStatus status={report.status} />
                 </View>
               </View>
-              <View className="mt-2 flex-row items-center">
+              {/* <View className="mt-2 flex-row items-center">
                 <Text className="text-gray-600">
                   {translate.report.bookingId}: {report.bookingId}
                 </Text>
-              </View>
+              </View> */}
             </CardBasic>
           ))}
         </View>

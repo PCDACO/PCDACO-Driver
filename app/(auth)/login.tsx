@@ -1,3 +1,4 @@
+import Feather from '@expo/vector-icons/Feather';
 import Icon from '@expo/vector-icons/Feather';
 import { Link, router } from 'expo-router';
 import React, { FunctionComponent } from 'react';
@@ -22,9 +23,20 @@ const Login: FunctionComponent = () => {
     <SafeAreaView className="flex-1">
       <View className="flex-1 justify-between gap-8 px-6 py-10">
         {/* Header */}
-        <View className="w-60 flex-row items-center gap-2">
-          <Logo width={100} height={100} />
-          <Text className="text-3xl font-semibold text-foreground">Chào mừng đã quay trở lại!</Text>
+        <View className="gap-2">
+          <Button
+            size="icon"
+            className="bg-background"
+            variant="outline"
+            onPress={() => router.back()}>
+            <Feather name="arrow-left" size={24} />
+          </Button>
+          <View className="w-60 flex-row items-center gap-2">
+            <Logo width={100} height={100} />
+            <Text className="text-3xl font-semibold text-foreground">
+              Chào mừng đã quay trở lại!
+            </Text>
+          </View>
         </View>
 
         {/* Form */}
@@ -85,10 +97,11 @@ const Login: FunctionComponent = () => {
           </Link>
 
           <View className="mt-4 gap-4">
-            <Button onPress={onSubmit} disabled={isLoading}>
+            <Button size="lg" onPress={onSubmit} disabled={isLoading}>
               <TextUI>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</TextUI>
             </Button>
             <Button
+              size="lg"
               variant="plain"
               onPress={() => {
                 resetStep();
@@ -104,7 +117,7 @@ const Login: FunctionComponent = () => {
           <View className="w-80">
             <Text className="text-center text-muted">
               Để đảm bảo quyền lợi của bạn, xin vui lòng xem kỹ{' '}
-              <Link className="text-primary" href="/(screen)/privacy/index">
+              <Link className="text-primary" href="/(screen)/privacy">
                 chính sách của chúng tôi
               </Link>
             </Text>
