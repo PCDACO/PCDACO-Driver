@@ -90,7 +90,7 @@ const Edit: FunctionComponent = () => {
       <View className="p-4">
         <Pressable
           disabled={isLoading}
-          className="w-full flex-row items-center justify-center gap-2 rounded-lg p-2"
+          className="w-full flex-row items-center justify-center gap-2 rounded-lg p-4"
           onPress={onSubmit}
           style={{ backgroundColor: COLORS.black }}>
           {isLoading ? (

@@ -132,12 +132,13 @@ export default function App() {
         ref={sheetRef}
         animationConfigs={ANIMATION_CONFIGS}
         snapPoints={snapPoints}
+        enableHandlePanningGesture={false}
+        enableContentPanningGesture={false}
         enableDynamicSizing={false}
         onChange={handleSheetChange}
         handleComponent={null}
         enablePanDownToClose={false}
-        enableOverDrag={false}
-        enableHandlePanningGesture={false}>
+        enableOverDrag={false}>
         <BottomSheetView className="flex-1">
           <View
             className="flex-1 gap-2 bg-primary px-4 py-4"

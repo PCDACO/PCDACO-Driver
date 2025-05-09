@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { View, Text } from 'react-native';
 
 import { CarResponseDetail } from '~/constants/models/car.model';
-import { formatNumber } from '~/lib/format';
+import { formatNumber, formatRating } from '~/lib/format';
 
 interface CarBasicInfoProps {
   car: CarResponseDetail | undefined;
@@ -25,7 +25,7 @@ const CarBasicInfo: FunctionComponent<CarBasicInfoProps> = ({ car }) => {
           <View className="flex-row items-end justify-end gap-2">
             <FontAwesome name="star" size={16} color="#FACC15" />
             <Text>
-              {averageRating}
+              {formatRating(averageRating || 0)}
               <Text className="text-sm text-gray-500">({totalRented} lượt thuê)</Text>
             </Text>
           </View>

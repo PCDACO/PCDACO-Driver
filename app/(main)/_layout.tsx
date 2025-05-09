@@ -33,6 +33,7 @@ const MainLayout = () => {
         <Tabs.Screen
           name="home"
           options={{
+            tabBarLabel: '',
             tabBarIcon: ({ color }) => <Icon name="home" color={color} size={20} />,
             headerStyle: {
               height: 30,
@@ -43,7 +44,8 @@ const MainLayout = () => {
         <Tabs.Screen
           name="car"
           options={{
-            tabBarIcon: ({ color }) => <Icon name="car" color={color} size={20} />,
+            tabBarLabel: '',
+            tabBarIcon: ({ color }) => <Icon name="search" color={color} size={20} />,
             headerStyle: {
               height: 30,
             },
@@ -53,6 +55,7 @@ const MainLayout = () => {
         <Tabs.Screen
           name="booking"
           options={{
+            tabBarLabel: '',
             headerShown: true,
             headerTitle: '',
             headerTitleStyle: {
@@ -70,6 +73,7 @@ const MainLayout = () => {
         <Tabs.Screen
           name="profile"
           options={{
+            tabBarLabel: '',
             tabBarIcon: ({ color }) => <Icon name="user" color={color} size={20} />,
             animation: 'fade',
           }}

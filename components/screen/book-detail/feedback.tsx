@@ -19,8 +19,7 @@ interface FeedbackCardProps {
 const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) => {
   const { form, onSubmit, isLoading } = useFeedbackForm(id);
 
-  const hasDriverFeedback = feedback?.some((f) => f.role === Role.Owner);
-  const nonDriverFeedbacks = feedback?.filter((f) => f.role !== Role.Driver);
+  const hasDriverFeedback = feedback?.some((f) => f.role === Role.Driver);
 
   return (
     <CardBasic>
@@ -30,7 +29,30 @@ const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) =>
         title="Chia sẻ kinh nghiệm của bạn với người thuê xe này để giúp đỡ những chủ xe khác."
       />
 
-      {!hasDriverFeedback ? (
+      <View className="mt-4">
+        {feedback?.map((feedback, index) => (
+          <View
+            key={index}
+            className="mb-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+            <View className="flex-row items-center justify-between">
+              <Text className="font-medium">{feedback.role}</Text>
+              <View className="flex-row">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <AntDesign
+                    key={star}
+                    name={star <= feedback.rating ? 'star' : 'star'}
+                    size={16}
+                    color={star <= feedback.rating ? '#FACC15' : COLORS.light.grey5}
+                  />
+                ))}
+              </View>
+            </View>
+            <Text className="mt-2 text-sm">{feedback.content || 'Không có nhận xét'}</Text>
+          </View>
+        ))}
+      </View>
+
+      {!hasDriverFeedback && (
         <>
           <View className="mt-4">
             <Text className="mb-2 text-base font-medium">Đánh giá của bạn</Text>
@@ -103,29 +125,6 @@ const FeedbackCard: FunctionComponent<FeedbackCardProps> = ({ id, feedback }) =>
             )}
           </TouchableOpacity>
         </>
-      ) : (
-        <View className="mt-4">
-          {nonDriverFeedbacks?.map((feedback, index) => (
-            <View
-              key={index}
-              className="mb-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-              <View className="flex-row items-center justify-between">
-                <Text className="font-medium">{feedback.role}</Text>
-                <View className="flex-row">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <AntDesign
-                      key={star}
-                      name={star <= feedback.rating ? 'star' : 'star'}
-                      size={16}
-                      color={star <= feedback.rating ? '#FACC15' : COLORS.light.grey5}
-                    />
-                  ))}
-                </View>
-              </View>
-              <Text className="mt-2 text-sm">{feedback.content || 'Không có nhận xét'}</Text>
-            </View>
-          ))}
-        </View>
       )}
     </CardBasic>
   );

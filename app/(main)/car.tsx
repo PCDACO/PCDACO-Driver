@@ -12,7 +12,7 @@ import Loading from '~/components/plugins/loading';
 import LoadingAnimation from '~/components/plugins/loading-animation';
 import { SearchInput } from '~/components/plugins/search-input';
 import CarParams from '~/components/screen/car-list/car-params';
-import CarSkeleton from '~/components/screen/car-list/car-skeleton';
+import { ANIMATION_CONFIGS } from '~/configs/animated.config';
 import { CarParams as CarParamsState } from '~/constants/models/car.model';
 import { useCarsListInfiniteQuery } from '~/hooks/car/use-car';
 import { useCarParamsStore } from '~/store/use-params';
@@ -41,6 +41,9 @@ const HomeScreen = () => {
         size: carParams?.size || 10,
         fuel: carParams?.fuel,
         transmission: carParams?.transmission,
+        radius: carParams.radius,
+        longtitude: carParams.longtitude,
+        latitude: carParams.latitude,
       });
     }
   }, [carParams, searchKeyword]);
@@ -68,7 +71,7 @@ const HomeScreen = () => {
   }, []);
 
   const sheetRef = React.useRef<BottomSheet>(null);
-  const snapPoints = React.useMemo(() => ['1%', '45%'], []);
+  const snapPoints = React.useMemo(() => ['1%', '80%'], []);
 
   const handleSnapPress = React.useCallback((index: number) => {
     sheetRef.current?.snapToIndex(index);
@@ -106,7 +109,7 @@ const HomeScreen = () => {
           className="items-center justify-center rounded-full border border-gray-200 bg-white  dark:border-gray-700 dark:bg-slate-300"
           onPress={() => handleSnapPress(1)}
           style={{
-            padding: 16,
+            padding: 10,
           }}>
           <Ionicons name="options-outline" size={20} color={COLORS.black} />
         </TouchableOpacity>
@@ -167,7 +170,10 @@ const HomeScreen = () => {
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
+        animationConfigs={ANIMATION_CONFIGS}
         enableDynamicSizing={false}
+        enableHandlePanningGesture={false}
+        enableContentPanningGesture={false}
         backdropComponent={
           isSheetOpen ? (props) => <Backdrop {...props} onPress={handleClosePress} /> : null
         }

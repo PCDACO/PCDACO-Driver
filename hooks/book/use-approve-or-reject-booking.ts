@@ -98,9 +98,9 @@ export const useApproveOrRejectBooking = ({ id }: UseApproveOrRejectBooking) => 
         queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.Detail] });
         queryClient.invalidateQueries({ queryKey: [QueryKey.Booking.get.List] });
         ToastAndroid.show(translate.booking.toast.complete, ToastAndroid.SHORT);
-        setTimeout(() => {
-          router.back();
-        }, 1000);
+        // setTimeout(() => {
+        //   router.back();
+        // }, 1000);
       },
       onError: (error: any) => {
         ToastAndroid.show(
